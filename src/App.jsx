@@ -6,39 +6,103 @@ export default function Portfolio() {
 
   const projects = [
     {
-      title: "Project Title 1",
-      description: "Brief description of your project, technologies used, and what problem it solves.",
-      tech: ["React", "Node.js", "MongoDB"],
-      link: "#"
+      title: "3D Exhibition Environment using 3D Gaussian Splatting",
+      description: "Built a full pipeline for 3D reconstruction and interactive visualization of Nepalese heritage sites using NeRF and Gaussian Splatting. Digitized 3 temples in Patan with occlusion masking and integrated into Three.js exhibition platform.",
+      tech: ["Python", "PyTorch", "Three.js", "Gaussian Splatting", "Blender"],
+      link: "https://github.com/Pramish-Aryal/3Drishya-2.0"
     },
     {
-      title: "Project Title 2",
-      description: "Another project showcasing your skills in web development or other technical areas.",
-      tech: ["Python", "Flask", "PostgreSQL"],
-      link: "#"
+      title: "Discrypt – Privacy-Preserving Human Language Model",
+      description: "Developed an NLP model using T5-small and Mistral-7B fine-tuned with QLoRA for PII detection and masking in chat conversations. Built a REST API with Flask and integrated into a Discord bot for real-time privacy protection.",
+      tech: ["Python", "Hugging Face", "Flask", "AWS SageMaker", "T5", "Mistral-7B"],
+      link: "https://github.com/liza1212/Discrypt"
     },
     {
-      title: "Project Title 3",
-      description: "A third project demonstrating your ability to work with different technologies.",
-      tech: ["JavaScript", "Express", "MySQL"],
-      link: "#"
+      title: "Yoggis – AI Yoga Trainer",
+      description: "Designed a pose classification system using PoseNet and custom classifier for real-time posture correction. Achieved 94% classification accuracy with custom dataset of yoga poses.",
+      tech: ["Python", "TensorFlow", "PoseNet", "OpenCV"],
+      link: "https://github.com/Nadika18/MinorProject"
+    },
+    {
+      title: "3D Reconstruction of Pimbahal",
+      description: "Digitally reconstructed Pimbahal temple in Blender and hosted the model for public access using Three.js. Developed expertise in 3D visualization pipelines and asset optimization.",
+      tech: ["Blender", "Three.js", "JavaScript"],
+      link: "https://github.com/MoAgr/3D-Model-of-Pimbahal"
+    },
+    {
+      title: "Avritti – AI Music Generator",
+      description: "Implemented genetic algorithms to generate unique and evolving music sequences. Built backend with FastAPI and designed web interface in Vue.js for real-time playback and user-driven music improvement.",
+      tech: ["Python", "FastAPI", "Vue.js", "MIDIFile", "Genetic Algorithms"],
+      link: "https://github.com/PrabigyaAcharya/Avritti"
     }
   ];
 
   const qualifications = [
     {
-      degree: "Bachelor's Degree in Computer Science",
-      institution: "Your University Name",
-      year: "2020 - 2024",
-      details: "Relevant coursework: Data Structures, Algorithms, Web Development, Database Systems"
+      degree: "Bachelor's in Computer Engineering",
+      institution: "IOE, Pulchowk Campus, Tribhuvan University",
+      year: "2019 - 2024",
+      details: "GPA: 81.02/100. Ranked Top 1% among 16,000 applicants. Merit scholarships for 6/8 semesters. Core courses: Data Structures, Computer Networks, Operating Systems, Distributed Systems, Machine Learning, Computer Vision."
     },
     {
-      degree: "Higher Secondary Education",
-      institution: "Your School/College Name",
-      year: "2018 - 2020",
-      details: "Major: Science/Computer Science"
+      degree: "Harvard CS50AI (Online)",
+      institution: "Harvard University",
+      year: "2024",
+      details: "Completed Harvard's advanced AI course, gaining mastery in search, optimization, machine learning, and game theory. Strengthened algorithmic problem-solving and AI system design."
+    },
+    {
+      degree: "4th NAAMII AI School",
+      institution: "Nepal Applied Mathematics and Informatics Institute",
+      year: "2024",
+      details: "Intensive 10-day AI school: 55 hours of lectures, 18 hours of labs, 14 hours of projects. Learned from experts from ETH Zürich, NUS. Topics: ML, NLP, Transformers, GNNs, Responsible AI."
+    },
+    {
+      degree: "Samsung Coding & Programming Training",
+      institution: "Samsung & Pulchowk Campus",
+      year: "2023",
+      details: "Certified Python course with 96 participants. Achieved top performance in coding assessments. Covered advanced Python concepts, dynamic programming, and algorithm design."
     }
   ];
+
+  const experience = [
+    {
+      role: "Research Assistant",
+      company: "NAAMII (Nepal Applied Mathematics and Informatics Institute)",
+      year: "June 2024 - Present",
+      details: "Developing hierarchical 3D scene description framework for Gaussian Splatting with paper submission to CVPR 2025. Engineered LangGraph-based pipeline for automated scene description generation. Tools: Python, PyTorch, LangChain, LangGraph."
+    },
+    {
+      role: "Research Intern",
+      company: "NAAMII (Nepal Applied Mathematics and Informatics Institute)",
+      year: "November 2024 - April 2025",
+      details: "Developed generative approach using Stable Diffusion to synthesize warped 3D views from single 2D images. Created pipeline for frame extraction and depth/normal map generation. Curated novel dataset from RealEstate10k."
+    },
+    {
+      role: "Software Engineer",
+      company: "Growthzilla",
+      year: "April 2024 - November 2024",
+      details: "Designed online payment integration system using Propay API. Built automated reconciliation system reducing manual work by 60%. Worked remotely across 3 countries with React and Node.js."
+    },
+    {
+      role: "Game Developer Intern",
+      company: "Avanna Games Studio",
+      year: "October 2023 - April 2024",
+      details: "Created physics engine and sound simulator for mobile applications (Football and Guitar Simulator). Worked with Unity, C#, and Blender. Gained hands-on experience in game mechanics and 3D modeling."
+    },
+    {
+      role: "Teaching Assistant",
+      company: "5th Nepal AI School (NAAMII)",
+      year: "2024",
+      details: "Assisted 10-day international AI school with 100+ participants. Supported lectures and workshops led by researchers from Oxford and SUNY. Facilitated coordination between instructors and participants."
+    },
+    {
+      role: "Instructor",
+      company: "Software Fellowship (LOCUS, Pulchowk Campus)",
+      year: "2023",
+      details: "Taught Data Structures and Algorithms in Python to 50 freshers for 4 days. Coordinated with instructors to maintain classroom participation and smooth learning experience."
+    }
+  ];
+  
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -86,33 +150,32 @@ export default function Portfolio() {
                 </div>
                 <div>
                   <h2 className="text-3xl font-bold text-gray-800">Prabigya</h2>
-                  <p className="text-gray-600">Computer Science Student</p>
+                  <p className="text-gray-600">Artificial Intelligence Researcher</p>
                 </div>
               </div>
               
               <div className="space-y-4 text-gray-700">
                 <p>
-                  Hello! I'm a passionate computer science student with a keen interest in web development, 
-                  software engineering, and problem-solving. This portfolio showcases my academic journey 
+                  Hello! I'm a passionate artificial intelligence researcher with a keen interest in Computer Vision, 
+                  Reinforcement Learning, and problem-solving. This portfolio showcases my academic journey 
                   and the projects I've worked on.
                 </p>
                 <p>
                   I enjoy learning new technologies and applying them to create meaningful solutions. 
-                  My focus areas include full-stack development, database management, and building 
-                  scalable applications.
+                  I am currently looking for research opportunities in use of NLP and CV applications in education domain.
                 </p>
               </div>
 
               <div className="mt-6 flex gap-4">
-                <a href="mailto:your.email@example.com" className="flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors">
+                <a href="mailto:acharyaprabigya@gmail.com" className="flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors">
                   <Mail size={20} />
                   <span>Email</span>
                 </a>
-                <a href="#" className="flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors">
+                <a href="https://github.com/PrabigyaAcharya" className="flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors">
                   <Github size={20} />
                   <span>GitHub</span>
                 </a>
-                <a href="#" className="flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors">
+                <a href="https://www.linkedin.com/in/aprab/" className="flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors">
                   <Linkedin size={20} />
                   <span>LinkedIn</span>
                 </a>
