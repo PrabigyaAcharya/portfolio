@@ -46,7 +46,7 @@ export default function Portfolio() {
     },
     {
       degree: "Harvard CS50AI (Online)",
-      institution: "Harvard University",
+      institution: "Harvard University/ edX",
       year: "2024",
       details: "Completed Harvard's advanced AI course, gaining mastery in search, optimization, machine learning, and game theory. Strengthened algorithmic problem-solving and AI system design."
     },
@@ -69,47 +69,26 @@ export default function Portfolio() {
       role: "Research Assistant",
       company: "NAAMII (Nepal Applied Mathematics and Informatics Institute)",
       year: "June 2024 - Present",
-      details: "Developing hierarchical 3D scene description framework for Gaussian Splatting with paper submission to CVPR 2025. Engineered LangGraph-based pipeline for automated scene description generation. Tools: Python, PyTorch, LangChain, LangGraph."
     },
     {
       role: "Research Intern",
       company: "NAAMII (Nepal Applied Mathematics and Informatics Institute)",
       year: "November 2024 - April 2025",
-      details: "Developed generative approach using Stable Diffusion to synthesize warped 3D views from single 2D images. Created pipeline for frame extraction and depth/normal map generation. Curated novel dataset from RealEstate10k."
     },
     {
       role: "Software Engineer",
       company: "Growthzilla",
       year: "April 2024 - November 2024",
-      details: "Designed online payment integration system using Propay API. Built automated reconciliation system reducing manual work by 60%. Worked remotely across 3 countries with React and Node.js."
-    },
-    {
-      role: "Game Developer Intern",
-      company: "Avanna Games Studio",
-      year: "October 2023 - April 2024",
-      details: "Created physics engine and sound simulator for mobile applications (Football and Guitar Simulator). Worked with Unity, C#, and Blender. Gained hands-on experience in game mechanics and 3D modeling."
-    },
-    {
-      role: "Teaching Assistant",
-      company: "5th Nepal AI School (NAAMII)",
-      year: "2024",
-      details: "Assisted 10-day international AI school with 100+ participants. Supported lectures and workshops led by researchers from Oxford and SUNY. Facilitated coordination between instructors and participants."
-    },
-    {
-      role: "Instructor",
-      company: "Software Fellowship (LOCUS, Pulchowk Campus)",
-      year: "2023",
-      details: "Taught Data Structures and Algorithms in Python to 50 freshers for 4 days. Coordinated with instructors to maintain classroom participation and smooth learning experience."
     }
   ];
   
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       <header className="bg-white shadow-sm sticky top-0 z-10">
         <nav className="max-w-5xl mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
-            <h1 className="text-2xl font-bold text-gray-800">Prabigya</h1>
+            <h1 className="text-2xl font-bold text-gray-800">Prabigya Acharya</h1>
             <div className="flex gap-6">
               <button
                 onClick={() => setActiveSection('about')}
@@ -120,12 +99,20 @@ export default function Portfolio() {
                 About
               </button>
               <button
+                onClick={() => setActiveSection('experience')}
+                className={`text-sm font-medium transition-colors ${
+                  activeSection === 'experience' ? 'text-blue-600' : 'text-gray-600 hover:text-blue-600'
+                }`}
+              >
+                Experience
+              </button>
+              <button
                 onClick={() => setActiveSection('qualifications')}
                 className={`text-sm font-medium transition-colors ${
                   activeSection === 'qualifications' ? 'text-blue-600' : 'text-gray-600 hover:text-blue-600'
                 }`}
               >
-                Qualifications
+                Education
               </button>
               <button
                 onClick={() => setActiveSection('projects')}
@@ -140,17 +127,17 @@ export default function Portfolio() {
         </nav>
       </header>
 
-      <main className="max-w-5xl mx-auto px-4 py-12">
+      <main className="max-w-5xl mx-auto px-4 py-12 flex-1 w-full">
         {activeSection === 'about' && (
           <section className="space-y-6 animate-fadeIn">
             <div className="bg-white rounded-lg shadow-md p-8">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center text-3xl font-bold text-blue-600">
-                  P
+                  PA
                 </div>
                 <div>
-                  <h2 className="text-3xl font-bold text-gray-800">Prabigya</h2>
-                  <p className="text-gray-600">Artificial Intelligence Researcher</p>
+                  <h2 className="text-3xl font-bold text-gray-800">Prabigya Acharya</h2>
+                  <p className="text-gray-600">AI Researcher | Computer Vision & Machine Learning</p>
                 </div>
               </div>
               
@@ -171,11 +158,11 @@ export default function Portfolio() {
                   <Mail size={20} />
                   <span>Email</span>
                 </a>
-                <a href="https://github.com/PrabigyaAcharya" className="flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors">
+                <a href="https://github.com/PrabigyaAcharya" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors">
                   <Github size={20} />
                   <span>GitHub</span>
                 </a>
-                <a href="https://www.linkedin.com/in/aprab/" className="flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors">
+                <a href="https://www.linkedin.com/in/aprab/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors">
                   <Linkedin size={20} />
                   <span>LinkedIn</span>
                 </a>
@@ -184,9 +171,30 @@ export default function Portfolio() {
           </section>
         )}
 
+        {activeSection === 'experience' && (
+          <section className="space-y-6 animate-fadeIn">
+            <h2 className="text-3xl font-bold text-gray-800 mb-6">Work Experience</h2>
+            {experience.map((exp, index) => (
+              <div key={index} className="bg-white rounded-lg shadow-md p-6">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Briefcase className="text-blue-600" size={24} />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-semibold text-gray-800">{exp.role}</h3>
+                    <p className="text-blue-600 font-medium">{exp.company}</p>
+                    <p className="text-gray-500 text-sm mt-1">{exp.year}</p>
+                    <p className="text-gray-700 mt-3">{exp.details}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </section>
+        )}
+
         {activeSection === 'qualifications' && (
           <section className="space-y-6 animate-fadeIn">
-            <h2 className="text-3xl font-bold text-gray-800 mb-6">Education & Qualifications</h2>
+            <h2 className="text-3xl font-bold text-gray-800 mb-6">Education & Certifications</h2>
             {qualifications.map((qual, index) => (
               <div key={index} className="bg-white rounded-lg shadow-md p-6">
                 <div className="flex items-start gap-4">
@@ -225,7 +233,7 @@ export default function Portfolio() {
                           </span>
                         ))}
                       </div>
-                      <a href={project.link} className="text-blue-600 hover:text-blue-700 font-medium text-sm">
+                      <a href={project.link} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-700 font-medium text-sm">
                         View Project →
                       </a>
                     </div>
@@ -237,9 +245,9 @@ export default function Portfolio() {
         )}
       </main>
 
-      <footer className="bg-white border-t border-gray-200 mt-16">
+      <footer className="bg-white border-t border-gray-200 mt-auto">
         <div className="max-w-5xl mx-auto px-4 py-6 text-center text-gray-600 text-sm">
-          <p>© 2024 Prabigya. All rights reserved.</p>
+          <p>© 2024 Prabigya Acharya. All rights reserved.</p>
         </div>
       </footer>
 
