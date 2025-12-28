@@ -4,7 +4,7 @@ const blog = {
     date: '2025-12-10',
     excerpt: 'A KDE Based Image Generator for handwritten letters.',
     content: `# A TINY IMAGE GENERATOR
-  I came across this youtube video ["I Built a Mini "GPT DALL-E" in One Day On a Laptop without GPU"](https://www.youtube.com/watch?v=2oh7Yp04cM8) from the channel CompuFlair. It was a very interesting video and approached the image generation problem through the perspective of a physicist. I went through the video and it was informative and interesting enough that it inspired me to try the concepts shared in the video myself. So, I started working on a small-scale handwritten letter generator.
+  I came across this youtube video ["I Built a Mini "GPT DALL-E" in One Day On a Laptop without GPU"](https://www.youtube.com/watch?v=2oh7Yp04cM8) from the channel CompuFlair. In it, it presented a task of creating a handwritten digit generated with resource constraints. I found the video very interesting and wanted to implement the ideas discussed in it to create my own letter generator.
 
   ### KDE and PCA
   KDE stands for [Kernel Density Estimator](https://en.wikipedia.org/wiki/Kernel_density_estimation).Kernel Density Estimation (KDE) is a method for approximating a random variable’s probability density function (PDF) using a finite sample.

@@ -4,7 +4,7 @@ export default function Qualificatoins(){
     const qualifications = [
         {
           degree: "Bachelor's in Computer Engineering",
-          institution: "IOE, Pulchowk Campus, Tribhuvan University (81.02/100",
+          institution: "IOE, Pulchowk Campus, Tribhuvan University (81.02/100)",
           year: "2019 - 2024",
           details: "I completed my Bachelor's in Computer Engineering with Distinction , covering a rigorous curriculum that included data structures and algorithms , database management systems and big data technologies , and software engineering methodologies with object-oriented analysis. My technical foundation spans computer architecture and organization , operating systems and embedded systems , distributed systems , and computer networks with internet/intranet technologies. The coursework also integrated advanced mathematics (calculus, statistics, numerical methods) , artificial intelligence and human language technologies , computer graphics , and project management, providing a comprehensive theoretical and practical engineering skillset."
         }
