@@ -8,10 +8,13 @@ const PORT = process.env.PORT || 5000;
 // Serve static files from dist directory
 app.use(express.static(path.join(__dirname, 'dist')));
 
+app.use('/blogs', express.static(path.join(__dirname, 'blogs')));
+
 // Handle all routes - send back index.html
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
+
 
 app.listen(PORT, '127.0.0.1', () => {
   console.log(`Portfolio server running on http://127.0.0.1:${PORT}`);
