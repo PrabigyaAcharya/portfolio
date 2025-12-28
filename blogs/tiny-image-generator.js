@@ -15,16 +15,16 @@ const blog = {
   Where, $K_h$ is the scaled kernel, and $h$ is the bandwidth of the kernel.
   Intuitively, if n are the number of observations we have taken. Given the distribution of the observations, we want to estimate the overall distribution of the p.d.f the observations are taken from.
   Let us take some points from an unknown distribution
-  ![](./blogs/images/tig/image.png?w=200px)
+  ![](/blogs/images/tig/image.png?w=200px)
   As we keep on taking more samples, thy will roughly represent the unknown distribution. However through KDE, we can estimate the underlying distribution.
-  ![](./blogs/images/tig/image-1.png?w=200px)
+  ![](/blogs/images/tig/image-1.png?w=200px)
   The above function can be written as:
   $$
   \\hat{f}_h(x) = \\frac{1}{nh}\\sum_{i=1}^{n}K(\\frac{x - x_i}{h})
   $$
   The KDE is calculated by weighting the distances of all the data points we’ve observed. The more points nearby corresponds to the estimate being higher and hence a higher probability of that point.
   Selecting the bandwith is important, as we want it to be as lower as the data point allows us. This ensures that data points contribute strongly near themselves when the distance is nearly zero and weakly far away. A lower bandwidth means only close neighbors are taken while estimating, while a higher bandwidth means a larger neighborhood of points is considered. Choosing nearby points only may cause the estimate to look like this.
-  ![](./blogs/images/tig/image-2.png?w=200px)
+  ![](/blogs/images/tig/image-2.png?w=200px)
 
   Principal component analysis (PCA) is a linear dimensionality reduction technique with applications in exploratory data analysis, visualization and data preprocessing. The data are linearly transformed onto a new coordinate system such that the directions (principal components) capturing the largest variation in the data can be easily identified.
 
