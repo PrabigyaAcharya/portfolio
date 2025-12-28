@@ -1,8 +1,92 @@
-import React, { useState } from 'react';
-import { GraduationCap, Briefcase, Mail, Github, Linkedin } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { GraduationCap, Briefcase, Mail, Github, Linkedin, BookOpen, ArrowLeft, Calendar } from 'lucide-react';
+import allBlogs from '../blogs';
+import ReactMarkdown from 'react-markdown'; 
+import remarkGfm from 'remark-gfm';
+import remarkMath from 'remark-math'; 
+import rehypeKatex from 'rehype-katex'; 
+import 'katex/dist/katex.min.css';
 
 export default function Portfolio() {
   const [activeSection, setActiveSection] = useState('about');
+  const [selectedBlog, setSelectedBlog] = useState(null);
+
+  const openBlog = (blog) => {
+    setSelectedBlog(blog);
+  };
+
+  const closeBlog = () => {
+    setSelectedBlog(null);
+  };
+
+  const MarkdownComponents = {
+    // Headers
+    h1: ({node, ...props}) => <h1 className="text-3xl font-bold text-gray-800 mb-6" {...props} />,
+    h2: ({node, ...props}) => <h2 className="text-2xl font-bold text-gray-800 mt-8 mb-4" {...props} />,
+    h3: ({node, ...props}) => <h3 className="text-xl font-semibold text-gray-800 mt-6 mb-3" {...props} />,
+    h4: ({node, ...props}) => <h4 className="text-lg font-semibold text-gray-800 mt-5 mb-2" {...props} />,
+    
+    // Text formatting
+    strong: ({node, ...props}) => <strong className="font-semibold" {...props} />,
+    em: ({node, ...props}) => <em className="italic text-gray-600" {...props} />,
+    p: ({node, ...props}) => <p className="text-gray-700 mb-4 leading-relaxed" {...props} />,
+    
+    // Lists
+    ul: ({node, ...props}) => <ul className="list-disc ml-6 my-4" {...props} />,
+    ol: ({node, ...props}) => <ol className="list-decimal ml-6 my-4" {...props} />,
+    li: ({node, ...props}) => <li className="mb-2 pl-1" {...props} />,
+    
+    // Code blocks
+    code: ({node, inline, className, children, ...props}) => {
+      return inline ? (
+        <code className="bg-gray-100 px-2 py-1 rounded text-sm font-mono text-pink-600" {...props}>
+          {children}
+        </code>
+      ) : (
+        <pre className="bg-gray-100 rounded-lg p-4 overflow-x-auto my-4 border border-gray-200">
+          <code className="text-sm font-mono text-gray-800" {...props}>{children}</code>
+        </pre>
+      );
+    },
+
+    // Images & Links
+    img: ({node, ...props}) => {
+      let styleWidth = undefined;
+      
+      try {
+        const url = new URL(props.src, 'https://dummy.com'); 
+        const w = url.searchParams.get('w');
+        if (w) styleWidth = w;
+      } catch (e) {
+        console.error("Error parsing image URL params", e);
+      }
+
+      return (
+        <img 
+          className="max-w-full h-auto rounded-lg shadow-md my-6 object-cover mx-auto" 
+          style={{ width: styleWidth }} 
+          {...props} 
+          alt={props.alt || ''} 
+        />
+      );
+    },
+    a: ({node, ...props}) => (
+      <a 
+        className="text-blue-600 hover:text-blue-700 underline transition-colors" 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        {...props} 
+      />
+    ),
+    
+    // Blockquotes (Bonus addition)
+    blockquote: ({node, ...props}) => (
+      <blockquote className="border-l-4 border-blue-500 pl-4 italic text-gray-600 my-4" {...props} />
+    ),
+  };
+
+  
+
 
   const projects = [
     {
@@ -40,27 +124,9 @@ export default function Portfolio() {
   const qualifications = [
     {
       degree: "Bachelor's in Computer Engineering",
-      institution: "IOE, Pulchowk Campus, Tribhuvan University",
+      institution: "IOE, Pulchowk Campus, Tribhuvan University (81.02/100",
       year: "2019 - 2024",
-      details: "GPA: 81.02/100. Ranked Top 1% among 16,000 applicants. Merit scholarships for 6/8 semesters. Core courses: Data Structures, Computer Networks, Operating Systems, Distributed Systems, Machine Learning, Computer Vision."
-    },
-    {
-      degree: "Harvard CS50AI (Online)",
-      institution: "Harvard University/ edX",
-      year: "2024",
-      details: "Completed Harvard's advanced AI course, gaining mastery in search, optimization, machine learning, and game theory. Strengthened algorithmic problem-solving and AI system design."
-    },
-    {
-      degree: "4th NAAMII AI School",
-      institution: "Nepal Applied Mathematics and Informatics Institute",
-      year: "2024",
-      details: "Intensive 10-day AI school: 55 hours of lectures, 18 hours of labs, 14 hours of projects. Learned from experts from ETH Zürich, NUS. Topics: ML, NLP, Transformers, GNNs, Responsible AI."
-    },
-    {
-      degree: "Samsung Coding & Programming Training",
-      institution: "Samsung & Pulchowk Campus",
-      year: "2023",
-      details: "Certified Python course with 96 participants. Achieved top performance in coding assessments. Covered advanced Python concepts, dynamic programming, and algorithm design."
+      details: "I completed my Bachelor's in Computer Engineering with Distinction , covering a rigorous curriculum that included data structures and algorithms , database management systems and big data technologies , and software engineering methodologies with object-oriented analysis. My technical foundation spans computer architecture and organization , operating systems and embedded systems , distributed systems , and computer networks with internet/intranet technologies. The coursework also integrated advanced mathematics (calculus, statistics, numerical methods) , artificial intelligence and human language technologies , computer graphics , and project management, providing a comprehensive theoretical and practical engineering skillset."
     }
   ];
 
@@ -68,7 +134,7 @@ export default function Portfolio() {
     {
       role: "Research Assistant",
       company: "NAAMII (Nepal Applied Mathematics and Informatics Institute)",
-      year: "June 2024 - Present",
+      year: "June 2025 - Present",
     },
     {
       role: "Research Intern",
@@ -122,6 +188,14 @@ export default function Portfolio() {
               >
                 Projects
               </button>
+              <button
+                onClick={() => setActiveSection('blog')}
+                className={`text-sm font-medium transition-colors ${
+                  activeSection === 'blog' ? 'text-blue-600' : 'text-gray-600 hover:text-blue-600'
+                }`}
+              >
+                Blog
+              </button>
             </div>
           </div>
         </nav>
@@ -143,8 +217,8 @@ export default function Portfolio() {
               
               <div className="space-y-4 text-gray-700">
                 <p>
-                  Hello! I'm a passionate artificial intelligence researcher with a keen interest in Computer Vision, 
-                  Reinforcement Learning, and problem-solving. This portfolio showcases my academic journey 
+                  Hello! I'm a passionate Artificial Intelligence researcher with a keen interest in Computer Vision, 
+                  Natural Language Processing and problem-solving. This portfolio showcases my academic journey 
                   and the projects I've worked on.
                 </p>
                 <p>
@@ -241,6 +315,77 @@ export default function Portfolio() {
                 </div>
               ))}
             </div>
+          </section>
+        )}
+
+{activeSection === 'blog' && !selectedBlog && (
+          <section className="space-y-6 animate-fadeIn">
+            <h2 className="text-3xl font-bold text-gray-800 mb-6">Blog</h2>
+            {allBlogs.length === 0 ? (
+              <div className="bg-white rounded-lg shadow-md p-8 text-center">
+                <BookOpen className="mx-auto text-gray-400 mb-4" size={48} />
+                <p className="text-gray-600">No blog posts yet. Check back soon!</p>
+              </div>
+            ) : (
+              <div className="grid gap-6">
+                {allBlogs.map((blog) => (
+                  <div 
+                    key={blog.id} 
+                    className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer"
+                    onClick={() => openBlog(blog)}
+                  >
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <BookOpen className="text-blue-600" size={24} />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-xl font-semibold text-gray-800 mb-2">{blog.title}</h3>
+                        <div className="flex items-center gap-2 text-sm text-gray-500 mb-3">
+                          <Calendar size={16} />
+                          <span>{blog.date}</span>
+                        </div>
+                        <p className="text-gray-700 mb-4 line-clamp-3">{blog.excerpt}</p>
+                        <span className="text-blue-600 hover:text-blue-700 font-medium text-sm">
+                          Read More →
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </section>
+        )}
+
+        {activeSection === 'blog' && selectedBlog && (
+          <section className="animate-fadeIn">
+            <button 
+              onClick={closeBlog}
+              className="flex items-center gap-2 text-blue-600 hover:text-blue-700 mb-6 font-medium"
+            >
+              <ArrowLeft size={20} />
+              Back to Blog List
+            </button>
+            <article className="bg-white rounded-lg shadow-md p-8">
+              <header className="mb-8 border-b pb-4">
+                <h1 className="text-4xl font-bold text-gray-900 mb-4">{selectedBlog.title}</h1>
+                <div className="flex items-center gap-2 text-sm text-gray-500">
+                  <Calendar size={16} />
+                  <span>{selectedBlog.date}</span>
+                </div>
+              </header>
+              
+              <div className="prose prose-lg max-w-none">
+                <ReactMarkdown 
+                  components={MarkdownComponents}
+                  remarkPlugins={[remarkGfm, remarkMath]} 
+                  rehypePlugins={[rehypeKatex]}          
+                >
+                  {selectedBlog.content}
+                </ReactMarkdown>
+              </div>
+              
+            </article>
           </section>
         )}
       </main>
