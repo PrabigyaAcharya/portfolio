@@ -20,7 +20,7 @@ const blog = {
   ![](./blogs/images/tig/image-1.png?w=200px)
   The above function can be written as:
   $$
-  \\hat{f}_h(x) = \\frac{1}{nh}\\sum_{i=1}^{n}K(x - x_i)
+  \\hat{f}_h(x) = \\frac{1}{nh}\\sum_{i=1}^{n}K(\\frac{x - x_i}{h})
   $$
   The KDE is calculated by weighting the distances of all the data points we’ve observed. The more points nearby corresponds to the estimate being higher and hence a higher probability of that point.
   Selecting the bandwith is important, as we want it to be as lower as the data point allows us. This ensures that data points contribute strongly near themselves when the distance is nearly zero and weakly far away. A lower bandwidth means only close neighbors are taken while estimating, while a higher bandwidth means a larger neighborhood of points is considered. Choosing nearby points only may cause the estimate to look like this.
@@ -34,7 +34,7 @@ const blog = {
   Diffusion models synthesize new images that are highly likely given the probability distribution. So knowing $P$, we can generate new images from it.
   Since images can be considered vectors, whose pixels are components of the vector. The probability distribution of an image can be estimated as:
   $$
-  P(\\overrightarrow{x}) = \\frac{1}{nh}\\sum_{i=1}^{n}K(x - x_i)
+  P(\\overrightarrow{x}) = \\frac{1}{nh}\\sum_{i=1}^{n}K(\\frac{x - x_i}{h})
   $$
   i.e. the sum over the images in the traiing set.
 
