@@ -1,0 +1,24 @@
+const dataset_research_blog = {
+    id: 3,
+    title: 'Dataset for next generation 3D understanding',
+    date: '2026-04-23',
+    excerpt: 'Hierarchical Dataset for 3DGS Scenes',
+    content: ` # Hierarchical Dataset for 3DGS Scenes
+Imagine standing in a kitchen, looking at all the cooking utensils, ingredients in the fridge and pantry and the tools in the kitchen. When we explore around the room, we view objects, read labels, check dates, see if the fruit is rotten or not, and take in all the visual cues that helps us make sense of the spatial as well as the functional arrangement and purpose of the room. If you asked a human to make tea, if they know how to make one, they can search for the tea pot where the utensils are kept, fill it with water, search for tea and sugar in the pantry and then prepare tea. Now imagine asking the best commercial AI today to make a tea in that 3D space. There would be a lot of problem that we will need to tackle before we can get it to do so. 
+
+AI systems that combine vision and language have gotten remarkably good at understanding photos. Show one a picture of a dog and it'll tell you the breed. Show it a cluttered desk and it can describe what's on it. But 3D environments are a different story. When an AI needs to understand a real room with depth, scale, and relationships between objects, things fall apart. Reasoning over a whole room, with a lot of objects fail due to a number of reasons. The same reference can be taken by similar objects, the context of reasoning can be too long for the model to hallucinate, and problems may arise due to the quality of representation itself, in which textures in the scene are not describable and texts aren’t readable. 
+
+Existing tests had two big blind spots. Most used point clouds, using which you get the rough shape of the furniture but lose all the texture, color, and material detail.  This poses a problem that while we can have accurate spatial information of the 3D scene, we lose out on the fine grained details that are an important part of the scene. For example, if we are unable to read a label on an ingredient on a scene of a kitchen, how are we supposed to guide systems to prepare something?
+
+Another problem was that these tests treated every object as a separate entity. A chair is just a chair. But in a real room, that chair sits at a dining table, which is in a dining area, which is part of a larger apartment. A human would understand easily if someone told them to rearrange the chairs in the dining area to fit some more people, while for AI, these type of reasoning might pose a problem because it lacks the description of a dining area when multiple arrangements of table and chars are present in the room. Through similar problems, we saw that context and hierarchy matter enormously for how we understand space, and no existing benchmark captured that.
+
+So we designed a benchmark that was designed to fix both problems. The scenes were represented using Gaussian Splats, which reconstructs a space so realistically that you can view it from any angle with all the textures and lighting intact. Instead of a dot skeleton, you get something that actually looks like being inside the room. 
+
+On top of that, we built a hierarchical map of meaning into every scene. Each scene is annotated not just at the object level, but all the way up through object groups, functional areas, rooms, and the full scene. It works like a family tree of meaning, from the big picture down to the individual peach sitting in a fruit bowl. We did this across 969 scenes, a mix of real-world apartments and high-quality synthetic interiors, producing over 183,000 annotated elements with text descriptions and precise 3D locations through bounding boxes.
+
+We then designed a benchmark with 3 types of tasks. Basic existence questions like whether an object with a certain color or material appears in the scene. Spatial questions like how many chairs are there, or which object is closer to the window. And multi-step reasoning questions like what the design of a space tells you about the person who lives there. We tested a range of leading AI systems and measured what happened. On basic existence questions, the best models reached around 85% accuracy. But on spatial tasks like counting or judging distances, accuracy dropped to around 60% or below. The multi-step reasoning tasks exposed even deeper gaps, especially anything involving missing objects or understanding how furniture physically constrains other furniture.
+
+AI can name the objects in a room, but, truly understanding the space the way a person does when they walk in and immediately get a sense of how someone lives, that is still an open challenge. This dataset is our first step towards addressing the challenge.
+    `
+}
+export default dataset_research_blog

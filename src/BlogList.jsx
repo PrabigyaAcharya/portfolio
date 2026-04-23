@@ -8,7 +8,7 @@ export default function BlogList() {
         <div className="space-y-8 animate-in fade-in duration-500">
       <div className="text-center mb-12">
         <h2 className="text-3xl font-bold text-gray-900">Latest Writings</h2>
-        <p className="text-gray-600 mt-2">Organized Thoughts.</p>
+        <p className="text-gray-600 mt-2">Blogs about things I am doing and learning about.</p>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
