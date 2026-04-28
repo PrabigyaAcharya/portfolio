@@ -11,7 +11,7 @@ But what happens when both worlds meet?
 
 That question led us to build **Avritti**, a project focused on generating music using **Genetic Algorithms**. Instead of relying on modern deep learning models or pre-trained datasets, this project explored a different direction — using evolutionary principles to create melodies from scratch.
 
-Avritti is currently hosted at:
+Avritti was created as a capstone project for AI in our seventh semester, it is currently hosted at:
 
 **https://music.prabigya.com.np**
 
