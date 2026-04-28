@@ -2,6 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import allBlogs from '../blogs'
 
+const sortedBlogs = [...allBlogs].sort((a, b) => 
+  new Date(b.date) - new Date(a.date)
+);
 
 export default function BlogList() {
     return (
@@ -12,7 +15,7 @@ export default function BlogList() {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {allBlogs.map((post) => (
+        {sortedBlogs.map((post) => (
           <Link 
             to={`/blog/${post.id}`} 
             key={post.id}
