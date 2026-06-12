@@ -4,7 +4,7 @@
 //          or { error: string, mailto?: string } on failure/over-budget
 
 import { hashIp, checkRateLimit, sanitizeInput } from './utils.js';
-import { publications, notebookPosts } from './content-bundle.js';
+import { publications, notebookPosts, site, cv, now } from './content-bundle.js';
 import type { Env } from './index.js';
 
 // ── Search helpers (reused from mcp.ts logic) ─────────────────────────────────
@@ -26,6 +26,33 @@ interface SearchChunk {
   snippet: string;
   url: string;
   score: number;
+}
+
+function buildBioContext(siteUrl: string): string {
+  const positions = cv.positions
+    .map(p => `${p.role} at ${p.org} (${p.start}–${p.end})`)
+    .join('; ');
+  const projects = cv.projects
+    ?.map((p: { title: string }) => p.title)
+    .join(', ') ?? '';
+  const threads = site.research_threads
+    .map(t => `${t.name}: ${t.blurb}`)
+    .join(' | ');
+  const workingOn = now.working_on.join('; ');
+
+  return `[site.yaml + cv.yaml + now.yaml]
+Name: ${site.name}
+Tagline: ${site.tagline}
+Location: ${site.location}
+Email: ${site.links.email}
+GitHub: ${site.links.github}
+Research threads: ${threads}
+Education: ${cv.education.map(e => `${e.role} at ${e.org} (${e.start}–${e.end})`).join('; ')}
+Experience: ${positions}
+Projects: ${projects}
+Skills: ${cv.skills.join(', ')}
+Currently working on: ${workingOn}
+${siteUrl}/`;
 }
 
 function searchContent(query: string, siteUrl: string): SearchChunk[] {
@@ -54,6 +81,21 @@ function searchContent(query: string, siteUrl: string): SearchChunk[] {
         title: post.title,
         snippet: post.summary,
         url: `${siteUrl}/notebook/${post.slug}`,
+        score,
+      });
+    }
+  }
+
+  // Search CV projects
+  for (const project of cv.projects ?? []) {
+    const corpus = [project.title, project.description].join(' ');
+    const score = simpleScore(corpus, query);
+    if (score > 0) {
+      results.push({
+        source: 'cv.yaml#projects',
+        title: project.title,
+        snippet: project.description,
+        url: `${siteUrl}/cv`,
         score,
       });
     }
@@ -191,12 +233,14 @@ export async function handleAsk(
     );
   }
 
-  // Retrieve top-3 context chunks
+  // Retrieve context: always include bio, then top search results
   const siteUrl = (env.SITE_URL ?? 'https://prabigya.com.np').replace(/\/$/, '');
+  const bio = buildBioContext(siteUrl);
   const chunks = searchContent(question, siteUrl);
-  const contextText = chunks.length > 0
+  const searchContext = chunks.length > 0
     ? chunks.map(c => `[${c.source}]\n${c.title}: ${c.snippet}\n${c.url}`).join('\n\n')
-    : 'No relevant content found in the knowledge base.';
+    : '';
+  const contextText = [bio, searchContext].filter(Boolean).join('\n\n');
 
   // Build prompt
   const { system, user } = buildAskPrompt(question, contextText);

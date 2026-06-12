@@ -60,9 +60,17 @@ export interface CVEntry {
   details?: string[];
 }
 
+export interface CvProject {
+  title: string;
+  description: string;
+  tech: string[];
+  link: string;
+}
+
 export interface CvData {
   education: CVEntry[];
   positions: CVEntry[];
+  projects?: CvProject[];
   skills: string[];
   service: string[];
   awards: string[];
