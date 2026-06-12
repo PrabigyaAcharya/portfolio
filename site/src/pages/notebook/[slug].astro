@@ -1,0 +1,126 @@
+---
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('notebook', ({ data }) => !data.draft);
+  return posts.map(post => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: CollectionEntry<'notebook'>;
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+
+const math = post.data.math ?? false;
+
+const formattedDate = post.data.date.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+
+const updatedDate = post.data.updated
+  ? post.data.updated.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+  : null;
+---
+<Base title={post.data.title} description={post.data.summary} math={math}>
+  <Header slot="header" />
+
+  <div class="page">
+    <article class="page-main post-body">
+      <header style="margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--rule);">
+        <h1 style="margin-bottom: 0.5rem;">{post.data.title}</h1>
+        <div style="display: flex; align-items: baseline; gap: 1rem; flex-wrap: wrap;">
+          <time class="mono" style="font-size: 0.7em; color: var(--ink-ghost);" datetime={post.data.date.toISOString()}>
+            {formattedDate}
+          </time>
+          {updatedDate && (
+            <span class="mono" style="font-size: 0.65em; color: var(--ink-ghost);">
+              last tended {updatedDate}
+            </span>
+          )}
+          {post.data.tags.length > 0 && (
+            <div class="post-tags">
+              {post.data.tags.map(tag => (
+                <a href={`/notebook#tag-${tag}`} class="tag">{tag}</a>
+              ))}
+            </div>
+          )}
+        </div>
+      </header>
+
+      <div class="prose">
+        <Content />
+      </div>
+
+      <footer style="margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--rule);">
+        <a href="/notebook" class="mono" style="font-size: 0.75em; color: var(--ink-faint);">
+          ← notebook
+        </a>
+      </footer>
+    </article>
+
+    <aside class="page-margin" aria-label="Margin notes" style="padding-top: 5rem;">
+      <div class="margin-note">
+        <span class="margin-stamp">posted</span>
+        {formattedDate}
+      </div>
+      {updatedDate && (
+        <div class="margin-note" style="margin-top: 1rem;">
+          <span class="margin-stamp">last tended</span>
+          {updatedDate}
+        </div>
+      )}
+    </aside>
+  </div>
+
+  <Footer slot="footer" />
+</Base>
+
+<style>
+  .prose :global(h2) {
+    margin-top: 2.5rem;
+  }
+  .prose :global(h3) {
+    margin-top: 2rem;
+  }
+  .prose :global(p) {
+    margin-bottom: 1.1em;
+  }
+  .prose :global(img) {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 1.5rem 0;
+  }
+  .prose :global(figure) {
+    margin: 1.5rem 0;
+  }
+  .prose :global(figcaption) {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72em;
+    color: var(--ink-faint);
+    margin-top: 0.5rem;
+  }
+  /* Sidenotes section styling in prose */
+  .prose :global(.sidenotes) {
+    margin-top: 3rem;
+    border-top: 1px solid var(--rule);
+    padding-top: 1rem;
+  }
+  .prose :global([data-footnote-ref]) {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.7em;
+    vertical-align: super;
+    line-height: 0;
+  }
+</style>

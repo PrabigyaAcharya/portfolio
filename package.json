@@ -1,0 +1,18 @@
+{
+  "name": "portfolio-kit",
+  "private": true,
+  "workspaces": [
+    "site",
+    "worker",
+    "shared"
+  ],
+  "scripts": {
+    "dev": "cd site && npm run dev",
+    "build": "cd site && npm run build",
+    "check": "cd shared && npm run build && cd ../site && npm run check && cd ../worker && npm test",
+    "check-content": "npx tsx scripts/check-invariants.ts"
+  },
+  "devDependencies": {
+    "tsx": "^4.22.4"
+  }
+}

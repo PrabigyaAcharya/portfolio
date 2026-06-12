@@ -1,0 +1,54 @@
+---
+import Page from '../layouts/Page.astro';
+import { getNow, getSiteData } from '../lib/content';
+
+const now = getNow();
+const site = getSiteData();
+
+const updatedDate = new Date(now.updated);
+const formattedDate = updatedDate.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+<Page title="Now" description={`What ${site.name} is working on right now`}>
+  <h1>Now</h1>
+  <p class="mono" style="font-size: 0.7em; color: var(--ink-ghost); margin-top: 0.25rem; margin-bottom: 2rem;">
+    updated <time datetime={now.updated}>{formattedDate}</time>
+  </p>
+
+  <section aria-labelledby="working-on-heading" style="margin-bottom: 2rem;">
+    <span class="section-label" id="working-on-heading">working on</span>
+    <ul class="now-list">
+      {now.working_on.map(item => (
+        <li>{item}</li>
+      ))}
+    </ul>
+  </section>
+
+  <section aria-labelledby="reading-heading" style="margin-bottom: 2rem;">
+    <span class="section-label" id="reading-heading">reading</span>
+    <ul class="now-list">
+      {now.reading.map(item => (
+        <li>{item}</li>
+      ))}
+    </ul>
+  </section>
+
+  <section aria-labelledby="open-to-heading">
+    <span class="section-label" id="open-to-heading">open to</span>
+    <ul class="now-list">
+      {now.open_to.map(item => (
+        <li>{item}</li>
+      ))}
+    </ul>
+  </section>
+
+  <div slot="margin">
+    <div class="margin-note" style="margin-top: 5rem;">
+      <span class="margin-stamp">inspired by</span>
+      <a href="https://nownownow.com/about" target="_blank" rel="noopener" style="font-style: normal;">nownownow.com</a>
+    </div>
+  </div>
+</Page>

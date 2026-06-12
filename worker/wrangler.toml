@@ -1,0 +1,29 @@
+name = "portfolio-worker"
+main = "src/index.ts"
+compatibility_date = "2024-11-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+ENVIRONMENT = "development"
+SITE_URL = "http://localhost:8787"
+
+# D1 database binding
+[[d1_databases]]
+binding = "DB"
+database_name = "portfolio"
+database_id = "f890a1e5-8c15-4ef3-91b5-7b14f02b44f4"
+
+# KV namespace bindings
+[[kv_namespaces]]
+binding = "KV"
+id = "30a448de4ce0401ea6f3e980aeee6d99"
+
+# Secrets (set via: wrangler secret put <NAME>)
+# GROQ_API_KEY      — for ask-box and eval judging (get a free key at console.groq.com)
+# TELEMETRY_TOKEN   — bearer token for lab-agent POSTs
+# EVAL_ANSWERS      — JSON object with answer hashes (never in repo)
+
+[env.production]
+[env.production.vars]
+ENVIRONMENT = "production"
+SITE_URL = "https://prabigya.com.np"

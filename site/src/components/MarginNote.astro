@@ -1,0 +1,12 @@
+---
+export interface Props {
+  stamp?: string;
+  class?: string;
+}
+
+const { stamp, class: extraClass } = Astro.props;
+---
+<aside class={`margin-note${extraClass ? ` ${extraClass}` : ''}`}>
+  {stamp && <span class="margin-stamp">{stamp}</span>}
+  <slot />
+</aside>

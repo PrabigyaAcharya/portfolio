@@ -1,0 +1,86 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  # ── Run checks and tests before deploying ─────────────────────────────────────
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: |
+            site/package-lock.json
+            worker/package-lock.json
+
+      - name: Install site deps
+        run: cd site && npm ci
+
+      - name: Install worker deps
+        run: cd worker && npm ci
+
+      - name: Astro type check
+        run: cd site && npm run check
+
+      - name: Worker tests
+        run: cd worker && npm test
+
+  # ── Deploy Cloudflare Worker (runs in parallel with deploy-site) ───────────────
+  deploy-worker:
+    needs: ci
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: worker/package-lock.json
+
+      - name: Install worker deps
+        run: cd worker && npm ci
+
+      - name: Deploy worker to Cloudflare
+        run: cd worker && npx wrangler deploy --env production
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+  # ── Build Astro site and deploy static files to VPS ───────────────────────────
+  deploy-site:
+    needs: ci
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+
+      - name: Install site deps
+        run: cd site && npm ci
+
+      - name: Build site
+        run: cd site && npm run build
+        env:
+          SITE_URL: https://prabigya.com.np
+
+      - name: Deploy static files to VPS
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT }}
+          source: "site/dist/"
+          target: "/home/${{ secrets.VPS_USER }}/portfolio-kit"
+          strip_components: 0

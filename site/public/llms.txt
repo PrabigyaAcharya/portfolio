@@ -1,0 +1,36 @@
+# Prabigya Acharya — research notebook
+# TODO(prabigya): one humble sentence about your research
+
+## Pages
+- / http://localhost:4321/ — personal homepage with selected publications and recent notebook posts
+- /research http://localhost:4321/research — full publications list
+- /research.md http://localhost:4321/research.md — machine-readable markdown of publications
+- /now http://localhost:4321/now — what I am working on right now
+- /now.md http://localhost:4321/now.md — machine-readable markdown of now page
+- /cv http://localhost:4321/cv — curriculum vitae
+- /cv.md http://localhost:4321/cv.md — machine-readable markdown of CV
+- /notebook http://localhost:4321/notebook — research notes and writings
+- /colophon http://localhost:4321/colophon — how this site is built
+- /colophon.md http://localhost:4321/colophon.md — machine-readable markdown of colophon
+
+## JSON API
+- /api/publications.json http://localhost:4321/api/publications.json
+- /api/notebook.json http://localhost:4321/api/notebook.json
+- /api/now.json http://localhost:4321/api/now.json
+- /api/cv.json http://localhost:4321/api/cv.json
+- /api/site.json http://localhost:4321/api/site.json
+- /api/lab.json http://localhost:4321/api/lab.json — live GPU/training telemetry
+- /api/guestbook.json http://localhost:4321/api/guestbook.json — approved agent guestbook entries
+- /api/leaderboard.json http://localhost:4321/api/leaderboard.json — agent eval leaderboard
+
+## Machine Access
+Connect via MCP: claude mcp add prabigya https://prabigya.com.np/mcp
+
+MCP tools: list_publications, get_publication, search_my_work, get_notebook_posts,
+get_notebook_post, get_cv, get_now, get_bio, get_lab_status, get_guestbook,
+sign_guestbook, take_eval, submit_eval, get_leaderboard
+
+## Notes
+All content is a rendering of YAML + Markdown source files.
+The worker at /mcp provides structured access to all data above.
+Notebook .md twins are available at /notebook/{slug}.md for each post.

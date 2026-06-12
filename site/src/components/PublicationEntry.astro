@@ -1,0 +1,92 @@
+---
+export interface Props {
+  pub: {
+    id: string;
+    title: string;
+    authors: string[];
+    venue: string;
+    year: number;
+    summary: string;
+    abstract?: string;
+    backstory?: string;
+    links?: {
+      pdf?: string;
+      arxiv?: string;
+      code?: string;
+      poster?: string;
+    };
+    bibtex?: string;
+    selected?: boolean;
+  };
+  authorName?: string;
+}
+
+const { pub, authorName = "P. Acharya" } = Astro.props;
+const bibtexJson = pub.bibtex ? JSON.stringify(pub.bibtex) : 'null';
+---
+
+<article class="pub-entry entry-list-item" id={pub.id}>
+  <h3 class="pub-title">{pub.title}</h3>
+  <p class="pub-authors">
+    {pub.authors.map((author, i) => (
+      <>
+        {i > 0 && ', '}
+        {author === authorName
+          ? <span class="me">{author}</span>
+          : <span>{author}</span>
+        }
+      </>
+    ))}
+  </p>
+  <p class="pub-venue">
+    {pub.venue} · {pub.year}
+  </p>
+  <p class="pub-summary">{pub.summary}</p>
+
+  <div class="pub-actions">
+    {pub.links?.pdf && pub.links.pdf.length > 0 && (
+      <a href={pub.links.pdf} target="_blank" rel="noopener noreferrer">[pdf]</a>
+    )}
+    {pub.links?.arxiv && pub.links.arxiv.length > 0 && (
+      <a href={pub.links.arxiv} target="_blank" rel="noopener noreferrer">[arXiv]</a>
+    )}
+    {pub.links?.code && pub.links.code.length > 0 && (
+      <a href={pub.links.code} target="_blank" rel="noopener noreferrer">[code]</a>
+    )}
+    {pub.links?.poster && pub.links.poster.length > 0 && (
+      <a href={pub.links.poster} target="_blank" rel="noopener noreferrer">[poster]</a>
+    )}
+    {pub.abstract && (
+      <details class="pub-abstract">
+        <summary><span class="visually-hidden">abstract</span></summary>
+        <div class="abstract-body">{pub.abstract}</div>
+      </details>
+    )}
+    {pub.bibtex && (
+      <details class="pub-bibtex">
+        <summary style="cursor: pointer; font-family: 'IBM Plex Mono', monospace; font-size: 0.72em; color: var(--accent); list-style: none; display: inline-flex;">[bibtex ⌄]</summary>
+        <div style="margin-top: 0.5rem;">
+          <pre><code>{pub.bibtex}</code></pre>
+          <button
+            type="button"
+            class="copy-bibtex-btn"
+            data-bibtex={bibtexJson}
+            style="font-family: 'IBM Plex Mono', monospace; font-size: 0.7em; color: var(--accent); background: none; border: none; cursor: pointer; padding: 0;"
+          >[copy]</button>
+        </div>
+      </details>
+    )}
+  </div>
+</article>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.copy-bibtex-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const bibtex = btn.dataset.bibtex ? JSON.parse(btn.dataset.bibtex) as string : '';
+      navigator.clipboard?.writeText(bibtex).then(() => {
+        btn.textContent = 'copied';
+        setTimeout(() => { btn.textContent = '[copy]'; }, 1500);
+      });
+    });
+  });
+</script>

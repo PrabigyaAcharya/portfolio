@@ -1,0 +1,43 @@
+# - id: placeholder-paper-2025
+#   title: "TODO(prabigya): Paper Title Goes Here"
+#   authors: ["P. Acharya", "TODO Coauthor A", "TODO Coauthor B"]
+#   venue: "TODO(prabigya): Conference / Workshop / arXiv"
+#   year: 2025
+#   thread: thread-1
+#   summary: "TODO(prabigya): One plain-language sentence describing what this paper does."
+#   abstract: |
+#     TODO(prabigya): Full abstract text goes here.
+#   backstory: "TODO(prabigya): Optional margin note — how it came about, what failed."
+#   links:
+#     pdf: ""
+#     arxiv: ""
+#   bibtex: |
+#     @inproceedings{placeholder-paper-2025,
+#       title     = {TODO(prabigya): Paper Title Goes Here},
+#       author    = {Acharya, Prabigya and TODO, Coauthor},
+#       booktitle = {TODO(prabigya): Proceedings},
+#       year      = {2025},
+#     }
+#   selected: true
+
+- id: piimasking-preprint-2024
+  title: "A Comparative Study of Light-weight Language Models for PII Masking and their Deployment for Real Conversational Texts"
+  authors: ["Prabigya Acharya", "Liza Shrestha"]
+  venue: "arXiv preprint"
+  year: 2024
+  thread: thread-1
+  summary: "We present a comparative study of light-weight language models for Personally Identifiable Information (PII) masking in real conversational texts. Our research evaluates the performance of various models in accurately identifying and masking PII, ensuring data privacy while maintaining the integrity of the original text. We also discuss the deployment challenges and solutions for integrating these models into real-world applications."
+  abstract: |
+    Automated masking of Personally Identifiable Information (PII) is critical for privacy-preserving conversational systems. While current frontier large language models demonstrate strong PII masking capabilities, concerns about data handling and computational costs motivate exploration of whether lightweight models can achieve comparable performance. We compare encoder-decoder and decoder-only architectures by fine-tuning T5-small and Mistral-Instruct-v0.3 on English datasets constructed from the AI4Privacy benchmark. We create different dataset variants to study label standardization and PII representation, covering 24 standardized PII categories and higher-granularity settings. Evaluation using entity-level and character-level metrics, type accuracy, and exact match shows that both lightweight models achieve performance comparable to frontier LLMs for PII masking tasks. Label normalization consistently improves performance across architectures. Mistral achieves higher F1 and recall with greater robustness across PII types but incurs significantly higher generation latency. T5, while less robust in conversational text, offers more controllable structured outputs and lower inference cost, motivating its use in a real-time Discord bot for real-world PII redaction. Evaluation on live messages reveals performance degradation under informal inputs. These results clarify trade-offs between accuracy, robustness, and computational efficiency, demonstrating that lightweight models can provide effective PII masking while addressing data handling concerns associated with frontier LLMs.
+  links: {}
+  bibtex: |
+    @misc{acharya2025comparativestudylightweightlanguage,
+      title={A Comparative Study of Light-weight Language Models for PII Masking and their Deployment for Real Conversational Texts}, 
+      author={Prabigya Acharya and Liza Shrestha},
+      year={2025},
+      eprint={2512.18608},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2512.18608}, 
+    }
+  selected: true

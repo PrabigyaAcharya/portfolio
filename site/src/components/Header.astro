@@ -1,0 +1,26 @@
+---
+const navLinks = [
+  { href: '/research', label: 'research' },
+  { href: '/notebook', label: 'notebook' },
+  { href: '/now', label: 'now' },
+  { href: '/cv', label: 'cv' },
+  { href: '/colophon', label: 'colophon' },
+];
+
+const currentPath = Astro.url.pathname;
+---
+<header class="site-header" role="banner">
+  <div class="site-header-inner">
+    <a href="/" class="site-name">Prabigya Acharya</a>
+    <nav class="site-nav" aria-label="Main navigation">
+      {navLinks.map(link => (
+        <a
+          href={link.href}
+          aria-current={currentPath.startsWith(link.href) ? 'page' : undefined}
+        >
+          {link.label}
+        </a>
+      ))}
+    </nav>
+  </div>
+</header>

@@ -1,0 +1,35 @@
+---
+import Page from '../layouts/Page.astro';
+import PublicationEntry from '../components/PublicationEntry.astro';
+import { getSiteData, getPublicationsByYear } from '../lib/content';
+
+const site = getSiteData();
+const byYear = getPublicationsByYear();
+const years = [...byYear.keys()];
+---
+<Page title="Research" description={`Research and publications by ${site.name}`}>
+  <h1>Research</h1>
+  <p style="color: var(--ink-soft); margin-top: 0.5rem; margin-bottom: 2rem; max-width: 52ch;">
+    TODO(prabigya): brief framing of your research approach, 1-2 sentences.
+  </p>
+
+  {years.map(year => (
+    <section aria-labelledby={`year-${year}`} style="margin-bottom: 2.5rem;">
+      <h2 id={`year-${year}`} style="font-family: 'IBM Plex Mono', monospace; font-size: 0.8em; color: var(--ink-ghost); letter-spacing: 0.1em; margin-bottom: 0; margin-top: 0; font-weight: 400; border-bottom: 1px solid var(--rule); padding-bottom: 0.5rem;">
+        {year}
+      </h2>
+      {byYear.get(year)!.map(pub => (
+        <PublicationEntry pub={pub} />
+      ))}
+    </section>
+  ))}
+
+  <div slot="margin">
+    <div class="margin-note" style="margin-top: 4rem;">
+      <span class="margin-stamp">research threads</span>
+      {site.research_threads.map(thread => (
+        <p style="margin-bottom: 0.75rem;">{thread.name}</p>
+      ))}
+    </div>
+  </div>
+</Page>

@@ -1,0 +1,7 @@
+- id: q01
+  question: "TODO(prabigya): a hard question from your research domain"
+  type: exact
+
+- id: q02
+  question: "TODO(prabigya): another question"
+  type: judged

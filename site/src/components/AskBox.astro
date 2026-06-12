@@ -1,0 +1,104 @@
+---
+// AskBox.astro — Ask-this-notebook component
+// Falls back to mailto when JS is off or budget is exceeded
+---
+
+<div class="ask-box" id="ask-box">
+  <form class="ask-form" id="ask-form" action="mailto:TODO(prabigya)@example.com" method="get">
+    <label for="ask-input" class="ask-label">ask this notebook</label>
+    <div class="ask-input-row">
+      <input
+        type="text"
+        id="ask-input"
+        name="body"
+        class="ask-input mono"
+        placeholder="ask this notebook…"
+        maxlength="300"
+        autocomplete="off"
+        spellcheck="false"
+      />
+      <button type="submit" class="ask-submit mono">ask</button>
+    </div>
+  </form>
+  <div class="ask-answer" id="ask-answer" aria-live="polite" aria-atomic="true"></div>
+</div>
+
+<noscript>
+  <p class="ask-noscript mono" style="font-size:0.8em; color:var(--ink-ghost);">
+    JavaScript is required for the ask-box. Use the <a href="/mcp">MCP server</a> or email directly.
+  </p>
+</noscript>
+
+<script>
+  const form = document.getElementById('ask-form') as HTMLFormElement | null;
+  const input = document.getElementById('ask-input') as HTMLInputElement | null;
+  const answerEl = document.getElementById('ask-answer') as HTMLDivElement | null;
+  if (!form || !input || !answerEl) throw new Error('ask-box elements missing');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const question = input.value.trim();
+    if (!question) return;
+
+    // Show thinking state
+    answerEl.textContent = '';
+    const thinking = document.createElement('span');
+    thinking.className = 'ask-thinking mono';
+    thinking.textContent = 'thinking…';
+    answerEl.appendChild(thinking);
+
+    try {
+      const res = await fetch('/api/ask', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question }),
+      });
+
+      const data = await res.json() as {
+        answer?: string;
+        sources?: string[];
+        error?: string;
+        mailto?: string;
+      };
+
+      answerEl.textContent = '';
+
+      if (data.error) {
+        const errEl = document.createElement('p');
+        errEl.className = 'ask-error mono';
+        // Use text nodes — never innerHTML
+        errEl.textContent = data.error;
+        if (data.mailto) {
+          errEl.textContent += ' ';
+          const link = document.createElement('a');
+          link.href = `mailto:${data.mailto}`;
+          link.textContent = 'email directly';
+          errEl.appendChild(link);
+        }
+        answerEl.appendChild(errEl);
+        return;
+      }
+
+      if (data.answer) {
+        const answerText = document.createElement('p');
+        answerText.className = 'ask-answer-text';
+        answerText.textContent = data.answer; // text node, never innerHTML
+
+        answerEl.appendChild(answerText);
+
+        if (data.sources && data.sources.length > 0) {
+          const sourcesEl = document.createElement('p');
+          sourcesEl.className = 'ask-sources mono';
+          sourcesEl.textContent = data.sources.map((s: string) => `→ ${s}`).join('  ');
+          answerEl.appendChild(sourcesEl);
+        }
+      }
+    } catch {
+      answerEl.textContent = '';
+      const errEl = document.createElement('p');
+      errEl.className = 'ask-error mono';
+      errEl.textContent = 'could not reach the notebook right now.';
+      answerEl.appendChild(errEl);
+    }
+  });
+</script>

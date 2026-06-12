@@ -1,0 +1,107 @@
+---
+import Page from '../layouts/Page.astro';
+import { getCV, getSiteData, getPublications } from '../lib/content';
+
+const cv = getCV();
+const site = getSiteData();
+const publications = getPublications();
+---
+<Page title="CV" description={`Curriculum vitae of ${site.name}`}>
+  <div style="display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem;">
+    <h1 style="margin-bottom: 0;">{site.name}</h1>
+    <a
+      href="/prabigya-acharya-cv.pdf"
+      class="mono"
+      style="font-size: 0.72em; color: var(--accent);"
+      download
+    >[download pdf]</a>
+  </div>
+
+  <!-- Education -->
+  <section aria-labelledby="education-heading" style="margin-bottom: 2.5rem;">
+    <span class="section-label" id="education-heading">education</span>
+    <div>
+      {cv.education.map(entry => (
+        <div class="cv-entry" style="border-top: 1px solid var(--rule); padding: 1rem 0;">
+          <div class="cv-entry-dates">{entry.start}–{entry.end}</div>
+          <div class="cv-entry-body">
+            <div class="cv-entry-org">{entry.org}</div>
+            <div class="cv-entry-role">{entry.role}</div>
+            {entry.details && entry.details.length > 0 && (
+              <ul class="cv-entry-details">
+                {entry.details.map(d => <li>{d}</li>)}
+              </ul>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Positions -->
+  <section aria-labelledby="positions-heading" style="margin-bottom: 2.5rem;">
+    <span class="section-label" id="positions-heading">positions</span>
+    <div>
+      {cv.positions.map(entry => (
+        <div class="cv-entry" style="border-top: 1px solid var(--rule); padding: 1rem 0;">
+          <div class="cv-entry-dates">{entry.start}–{entry.end}</div>
+          <div class="cv-entry-body">
+            <div class="cv-entry-org">{entry.org}</div>
+            <div class="cv-entry-role">{entry.role}</div>
+            {entry.details && entry.details.length > 0 && (
+              <ul class="cv-entry-details">
+                {entry.details.map(d => <li>{d}</li>)}
+              </ul>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Publications -->
+  <section aria-labelledby="pubs-heading" style="margin-bottom: 2.5rem;">
+    <span class="section-label" id="pubs-heading">publications</span>
+    {publications.map(pub => (
+      <div style="padding: 0.75rem 0; border-top: 1px solid var(--rule);">
+        <p style="font-size: 0.92rem; font-weight: 500; color: var(--ink);">{pub.title}</p>
+        <p style="font-size: 0.82rem; color: var(--ink-soft); margin-top: 0.15rem;">
+          {pub.authors.join(', ')} · {pub.venue} · {pub.year}
+        </p>
+      </div>
+    ))}
+  </section>
+
+  <!-- Skills -->
+  <section aria-labelledby="skills-heading" style="margin-bottom: 2.5rem;">
+    <span class="section-label" id="skills-heading">skills</span>
+    <ul style="list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.25rem;">
+      {cv.skills.map(skill => (
+        <li style="font-size: 0.88rem; color: var(--ink-soft); padding: 0.15rem 0.6rem; border: 1px solid var(--rule);">{skill}</li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- Service -->
+  <section aria-labelledby="service-heading" style="margin-bottom: 2.5rem;">
+    <span class="section-label" id="service-heading">service</span>
+    <ul class="now-list">
+      {cv.service.map(item => <li>{item}</li>)}
+    </ul>
+  </section>
+
+  <!-- Awards -->
+  <section aria-labelledby="awards-heading" style="margin-bottom: 2.5rem;">
+    <span class="section-label" id="awards-heading">awards</span>
+    <ul class="now-list">
+      {cv.awards.map(item => <li>{item}</li>)}
+    </ul>
+  </section>
+
+  <div slot="margin">
+    <div class="margin-note" style="margin-top: 5rem;">
+      <span class="margin-stamp">pdf note</span>
+      PDF generated from the same data as this page via Typst.
+    </div>
+  </div>
+</Page>

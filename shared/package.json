@@ -1,0 +1,17 @@
+{
+  "name": "@portfolio/shared",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./dist/schema.js",
+  "types": "./dist/schema.d.ts",
+  "scripts": {
+    "build": "tsc --outDir dist",
+    "check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  }
+}

@@ -1,0 +1,64 @@
+---
+---
+<footer class="site-footer" role="contentinfo">
+  <div class="site-footer-inner">
+    <div class="mcp-line">
+      <span>§ this site speaks MCP —</span>
+      <code>claude mcp add prabigya https://prabigya.com.np/mcp</code>
+      <button
+        class="copy-mcp"
+        type="button"
+        aria-label="Copy MCP add command"
+        id="copy-mcp-btn"
+      >[copy]</button>
+    </div>
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+      <span class="mono" style="font-size: 0.7em; color: var(--ink-ghost);">
+        &copy; Prabigya Acharya
+      </span>
+      <button
+        class="theme-toggle"
+        type="button"
+        id="theme-toggle-btn"
+        aria-label="Toggle color theme"
+      >
+        <span id="theme-paper">paper</span> / <span id="theme-lamp">lamplight</span>
+      </button>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Copy MCP command
+  const copyBtn = document.getElementById('copy-mcp-btn');
+  if (copyBtn) {
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard?.writeText('claude mcp add prabigya https://prabigya.com.np/mcp')
+        .then(() => {
+          copyBtn.textContent = 'copied';
+          setTimeout(() => { copyBtn.textContent = '[copy]'; }, 1500);
+        });
+    });
+  }
+
+  // Theme toggle
+  const toggleBtn = document.getElementById('theme-toggle-btn');
+  const paperEl = document.getElementById('theme-paper');
+  const lampEl = document.getElementById('theme-lamp');
+
+  function syncThemeLabels() {
+    const cur = document.documentElement.getAttribute('data-theme') ?? 'paper';
+    paperEl?.classList.toggle('active', cur === 'paper');
+    lampEl?.classList.toggle('active', cur === 'lamplight');
+  }
+
+  syncThemeLabels();
+
+  toggleBtn?.addEventListener('click', () => {
+    const cur = document.documentElement.getAttribute('data-theme');
+    const next = cur === 'lamplight' ? 'paper' : 'lamplight';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    syncThemeLabels();
+  });
+</script>

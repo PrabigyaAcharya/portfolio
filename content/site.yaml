@@ -1,0 +1,16 @@
+name: "Prabigya Acharya"
+tagline: "AI researcher working on privacy-preserving NLP, computer vision, and 3D reconstruction"
+location: "Kathmandu, Nepal"
+links:
+  github: "https://github.com/PrabigyaAcharya"
+  scholar: "https://scholar.google.com/citations?user=5Hb1964AAAAJ"
+  email: "acharyaprabigya@gmail.com"
+  linkedin: "linkedin.com/in/aprab"
+mcp_endpoint: "https://prabigya.com.np/mcp"
+research_threads:
+  - id: thread-1
+    name: "Privacy-preserving NLP"
+    blurb: "Lightweight language models for PII masking in conversational text — accuracy and deployment at the edge."
+  - id: thread-2
+    name: "3D Vision & Reconstruction"
+    blurb: "Neural radiance fields and Gaussian splatting for digitizing cultural heritage sites."

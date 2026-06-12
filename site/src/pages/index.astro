@@ -1,0 +1,130 @@
+---
+import Page from '../layouts/Page.astro';
+import PublicationEntry from '../components/PublicationEntry.astro';
+import AskBox from '../components/AskBox.astro';
+import { getSiteData, getSelectedPublications, getNow } from '../lib/content';
+import { getCollection } from 'astro:content';
+
+const site = getSiteData();
+const selected = getSelectedPublications();
+const now = getNow();
+
+const allPosts = await getCollection('notebook', ({ data }) => !data.draft);
+const recentPosts = allPosts
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 3);
+
+// Build-time telemetry snapshot from static lab.json stub
+interface LabSnapshot {
+  status: string;
+  received_at: string | null;
+  latest?: {
+    run_name?: string;
+    epoch?: number;
+    total_epochs?: number;
+    loss?: number;
+    gpu_util?: number;
+  } | null;
+}
+
+// Note: at build time we use a default idle state; the worker serves live data.
+// We just render whatever is available so the HTML is meaningful without JS.
+const labSnapshot: LabSnapshot = { status: 'idle', received_at: null, latest: null };
+---
+<Page title={site.name} description={site.tagline}>
+  <section aria-labelledby="intro-heading" style="margin-bottom: 3rem;">
+    <h1 id="intro-heading">{site.name}</h1>
+    <p style="color: var(--ink-soft); font-size: 1rem; margin-top: 0.5rem; max-width: 52ch;">
+      {site.tagline}
+    </p>
+    <p class="mono" style="font-size: 0.72em; color: var(--ink-ghost); margin-top: 1rem;">
+      now: {now.working_on[0] ?? '…'}
+    </p>
+
+    <!-- Telemetry strip: build-time snapshot, polled live every 60s -->
+    <div
+      class="telemetry-strip"
+      data-poll="/api/lab.json"
+      data-status={labSnapshot.status}
+    >
+      <span class="telemetry-label">lab</span>
+      <span class="telemetry-status" data-field="status">
+        {labSnapshot.status === 'training' ? 'training' : 'idle'}
+      </span>
+      {labSnapshot.status === 'training' && labSnapshot.latest?.run_name && (
+        <span class="telemetry-detail" data-field="run_name">
+          {labSnapshot.latest.run_name}
+        </span>
+      )}
+      {labSnapshot.status === 'training' && labSnapshot.latest?.loss !== undefined && (
+        <span class="telemetry-detail" data-field="loss">
+          loss {labSnapshot.latest.loss.toFixed(4)}
+        </span>
+      )}
+      {labSnapshot.status === 'training' && labSnapshot.latest?.epoch !== undefined && labSnapshot.latest?.total_epochs !== undefined && (
+        <span class="telemetry-detail" data-field="epoch">
+          epoch {labSnapshot.latest.epoch}/{labSnapshot.latest.total_epochs}
+        </span>
+      )}
+    </div>
+  </section>
+
+  {selected.length > 0 && (
+    <section aria-labelledby="work-heading" style="margin-bottom: 3rem;">
+      <h2 id="work-heading">
+        <span class="section-label">selected work</span>
+      </h2>
+      {selected.map(pub => (
+        <PublicationEntry pub={pub} />
+      ))}
+      <p style="margin-top: 1rem;">
+        <a href="/research" class="mono" style="font-size: 0.8em;">
+          all publications →
+        </a>
+      </p>
+    </section>
+  )}
+
+  {recentPosts.length > 0 && (
+    <section aria-labelledby="notebook-heading">
+      <h2 id="notebook-heading">
+        <span class="section-label">notebook</span>
+      </h2>
+      <ul class="post-list" role="list">
+        {recentPosts.map(post => (
+          <li class="post-list-item entry-list-item">
+            <div>
+              <a href={`/notebook/${post.slug}`} class="post-title" style="text-decoration: none;">
+                {post.data.title}
+              </a>
+              <p class="post-summary">{post.data.summary}</p>
+            </div>
+            <time class="post-meta" datetime={post.data.date.toISOString()}>
+              {post.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+            </time>
+          </li>
+        ))}
+      </ul>
+      <p style="margin-top: 1rem;">
+        <a href="/notebook" class="mono" style="font-size: 0.8em;">
+          all posts →
+        </a>
+      </p>
+    </section>
+  )}
+
+  <AskBox />
+
+  <div slot="margin">
+    <div class="margin-note" style="margin-top: 6rem;">
+      <span class="margin-stamp">location</span>
+      {site.location}
+    </div>
+    <div class="margin-note" style="margin-top: 1.5rem;">
+      <span class="margin-stamp">links</span>
+      {site.links.github && site.links.github !== 'TODO(prabigya)' && (
+        <a href={`https://github.com/${site.links.github}`} target="_blank" rel="noopener">github</a>
+      )}
+    </div>
+  </div>
+</Page>

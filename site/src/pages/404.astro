@@ -1,0 +1,19 @@
+---
+import Page from '../layouts/Page.astro';
+---
+<Page title="Not found">
+  <h1 style="margin-bottom: 0.5rem;">404</h1>
+  <p style="color: var(--ink-soft); font-size: 1rem;">
+    This page isn't in the notebook.
+  </p>
+  <p style="margin-top: 1.5rem;">
+    <a href="/">← return home</a>
+  </p>
+
+  <div slot="margin">
+    <div class="margin-note" style="margin-top: 3rem;">
+      <span class="margin-stamp">perhaps</span>
+      try the <a href="/notebook">notebook</a> or <a href="/research">research</a> pages.
+    </div>
+  </div>
+</Page>

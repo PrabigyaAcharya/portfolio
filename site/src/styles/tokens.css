@@ -1,0 +1,33 @@
+/* Design tokens — notebook portfolio
+   TODO: self-host Newsreader + IBM Plex Mono woff2 files instead of CDN
+*/
+
+:root {
+  /* paper mode (default) */
+  --paper: #FAF7F0;
+  --paper-raised: #F3EEE3;
+  --ink: #211E18;
+  --ink-soft: #46412F;
+  --ink-faint: #7A7260;
+  --ink-ghost: #A39A82;
+  --rule: #E2DBCB;
+  --accent: #8A3B22;
+  --accent-press: #6E2F1B;
+
+  /* layout */
+  --max-prose: 64ch;
+  --margin-col: 11.5rem;
+  --gutter: 1.5rem;
+}
+
+:root[data-theme="lamplight"] {
+  --paper: #1B1813;
+  --paper-raised: #242019;
+  --ink: #E8E2D4;
+  --ink-soft: #C9C1AD;
+  --ink-faint: #968D77;
+  --ink-ghost: #6E6755;
+  --rule: #3A342A;
+  --accent: #D08562;
+  --accent-press: #E09A78;
+}

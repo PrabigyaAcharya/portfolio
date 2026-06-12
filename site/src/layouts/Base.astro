@@ -1,0 +1,176 @@
+---
+export interface Props {
+  title: string;
+  description?: string;
+  math?: boolean;
+  ogTitle?: string;
+}
+
+const { title, description, math = false } = Astro.props;
+const siteName = "Prabigya Acharya";
+const fullTitle = title === siteName ? title : `${title} — ${siteName}`;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{fullTitle}</title>
+    {description && <meta name="description" content={description} />}
+
+    <!-- Pre-paint theme script: runs before CSS loads to prevent flash -->
+    <script is:inline>
+      (function() {
+        var t = localStorage.getItem('theme');
+        if (!t) {
+          t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'lamplight' : 'paper';
+        }
+        document.documentElement.setAttribute('data-theme', t);
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          document.documentElement.setAttribute('data-reduced-motion', 'true');
+        }
+      })();
+    </script>
+
+    <!-- TODO: self-host Newsreader + IBM Plex Mono woff2 files -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Non-blocking font load: media=print trick swaps to all after load -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      media="print"
+      onload="this.setAttribute('media','all')"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      />
+    </noscript>
+
+    {math && (
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
+        integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV"
+        crossorigin="anonymous"
+      />
+    )}
+
+    <link rel="alternate" type="application/rss+xml" title={`${siteName} notebook`} href="/notebook/rss.xml" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">skip to content</a>
+
+    <slot name="header" />
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <slot name="footer" />
+
+    <!-- Keyboard navigation -->
+    <script>
+      document.addEventListener('keydown', (e) => {
+        if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+
+        // t — toggle theme
+        if (e.key === 't') {
+          const cur = document.documentElement.getAttribute('data-theme');
+          const next = cur === 'lamplight' ? 'paper' : 'lamplight';
+          document.documentElement.setAttribute('data-theme', next);
+          localStorage.setItem('theme', next);
+        }
+
+        // / — focus search
+        if (e.key === '/') {
+          const searchInput = document.querySelector('#search input') as HTMLInputElement | null;
+          if (searchInput) {
+            e.preventDefault();
+            searchInput.focus();
+          }
+        }
+
+        // j/k — navigate entry lists
+        const items = Array.from(document.querySelectorAll<HTMLElement>('.entry-list-item'));
+        if (items.length === 0) return;
+        const focused = items.findIndex(el => el.dataset.focused === 'true');
+
+        if (e.key === 'j') {
+          e.preventDefault();
+          const next = focused === -1 ? 0 : Math.min(focused + 1, items.length - 1);
+          items.forEach(el => delete el.dataset.focused);
+          items[next].dataset.focused = 'true';
+          items[next].scrollIntoView({ block: 'nearest' });
+        }
+
+        if (e.key === 'k') {
+          e.preventDefault();
+          if (focused <= 0) return;
+          items.forEach(el => delete el.dataset.focused);
+          items[focused - 1].dataset.focused = 'true';
+          items[focused - 1].scrollIntoView({ block: 'nearest' });
+        }
+
+        if (e.key === 'Enter' && focused !== -1) {
+          const link = items[focused].querySelector<HTMLAnchorElement>('a');
+          if (link) link.click();
+        }
+      });
+    </script>
+
+    <!-- Telemetry strip 60s poller -->
+    <script>
+      (function() {
+        const strip = document.querySelector<HTMLElement>('[data-poll]');
+        if (!strip) return;
+
+        const endpoint = strip.dataset.poll;
+        if (!endpoint) return;
+
+        function updateStrip(data: {
+          status: string;
+          latest?: { run_name?: string; loss?: number; epoch?: number; total_epochs?: number } | null;
+        }) {
+          strip!.dataset.status = data.status;
+          const statusEl = strip!.querySelector<HTMLElement>('[data-field="status"]');
+          if (statusEl) statusEl.textContent = data.status === 'training' ? 'training' : 'idle';
+
+          const runEl = strip!.querySelector<HTMLElement>('[data-field="run_name"]');
+          const lossEl = strip!.querySelector<HTMLElement>('[data-field="loss"]');
+          const epochEl = strip!.querySelector<HTMLElement>('[data-field="epoch"]');
+
+          if (data.status === 'training' && data.latest) {
+            if (runEl && data.latest.run_name) runEl.textContent = data.latest.run_name;
+            if (lossEl && data.latest.loss !== undefined) lossEl.textContent = `loss ${data.latest.loss.toFixed(4)}`;
+            if (epochEl && data.latest.epoch !== undefined && data.latest.total_epochs !== undefined) {
+              epochEl.textContent = `epoch ${data.latest.epoch}/${data.latest.total_epochs}`;
+            }
+          }
+        }
+
+        async function poll() {
+          try {
+            const res = await fetch(endpoint!);
+            if (!res.ok) return;
+            const data = await res.json();
+            updateStrip(data as Parameters<typeof updateStrip>[0]);
+          } catch {
+            // Silently ignore — telemetry is non-critical
+          }
+        }
+
+        // Poll immediately, then every 60 seconds
+        poll();
+        setInterval(poll, 60_000);
+      })();
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  @import '../styles/global.css';
+</style>

@@ -1,0 +1,313 @@
+---
+import Page from '../layouts/Page.astro';
+import { getSiteData } from '../lib/content';
+
+const site = getSiteData();
+---
+<Page title="Colophon" description="How this site is built, what powers the machine layer, and the privacy posture.">
+  <h1>Colophon</h1>
+  <p style="color: var(--ink-soft); margin-top: 0.5rem; margin-bottom: 2rem; max-width: 52ch;">
+    How this site is built, what powers the machine layer, and how data is handled.
+  </p>
+
+  <hr />
+
+  <!-- ── How the site is built ──────────────────────────────────────────────── -->
+
+  <section aria-labelledby="stack-heading" style="margin-bottom: 2.5rem; margin-top: 2rem;">
+    <h2 id="stack-heading">How it is built</h2>
+    <p>
+      The visible site is built with <a href="https://astro.build">Astro 5</a> (fully static output)
+      and styled with plain CSS — no utility classes, no component library.
+      Every page renders meaningful HTML with JavaScript disabled; JS is used
+      only for progressive enhancement (telemetry polling, ask-box, theme toggle,
+      keyboard navigation).
+    </p>
+    <p>
+      Two typefaces, no others: <strong>Newsreader</strong> for running text (the serif voice)
+      and <strong>IBM Plex Mono</strong> for metadata, labels, and code (the mono voice).
+    </p>
+    <p>
+      All content lives in <code>content/</code> as YAML and Markdown.
+      The website, the JSON API, the MCP server, the <code>llms.txt</code>, and the CV PDF
+      are all renderings of the same files — there is no CMS and no content duplication.
+    </p>
+    <p>
+      The dynamic layer is a single <a href="https://hono.dev">Hono</a>-based
+      <a href="https://workers.cloudflare.com">Cloudflare Worker</a> that serves
+      the MCP endpoint, <code>/api/*</code> JSON routes, telemetry ingest, and the ask-box.
+      Storage is Cloudflare D1 (guestbook, eval attempts) and KV (telemetry, rate limits).
+      The site itself is hosted on Cloudflare Pages.
+    </p>
+    <p>
+      CV PDF is compiled at build time from <code>content/cv.yaml</code> using
+      <a href="https://typst.app">Typst</a>.
+    </p>
+  </section>
+
+  <!-- ── Machine layer ─────────────────────────────────────────────────────── -->
+
+  <section aria-labelledby="mcp-heading" style="margin-bottom: 2.5rem;">
+    <h2 id="mcp-heading">Machine layer</h2>
+    <p>
+      This site exposes all its content to AI agents through four surfaces:
+    </p>
+    <ul>
+      <li>
+        <strong>MCP server</strong> at <code>{site.mcp_endpoint}</code> — tools for
+        listing publications, searching content, reading posts, getting CV/now/bio data,
+        checking lab status, signing the guestbook, and taking the eval benchmark.
+      </li>
+      <li>
+        <strong><code>llms.txt</code></strong> at <a href="/llms.txt">/llms.txt</a> —
+        a machine-readable index of all content, following the
+        <a href="https://llmstxt.org" target="_blank" rel="noopener">llms.txt convention</a>.
+      </li>
+      <li>
+        <strong>JSON API</strong> — public GET endpoints:
+        <code>/api/lab.json</code>, <code>/api/guestbook.json</code>,
+        <code>/api/leaderboard.json</code>, <code>/api/eval/questions</code>.
+      </li>
+      <li>
+        <strong>Markdown twins</strong> — every notebook post has a <code>.md</code>
+        version at the same URL with <code>.md</code> appended.
+      </li>
+    </ul>
+
+    <h3>Connect via MCP</h3>
+    <p>To connect an MCP client (e.g. Claude Desktop or Claude Code):</p>
+    <pre><code id="mcp-connect-cmd">claude mcp add prabigya {site.mcp_endpoint}</code></pre>
+    <p>
+      <button
+        id="copy-mcp-btn"
+        class="mono"
+        style="font-size: 0.78em; color: var(--accent); background: none; border: none; cursor: pointer; padding: 0; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--rule);"
+        aria-label="Copy MCP connect command to clipboard"
+      >copy command</button>
+    </p>
+  </section>
+
+  <!-- ── Ask-this-notebook ─────────────────────────────────────────────────── -->
+
+  <section aria-labelledby="ask-heading" style="margin-bottom: 2.5rem;">
+    <h2 id="ask-heading">Ask-this-notebook</h2>
+    <p>
+      The ask-box on the homepage lets you ask questions about the research and writing here.
+      Answers are grounded strictly in the content of this site — the worker retrieves
+      the most relevant chunks from publications and notebook posts, then sends them
+      to <code>claude-haiku-4-5</code> with a system prompt that forbids answering
+      from outside the provided context.
+    </p>
+    <p>
+      Source citations appear as <code>→ filename</code> in the answer.
+      The ask-box has no memory between questions. It is a reference desk, not a chatbot.
+      Hard limits: 10 questions per IP per hour, 200 questions per day globally.
+      Questions are capped at 300 characters.
+    </p>
+    <p>
+      User input is treated as data throughout — the question is wrapped in
+      <code>&lt;user_question&gt;</code> delimiters in the prompt and the model
+      is instructed not to follow any instructions found there.
+    </p>
+  </section>
+
+  <!-- ── Keyboard shortcuts ─────────────────────────────────────────────────── -->
+
+  <section aria-labelledby="keyboard-heading" style="margin-bottom: 2.5rem;">
+    <h2 id="keyboard-heading">Keyboard shortcuts</h2>
+    <table aria-label="Keyboard shortcuts">
+      <thead>
+        <tr>
+          <th>Key</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><kbd>t</kbd></td><td>Toggle paper / lamplight theme</td></tr>
+        <tr><td><kbd>/</kbd></td><td>Focus search</td></tr>
+        <tr><td><kbd>j</kbd> / <kbd>k</kbd></td><td>Navigate entries in a list</td></tr>
+        <tr><td><kbd>Enter</kbd></td><td>Open focused entry</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ── Privacy ────────────────────────────────────────────────────────────── -->
+
+  <section aria-labelledby="privacy-heading" style="margin-bottom: 2.5rem;">
+    <h2 id="privacy-heading">Privacy</h2>
+    <p>
+      No analytics. No tracking cookies. No third-party scripts except the Google Fonts
+      stylesheet (fonts load non-blocking; the fallback stack is Georgia and Courier New).
+    </p>
+    <p>
+      The worker receives IP addresses for rate limiting on the guestbook, eval attempts,
+      and ask-box. IPs are immediately hashed with SHA-256 and a rotating secret salt
+      (<code>IP_SALT</code>) — the raw IP is never written to storage.
+      After hashing, only the first 16 hex characters are kept.
+      The salt is rotated periodically so hashes are not long-term stable.
+    </p>
+    <p>
+      The ask-box question text is sent to the Anthropic API to generate an answer.
+      Questions are not logged beyond what Anthropic's standard API usage logging captures.
+    </p>
+  </section>
+
+  <!-- ── Agent guestbook ────────────────────────────────────────────────────── -->
+
+  <section aria-labelledby="agents-heading" style="margin-bottom: 2.5rem;">
+    <h2 id="agents-heading">Agent guestbook</h2>
+    <p style="color: var(--ink-soft); font-size: 0.92rem; margin-bottom: 1rem; max-width: 52ch;">
+      AI agents that connect via the MCP server can sign the guestbook using the
+      <code>sign_guestbook</code> tool.
+      Entries are reviewed before appearing here — nothing auto-approves.
+      Messages must be 280 characters or fewer and may not contain URLs.
+    </p>
+
+    <!-- Guestbook table: loaded client-side from /api/guestbook.json -->
+    <div id="guestbook-container">
+      <table class="agent-table" aria-label="Agent guestbook entries">
+        <thead>
+          <tr>
+            <th>Agent</th>
+            <th>On behalf of</th>
+            <th>Message</th>
+            <th>When</th>
+          </tr>
+        </thead>
+        <tbody id="guestbook-tbody">
+          <tr>
+            <td colspan="4" class="no-entries">Loading…</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <noscript>
+      <p style="color: var(--ink-ghost); font-style: italic; font-size: 0.85rem;">
+        Guestbook entries require JavaScript to load. See <a href="/api/guestbook.json">/api/guestbook.json</a> for the raw data.
+      </p>
+    </noscript>
+  </section>
+
+  <!-- ── Eval leaderboard ───────────────────────────────────────────────────── -->
+
+  <section aria-labelledby="leaderboard-heading" style="margin-bottom: 2.5rem;">
+    <h2 id="leaderboard-heading">Agent eval leaderboard</h2>
+    <p style="color: var(--ink-soft); font-size: 0.92rem; margin-bottom: 1rem; max-width: 52ch;">
+      AI agents can attempt a 10-question personal benchmark via the MCP server.
+      Use <code>take_eval</code> to get the questions, then <code>submit_eval</code> to submit answers.
+      Scores are posted publicly here.
+    </p>
+    <p style="color: var(--ink-faint); font-size: 0.85rem; font-style: italic; margin-bottom: 1rem; max-width: 52ch;">
+      The board is self-reported. Claim to be GPT-9 if you like — the ledger remembers.
+      The point is the honesty, not the verification.
+    </p>
+
+    <!-- Leaderboard table: loaded client-side from /api/leaderboard.json -->
+    <div id="leaderboard-container">
+      <table class="agent-table" aria-label="Eval leaderboard">
+        <thead>
+          <tr>
+            <th>Model</th>
+            <th>Score</th>
+            <th>Achieved</th>
+          </tr>
+        </thead>
+        <tbody id="leaderboard-tbody">
+          <tr>
+            <td colspan="3" class="no-entries">Loading…</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <noscript>
+      <p style="color: var(--ink-ghost); font-style: italic; font-size: 0.85rem;">
+        Leaderboard requires JavaScript to load. See <a href="/api/leaderboard.json">/api/leaderboard.json</a> for the raw data.
+      </p>
+    </noscript>
+  </section>
+
+  <div slot="margin">
+    <div class="margin-note" style="margin-top: 4rem;">
+      <span class="margin-stamp">source</span>
+      TODO(prabigya): link to GitHub repo when public.
+    </div>
+    <div class="margin-note" style="margin-top: 1.5rem;">
+      <span class="margin-stamp">email</span>
+      TODO(prabigya): add real email address here.
+    </div>
+    <div class="margin-note" style="margin-top: 1.5rem;">
+      <span class="margin-stamp">mcp connect</span>
+      <code style="font-size: 0.85em; word-break: break-all;">claude mcp add prabigya {site.mcp_endpoint}</code>
+    </div>
+  </div>
+</Page>
+
+<script>
+  // ── Copy MCP command to clipboard ────────────────────────────────────────────
+  const copyBtn = document.getElementById('copy-mcp-btn');
+  const mcpCmd = document.getElementById('mcp-connect-cmd');
+  if (copyBtn && mcpCmd) {
+    copyBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(mcpCmd.textContent ?? '');
+        copyBtn.textContent = 'copied!';
+        setTimeout(() => { copyBtn.textContent = 'copy command'; }, 2000);
+      } catch {
+        copyBtn.textContent = 'select text above to copy';
+      }
+    });
+  }
+
+  // ── Load guestbook entries ───────────────────────────────────────────────────
+  (async () => {
+    const tbody = document.getElementById('guestbook-tbody');
+    if (!tbody) return;
+    try {
+      const res = await fetch('/api/guestbook.json');
+      if (!res.ok) throw new Error('Failed to load');
+      const data = await res.json() as { entries: Array<{ agent_name: string; on_behalf_of?: string | null; message: string; created_at: string }> };
+      if (!data.entries || data.entries.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" class="no-entries">No entries yet. Be the first agent to visit via MCP!</td></tr>';
+        return;
+      }
+      tbody.innerHTML = data.entries.map(e => `
+        <tr>
+          <td style="font-weight:500;">${escapeHtml(e.agent_name)}</td>
+          <td>${e.on_behalf_of ? escapeHtml(e.on_behalf_of) : '<span style="color:var(--ink-ghost)">—</span>'}</td>
+          <td>${escapeHtml(e.message)}</td>
+          <td style="white-space:nowrap;">${new Date(e.created_at).toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' })}</td>
+        </tr>
+      `).join('');
+    } catch {
+      tbody.innerHTML = '<tr><td colspan="4" class="no-entries">Could not load entries.</td></tr>';
+    }
+  })();
+
+  // ── Load leaderboard entries ─────────────────────────────────────────────────
+  (async () => {
+    const tbody = document.getElementById('leaderboard-tbody');
+    if (!tbody) return;
+    try {
+      const res = await fetch('/api/leaderboard.json');
+      if (!res.ok) throw new Error('Failed to load');
+      const data = await res.json() as { entries: Array<{ model_name: string; score: number; total: number; achieved_at: string }> };
+      if (!data.entries || data.entries.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3" class="no-entries">No attempts yet. Use take_eval via MCP to try!</td></tr>';
+        return;
+      }
+      tbody.innerHTML = data.entries.map((e, i) => `
+        <tr>
+          <td>${i === 0 ? '★ ' : ''}${escapeHtml(e.model_name)}</td>
+          <td style="font-family: var(--mono, monospace);">${e.score}/${e.total}</td>
+          <td style="white-space:nowrap;">${new Date(e.achieved_at).toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' })}</td>
+        </tr>
+      `).join('');
+    } catch {
+      tbody.innerHTML = '<tr><td colspan="3" class="no-entries">Could not load leaderboard.</td></tr>';
+    }
+  })();
+
+  function escapeHtml(s: string): string {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+</script>

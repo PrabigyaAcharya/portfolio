@@ -1,0 +1,89 @@
+---
+import Page from '../../layouts/Page.astro';
+import { getCollection } from 'astro:content';
+import { getSiteData } from '../../lib/content';
+
+const site = getSiteData();
+
+const allPosts = await getCollection('notebook', ({ data }) => !data.draft);
+const posts = allPosts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+// Collect all tags
+const allTags = [...new Set(posts.flatMap(p => p.data.tags))].sort();
+
+---
+<Page title="Notebook" description={`Research notes and writings by ${site.name}`}>
+  <h1>Notebook</h1>
+  <p style="color: var(--ink-soft); margin-top: 0.25rem; margin-bottom: 2rem;">
+    Notes on research, experiments, and adjacent things.
+  </p>
+
+  {allTags.length > 0 && (
+    <div style="margin-bottom: 2rem; display: flex; align-items: baseline; gap: 0.75rem; flex-wrap: wrap;">
+      <span class="section-label" style="margin-bottom: 0;">filter</span>
+      {allTags.map(tag => (
+        <a href={`#tag-${tag}`} class="tag">{tag}</a>
+      ))}
+    </div>
+  )}
+
+  <ul class="post-list" role="list" id="post-list">
+    {posts.map(post => (
+      <li
+        class="post-list-item entry-list-item"
+        data-tags={post.data.tags.join(',')}
+      >
+        <div>
+          <a href={`/notebook/${post.slug}`} class="post-title" style="text-decoration: none; display: block;">
+            {post.data.title}
+          </a>
+          <p class="post-summary">{post.data.summary}</p>
+          <div class="post-tags" style="margin-top: 0.35rem;">
+            {post.data.tags.map(tag => (
+              <a href={`#tag-${tag}`} class="tag">{tag}</a>
+            ))}
+          </div>
+        </div>
+        <div style="text-align: right;">
+          <time class="post-meta" datetime={post.data.date.toISOString()}>
+            {post.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+          </time>
+          {post.data.updated && (
+            <div class="mono" style="font-size: 0.65em; color: var(--ink-ghost); margin-top: 0.2rem;">
+              tended {post.data.updated.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+            </div>
+          )}
+        </div>
+      </li>
+    ))}
+  </ul>
+
+  <div slot="margin">
+    <div class="margin-note" style="margin-top: 5rem;">
+      <span class="margin-stamp">rss</span>
+      <a href="/notebook/rss.xml" style="font-style: normal;">subscribe via rss</a>
+    </div>
+  </div>
+</Page>
+
+<script>
+  // Tag filter via URL hash (no-JS fallback: all posts visible)
+  function applyFilter() {
+    const hash = window.location.hash;
+    const tagMatch = hash.match(/^#tag-(.+)$/);
+    const tag = tagMatch ? decodeURIComponent(tagMatch[1]) : null;
+
+    const items = document.querySelectorAll<HTMLElement>('[data-tags]');
+    items.forEach(item => {
+      if (!tag) {
+        item.style.display = '';
+      } else {
+        const tags = item.dataset.tags?.split(',') ?? [];
+        item.style.display = tags.includes(tag) ? '' : 'none';
+      }
+    });
+  }
+
+  applyFilter();
+  window.addEventListener('hashchange', applyFilter);
+</script>
