@@ -24,12 +24,12 @@ Where $K_h$ is the scaled kernel and $h$ is the bandwidth of the kernel.
 Intuitively, given $n$ observations, we want to estimate the overall distribution from which they were drawn. Consider some points sampled from an unknown distribution:
 
 <!-- TODO: download to content/notebook/tiny-image-generator/image.png -->
-![Sample points from an unknown distribution](https://prabigya.com.np/blogs/images/tig/image.png "fig. 1 — sample points from an unknown distribution")
+![Sample points from an unknown distribution](/images/tig/image.png "fig. 1 — sample points from an unknown distribution")
 
 As we take more samples, through KDE we can estimate the underlying distribution:
 
 <!-- TODO: download to content/notebook/tiny-image-generator/image-1.png -->
-![KDE estimate overlaid on sample points](https://prabigya.com.np/blogs/images/tig/image-1.png "fig. 2 — KDE estimate")
+![KDE estimate overlaid on sample points](/images/tig/image-1.png "fig. 2 — KDE estimate")
 
 The above can be written as:
 
@@ -42,7 +42,7 @@ The KDE weights distances of all observed data points — more nearby points mea
 Bandwidth selection matters. A lower bandwidth considers only close neighbors; a higher bandwidth widens the neighborhood. Too narrow a bandwidth gives an estimate that looks like this:
 
 <!-- TODO: download to content/notebook/tiny-image-generator/image-2.png -->
-![Overfitted narrow-bandwidth KDE](https://prabigya.com.np/blogs/images/tig/image-2.png "fig. 3 — overfitted narrow bandwidth")
+![Overfitted narrow-bandwidth KDE](/images/tig/image-2.png "fig. 3 — overfitted narrow bandwidth")
 
 **Principal Component Analysis (PCA)** is a linear dimensionality reduction technique. The data are transformed onto a new coordinate system such that the directions of largest variance (the principal components) can be easily identified. Scikit-learn provides implementations of both KDE and PCA.
 
@@ -115,7 +115,7 @@ show_examples(train_data[0], train_data[1])
 ```
 
 <!-- TODO: download to content/notebook/tiny-image-generator/ig_ex.png -->
-![Sample EMNIST letter examples](https://prabigya.com.np/blogs/images/tig/ig_ex.png "fig. 4 — sample EMNIST letters")
+![Sample EMNIST letter examples](/images/tig/ig_ex.png "fig. 4 — sample EMNIST letters")
 
 ### PCA + KDE fitting
 
@@ -205,8 +205,8 @@ print(f"Saved {len(X_gen)} images to {out_dir}")
 ## Results
 
 <!-- TODO: download to content/notebook/tiny-image-generator/a.png and f.png -->
-![Generated letter a](https://prabigya.com.np/blogs/images/tig/a.png "fig. 5 — generated letter a")
-![Generated letter f](https://prabigya.com.np/blogs/images/tig/f.png "fig. 6 — generated letter f")
+![Generated letter a](/images/tig/a.png "fig. 5 — generated letter a")
+![Generated letter f](/images/tig/f.png "fig. 6 — generated letter f")
 
 ## References
 

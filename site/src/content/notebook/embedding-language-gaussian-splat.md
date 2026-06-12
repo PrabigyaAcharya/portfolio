@@ -70,12 +70,12 @@ I only tested on one scene. It contained a Pikachu plushie, an Xbox controller, 
 The CLIP feature field when visualised:
 
 <!-- TODO: download to content/notebook/embedding-language-gaussian-splat/clip_render.png -->
-![Rendered CLIP feature field](https://prabigya.com.np/blogs/images/clip_gsplat/cliip_render.png "fig. 1 — rendered CLIP feature field")
+![Rendered CLIP feature field](/images/clip_gsplat/cliip_render.png "fig. 1 — rendered CLIP feature field")
 
 The original scene for reference:
 
 <!-- TODO: download to content/notebook/embedding-language-gaussian-splat/original_scene.png -->
-![Original scene](https://prabigya.com.np/blogs/images/clip_gsplat/original_scene.png "fig. 2 — original scene")
+![Original scene](/images/clip_gsplat/original_scene.png "fig. 2 — original scene")
 
 The output was not great. The rendered feature field is blurry and noisy, mostly showing up as a washed-out red haze. However, if you look carefully, you can make out the rough outline of the Pikachu plushie — so something is being learned, just not cleanly.
 
