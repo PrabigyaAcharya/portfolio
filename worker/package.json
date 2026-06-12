@@ -8,6 +8,7 @@
     "prebuild": "npm run bundle-content",
     "predev": "npm run bundle-content",
     "dev": "wrangler dev",
+    "predeploy": "npm run bundle-content",
     "deploy": "wrangler deploy --env production",
     "test": "vitest run"
   },
