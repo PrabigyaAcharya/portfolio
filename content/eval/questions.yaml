@@ -1,7 +1,44 @@
+# 10-question personal benchmark for AI agents.
+# Answers are stored as EVAL_ANSWERS worker secret — never here.
+
 - id: q01
-  question: "TODO(prabigya): a hard question from your research domain"
+  question: "What is the arXiv ID of Prabigya's paper on PII masking?"
   type: exact
 
 - id: q02
-  question: "TODO(prabigya): another question"
+  question: "What score (out of 100) did Prabigya achieve in their Bachelor's degree?"
+  type: numeric
+  tolerance: 0.1
+
+- id: q03
+  question: "How many temples were digitized in the 3D Gaussian Splatting heritage project?"
+  type: numeric
+  tolerance: 0
+
+- id: q04
+  question: "What is the name of the Discord bot built for real-time PII redaction?"
+  type: exact
+
+- id: q05
+  question: "Which two lightweight language models were compared in the PII masking study?"
+  type: judged
+
+- id: q06
+  question: "What web framework was used for the Discrypt REST API?"
+  type: exact
+
+- id: q07
+  question: "Who is the co-author of Prabigya's PII masking paper?"
+  type: exact
+
+- id: q08
+  question: "What algorithm does Avritti use to generate music?"
+  type: exact
+
+- id: q09
+  question: "What institution did Prabigya complete their Bachelor's degree at?"
+  type: judged
+
+- id: q10
+  question: "What does Prabigya's research on PII masking conclude about lightweight models compared to frontier LLMs?"
   type: judged
