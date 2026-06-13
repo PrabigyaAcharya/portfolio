@@ -22,21 +22,20 @@ interface LabSnapshot {
     epoch?: number;
     total_epochs?: number;
     loss?: number;
-    gpu_util?: number;
   } | null;
 }
 
 const labSnapshot: LabSnapshot = { status: 'idle', received_at: null, latest: null };
 ---
-<Page title={site.name} description={site.tagline}>
-  <section aria-labelledby="intro-heading" class="page-intro">
-    <h1 id="intro-heading">{site.name}</h1>
+<Page title={site.name} description={site.tagline} breadcrumb={[]}>
+  <!-- Hero -->
+  <section class="page-intro">
+    <span class="hero-tag">prabigya =v1.0;</span>
+    <h1 class="hero-title">{site.name}</h1>
     <p class="page-lede">{site.tagline}</p>
-    <p class="mono" style="font-size: 0.72em; color: var(--ink-ghost); margin-top: 0.75rem;">
+    <p style="font-size: 0.72em; color: var(--ink-ghost); margin-top: 0.75rem;">
       now: {now.working_on[0] ?? '…'}
     </p>
-
-    <!-- Telemetry strip: build-time snapshot, polled live every 60s -->
     <div
       class="telemetry-strip"
       data-poll="/api/lab.json"
@@ -47,71 +46,79 @@ const labSnapshot: LabSnapshot = { status: 'idle', received_at: null, latest: nu
         {labSnapshot.status === 'training' ? 'training' : 'idle'}
       </span>
       {labSnapshot.status === 'training' && labSnapshot.latest?.run_name && (
-        <span class="telemetry-detail" data-field="run_name">
-          {labSnapshot.latest.run_name}
-        </span>
+        <span class="telemetry-detail" data-field="run_name">{labSnapshot.latest.run_name}</span>
       )}
       {labSnapshot.status === 'training' && labSnapshot.latest?.loss !== undefined && (
-        <span class="telemetry-detail" data-field="loss">
-          loss {labSnapshot.latest.loss.toFixed(4)}
-        </span>
+        <span class="telemetry-detail" data-field="loss">loss {labSnapshot.latest.loss.toFixed(4)}</span>
       )}
       {labSnapshot.status === 'training' && labSnapshot.latest?.epoch !== undefined && labSnapshot.latest?.total_epochs !== undefined && (
-        <span class="telemetry-detail" data-field="epoch">
-          epoch {labSnapshot.latest.epoch}/{labSnapshot.latest.total_epochs}
-        </span>
+        <span class="telemetry-detail" data-field="epoch">epoch {labSnapshot.latest.epoch}/{labSnapshot.latest.total_epochs}</span>
       )}
     </div>
   </section>
 
+  <!-- Selected work -->
   {selected.length > 0 && (
-    <section aria-labelledby="work-heading" class="page-section">
-      <h2 id="work-heading" class="section-label">selected work</h2>
-      {selected.map(pub => (
-        <PublicationEntry pub={pub} />
-      ))}
-      <p style="margin-top: 1rem;">
-        <a href="/research" class="mono" style="font-size: 0.8em;">all publications →</a>
-      </p>
-    </section>
-  )}
-
-  {recentPosts.length > 0 && (
-    <section aria-labelledby="notebook-heading" class="page-section">
-      <h2 id="notebook-heading" class="section-label">notebook</h2>
-      <ul class="post-list" role="list">
-        {recentPosts.map(post => (
-          <li class="post-list-item entry-list-item">
-            <div>
-              <a href={`/notebook/${post.slug}`} class="post-title" style="text-decoration: none;">
-                {post.data.title}
-              </a>
-              <p class="post-summary">{post.data.summary}</p>
-            </div>
-            <time class="post-meta" datetime={post.data.date.toISOString()}>
-              {post.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
-            </time>
-          </li>
+    <section class="page-section">
+      <span class="code-comment">// selected work</span>
+      <h2 class="code-heading">selected_work <span class="code-brace">{'{'}</span></h2>
+      <div class="code-body">
+        {selected.map(pub => (
+          <PublicationEntry pub={pub} />
         ))}
-      </ul>
-      <p style="margin-top: 1rem;">
-        <a href="/notebook" class="mono" style="font-size: 0.8em;">all posts →</a>
-      </p>
+        <p style="margin-top: 1rem;">
+          <a href="/research" style="font-size: 0.82em;">all publications →</a>
+        </p>
+      </div>
+      <span class="code-close code-brace">{'}'}</span>
     </section>
   )}
 
-  <AskBox />
+  <!-- Recent notebook -->
+  {recentPosts.length > 0 && (
+    <section class="page-section">
+      <span class="code-comment">// recent writing</span>
+      <h2 class="code-heading">notebook <span class="code-brace">{'{'}</span></h2>
+      <div class="code-body">
+        <ul class="post-list" role="list">
+          {recentPosts.map(post => (
+            <li class="post-list-item entry-list-item">
+              <div>
+                <a href={`/notebook/${post.slug}`} class="post-title" style="text-decoration: none;">
+                  {post.data.title}
+                </a>
+                <p class="post-summary">{post.data.summary}</p>
+              </div>
+              <time class="post-meta" datetime={post.data.date.toISOString()}>
+                {post.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+              </time>
+            </li>
+          ))}
+        </ul>
+        <p style="margin-top: 1rem;">
+          <a href="/notebook" style="font-size: 0.82em;">all posts →</a>
+        </p>
+      </div>
+      <span class="code-close code-brace">{'}'}</span>
+    </section>
+  )}
+
+  <!-- Ask box -->
+  <section class="page-section">
+    <span class="code-comment">// ask this notebook</span>
+    <AskBox />
+  </section>
 
   <div slot="margin">
-    <div class="margin-note" style="margin-top: 6rem;">
+    <div class="margin-note" style="margin-top: 8rem;">
       <span class="margin-stamp">location</span>
       {site.location}
     </div>
     <div class="margin-note" style="margin-top: 1.5rem;">
-      <span class="margin-stamp">links</span>
-      {site.links.github && site.links.github !== 'TODO(prabigya)' && (
-        <a href={`https://github.com/${site.links.github}`} target="_blank" rel="noopener">github</a>
-      )}
+      <span class="margin-stamp">research</span>
+      {site.research_threads.map(t => (
+        <p style="margin-bottom: 0.5rem; font-style: normal; font-size: 0.9em; color: var(--ink-faint);">{t.name}</p>
+      ))}
     </div>
   </div>
 </Page>

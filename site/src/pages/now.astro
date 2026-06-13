@@ -7,44 +7,48 @@ const site = getSiteData();
 
 const updatedDate = new Date(now.updated);
 const formattedDate = updatedDate.toLocaleDateString('en-US', {
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric',
+  year: 'numeric', month: 'long', day: 'numeric',
 });
 ---
 <Page title="Now" description={`What ${site.name} is working on right now`}>
   <section class="page-intro">
     <h1>Now</h1>
-    <p class="mono" style="font-size: 0.7em; color: var(--ink-ghost); margin-top: 0.25rem;">
+    <p style="font-size: 0.72em; color: var(--ink-ghost); margin-top: 0.25rem;">
       updated <time datetime={now.updated}>{formattedDate}</time>
     </p>
   </section>
 
-  <section aria-labelledby="working-on-heading" class="page-section">
-    <h2 id="working-on-heading" class="section-label">working on</h2>
-    <ul class="now-list">
-      {now.working_on.map(item => (
-        <li>{item}</li>
-      ))}
-    </ul>
+  <section class="page-section">
+    <span class="code-comment">// current focus</span>
+    <h2 class="code-heading">working_on <span class="code-brace">{'{'}</span></h2>
+    <div class="code-body">
+      <ul class="now-list">
+        {now.working_on.map(item => <li>{item}</li>)}
+      </ul>
+    </div>
+    <span class="code-close code-brace">{'}'}</span>
   </section>
 
-  <section aria-labelledby="reading-heading" class="page-section">
-    <h2 id="reading-heading" class="section-label">reading</h2>
-    <ul class="now-list">
-      {now.reading.map(item => (
-        <li>{item}</li>
-      ))}
-    </ul>
+  <section class="page-section">
+    <span class="code-comment">// reading list</span>
+    <h2 class="code-heading">reading <span class="code-brace">{'{'}</span></h2>
+    <div class="code-body">
+      <ul class="now-list">
+        {now.reading.map(item => <li>{item}</li>)}
+      </ul>
+    </div>
+    <span class="code-close code-brace">{'}'}</span>
   </section>
 
-  <section aria-labelledby="open-to-heading" class="page-section">
-    <h2 id="open-to-heading" class="section-label">open to</h2>
-    <ul class="now-list">
-      {now.open_to.map(item => (
-        <li>{item}</li>
-      ))}
-    </ul>
+  <section class="page-section">
+    <span class="code-comment">// collaboration</span>
+    <h2 class="code-heading">open_to <span class="code-brace">{'{'}</span></h2>
+    <div class="code-body">
+      <ul class="now-list">
+        {now.open_to.map(item => <li>{item}</li>)}
+      </ul>
+    </div>
+    <span class="code-close code-brace">{'}'}</span>
   </section>
 
   <div slot="margin">

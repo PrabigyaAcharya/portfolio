@@ -15,20 +15,27 @@ const years = [...byYear.keys()];
     </p>
   </section>
 
-  {years.map(year => (
-    <section aria-labelledby={`year-${year}`} class="page-section">
-      <h2 id={`year-${year}`} class="year-rule">{year}</h2>
-      {byYear.get(year)!.map(pub => (
-        <PublicationEntry pub={pub} />
-      ))}
-    </section>
-  ))}
+  <div>
+    {years.map((year, i) => (
+      <details class="year-accordion" open={i === 0}>
+        <summary class="year-summary">
+          <span class="year-toggle"></span>
+          <span class="year-label">{year}</span>
+        </summary>
+        <div class="year-body">
+          {byYear.get(year)!.map(pub => (
+            <PublicationEntry pub={pub} />
+          ))}
+        </div>
+      </details>
+    ))}
+  </div>
 
   <div slot="margin">
     <div class="margin-note" style="margin-top: 4rem;">
-      <span class="margin-stamp">research threads</span>
+      <span class="margin-stamp">threads</span>
       {site.research_threads.map(thread => (
-        <p style="margin-bottom: 0.75rem;">{thread.name}</p>
+        <p style="margin-bottom: 0.75rem; font-style: normal; font-size: 0.9em;">{thread.name}</p>
       ))}
     </div>
   </div>

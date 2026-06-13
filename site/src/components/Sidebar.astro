@@ -1,0 +1,128 @@
+---
+import { getSiteData } from '../lib/content';
+const site = getSiteData();
+
+const navLinks = [
+  { index: 0, href: '/', label: 'home' },
+  { index: 1, href: '/research', label: 'research' },
+  { index: 2, href: '/notebook', label: 'notebook' },
+  { index: 3, href: '/now', label: 'now' },
+  { index: 4, href: '/cv', label: 'cv' },
+  { index: 5, href: '/colophon', label: 'colophon' },
+];
+
+const extLinks = [
+  { label: 'github', href: site.links.github },
+  { label: 'scholar', href: site.links.scholar },
+  { label: 'email', href: `mailto:${site.links.email}` },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<aside class="sidebar" id="sidebar" aria-label="Site navigation">
+  <nav class="sidebar-block">
+    <p class="sidebar-struct">contract Menu {'{'}</p>
+    <ul class="sidebar-list">
+      {navLinks.map(link => {
+        const isActive = link.href === '/'
+          ? currentPath === '/'
+          : currentPath.startsWith(link.href);
+        return (
+          <li>
+            <a
+              href={link.href}
+              class={`sidebar-link${isActive ? ' is-active' : ''}`}
+              aria-current={isActive ? 'page' : undefined}
+            >
+              <span class="sidebar-idx">{`{${link.index}}`}</span>{link.label}
+            </a>
+          </li>
+        );
+      })}
+    </ul>
+    <p class="sidebar-struct">{'}'}</p>
+  </nav>
+
+  <div class="sidebar-block">
+    <p class="sidebar-struct">enum Links {'{'}</p>
+    <ul class="sidebar-list">
+      {extLinks.map(link => (
+        <li>
+          <a
+            href={link.href}
+            class="sidebar-link"
+            target={link.href.startsWith('http') ? '_blank' : undefined}
+            rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+          >{link.label}</a>
+        </li>
+      ))}
+    </ul>
+    <p class="sidebar-struct">{'}'}</p>
+  </div>
+
+  <div style="margin-top: auto; padding-top: 1rem;">
+    <button class="theme-toggle" id="theme-toggle-btn" type="button" aria-label="Toggle color theme">
+      <span id="theme-paper">paper</span> / <span id="theme-lamp">lamplight</span>
+    </button>
+  </div>
+</aside>
+
+<!-- Mobile header -->
+<header class="mobile-header" role="banner">
+  <button class="hamburger" id="hamburger-btn" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar">
+    <span></span><span></span><span></span>
+  </button>
+  <a href="/" class="mobile-header-name">{site.name.split(' ')[0].toLowerCase()}</a>
+</header>
+
+<div class="sidebar-overlay" id="sidebar-overlay" aria-hidden="true"></div>
+
+<script>
+  const sidebar = document.getElementById('sidebar');
+  const hamburger = document.getElementById('hamburger-btn');
+  const overlay = document.getElementById('sidebar-overlay');
+
+  function openSidebar() {
+    sidebar?.classList.add('is-open');
+    overlay?.classList.add('is-visible');
+    hamburger?.setAttribute('aria-expanded', 'true');
+  }
+
+  function closeSidebar() {
+    sidebar?.classList.remove('is-open');
+    overlay?.classList.remove('is-visible');
+    hamburger?.setAttribute('aria-expanded', 'false');
+  }
+
+  hamburger?.addEventListener('click', () => {
+    sidebar?.classList.contains('is-open') ? closeSidebar() : openSidebar();
+  });
+
+  overlay?.addEventListener('click', closeSidebar);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeSidebar();
+  });
+
+  // Theme toggle
+  const toggleBtn = document.getElementById('theme-toggle-btn');
+  const paperEl = document.getElementById('theme-paper');
+  const lampEl = document.getElementById('theme-lamp');
+
+  function syncTheme() {
+    const cur = document.documentElement.getAttribute('data-theme') ?? 'paper';
+    paperEl?.classList.toggle('active', cur === 'paper');
+    lampEl?.classList.toggle('active', cur === 'lamplight');
+  }
+
+  syncTheme();
+
+  toggleBtn?.addEventListener('click', () => {
+    const cur = document.documentElement.getAttribute('data-theme');
+    const next = cur === 'lamplight' ? 'paper' : 'lamplight';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    syncTheme();
+  });
+</script>

@@ -1,31 +1,29 @@
 ---
-// AskBox.astro — Ask-this-notebook component
-// Falls back to mailto when JS is off or budget is exceeded
 ---
-
 <div class="ask-box" id="ask-box">
+  <span class="ask-label">ask this notebook</span>
   <form class="ask-form" id="ask-form" action="mailto:acharyaprabigya@gmail.com" method="get">
-    <label for="ask-input" class="ask-label">ask this notebook</label>
-    <div class="ask-input-row">
+    <div class="ask-terminal">
+      <span class="ask-prompt">&gt;</span>
       <input
         type="text"
         id="ask-input"
         name="body"
-        class="ask-input mono"
-        placeholder="ask this notebook…"
+        class="ask-input"
+        placeholder="type a question…"
         maxlength="300"
         autocomplete="off"
         spellcheck="false"
       />
-      <button type="submit" class="ask-submit mono">ask</button>
+      <button type="submit" class="ask-submit">ask</button>
     </div>
   </form>
   <div class="ask-answer" id="ask-answer" aria-live="polite" aria-atomic="true"></div>
 </div>
 
 <noscript>
-  <p class="ask-noscript mono" style="font-size:0.8em; color:var(--ink-ghost);">
-    JavaScript is required for the ask-box. Use the <a href="/mcp">MCP server</a> or email directly.
+  <p class="ask-noscript" style="font-size: 0.78em; color: var(--ink-ghost);">
+    JavaScript required for the ask-box. Use the <a href="/colophon#mcp-heading">MCP server</a> or <a href="mailto:acharyaprabigya@gmail.com">email directly</a>.
   </p>
 </noscript>
 
@@ -40,12 +38,14 @@
     const question = input.value.trim();
     if (!question) return;
 
-    // Show thinking state
-    answerEl.textContent = '';
+    answerEl.innerHTML = '';
+    const block = document.createElement('div');
+    block.className = 'ask-answer-block';
     const thinking = document.createElement('span');
-    thinking.className = 'ask-thinking mono';
+    thinking.className = 'ask-thinking';
     thinking.textContent = 'thinking…';
-    answerEl.appendChild(thinking);
+    block.appendChild(thinking);
+    answerEl.appendChild(block);
 
     try {
       const res = await fetch('/api/ask', {
@@ -61,12 +61,11 @@
         mailto?: string;
       };
 
-      answerEl.textContent = '';
+      block.innerHTML = '';
 
       if (data.error) {
         const errEl = document.createElement('p');
-        errEl.className = 'ask-error mono';
-        // Use text nodes — never innerHTML
+        errEl.className = 'ask-error';
         errEl.textContent = data.error;
         if (data.mailto) {
           errEl.textContent += ' ';
@@ -75,30 +74,29 @@
           link.textContent = 'email directly';
           errEl.appendChild(link);
         }
-        answerEl.appendChild(errEl);
+        block.appendChild(errEl);
         return;
       }
 
       if (data.answer) {
         const answerText = document.createElement('p');
         answerText.className = 'ask-answer-text';
-        answerText.textContent = data.answer; // text node, never innerHTML
-
-        answerEl.appendChild(answerText);
+        answerText.textContent = data.answer;
+        block.appendChild(answerText);
 
         if (data.sources && data.sources.length > 0) {
           const sourcesEl = document.createElement('p');
-          sourcesEl.className = 'ask-sources mono';
+          sourcesEl.className = 'ask-sources';
           sourcesEl.textContent = data.sources.map((s: string) => `→ ${s}`).join('  ');
-          answerEl.appendChild(sourcesEl);
+          block.appendChild(sourcesEl);
         }
       }
     } catch {
-      answerEl.textContent = '';
+      block.innerHTML = '';
       const errEl = document.createElement('p');
-      errEl.className = 'ask-error mono';
+      errEl.className = 'ask-error';
       errEl.textContent = 'could not reach the notebook right now.';
-      answerEl.appendChild(errEl);
+      block.appendChild(errEl);
     }
   });
 </script>

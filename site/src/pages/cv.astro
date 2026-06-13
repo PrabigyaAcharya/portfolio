@@ -12,10 +12,10 @@ const publications = getPublications();
     <a href="/prabigya-acharya-cv.pdf" class="mono" style="font-size: 0.72em; color: var(--accent);" download>[download pdf]</a>
   </div>
 
-  <!-- Education -->
-  <section aria-labelledby="education-heading" class="page-section">
-    <h2 id="education-heading" class="section-label">education</h2>
-    <div>
+  <section class="page-section">
+    <span class="code-comment">// academic background</span>
+    <h2 class="code-heading">education <span class="code-brace">{'{'}</span></h2>
+    <div class="code-body">
       {cv.education.map(entry => (
         <div class="cv-entry">
           <div class="cv-entry-dates">{entry.start}–{entry.end}</div>
@@ -31,12 +31,13 @@ const publications = getPublications();
         </div>
       ))}
     </div>
+    <span class="code-close code-brace">{'}'}</span>
   </section>
 
-  <!-- Positions -->
-  <section aria-labelledby="positions-heading" class="page-section">
-    <h2 id="positions-heading" class="section-label">positions</h2>
-    <div>
+  <section class="page-section">
+    <span class="code-comment">// work experience</span>
+    <h2 class="code-heading">positions <span class="code-brace">{'{'}</span></h2>
+    <div class="code-body">
       {cv.positions.map(entry => (
         <div class="cv-entry">
           <div class="cv-entry-dates">{entry.start}–{entry.end}</div>
@@ -52,54 +53,65 @@ const publications = getPublications();
         </div>
       ))}
     </div>
+    <span class="code-close code-brace">{'}'}</span>
   </section>
 
-  <!-- Publications -->
-  <section aria-labelledby="pubs-heading" class="page-section">
-    <h2 id="pubs-heading" class="section-label">publications</h2>
-    <div>
+  <section class="page-section">
+    <span class="code-comment">// peer-reviewed work</span>
+    <h2 class="code-heading">publications <span class="code-brace">{'{'}</span></h2>
+    <div class="code-body">
       {publications.map(pub => (
         <div class="cv-entry">
           <div class="cv-entry-dates">{pub.year}</div>
           <div class="cv-entry-body">
-            <div class="cv-entry-org" style="font-size: 0.95rem;">{pub.title}</div>
+            <div class="cv-entry-org" style="font-size: 0.92rem;">{pub.title}</div>
             <div class="cv-entry-role">{pub.authors.join(', ')} · {pub.venue}</div>
           </div>
         </div>
       ))}
     </div>
+    <span class="code-close code-brace">{'}'}</span>
   </section>
 
-  <!-- Skills -->
-  <section aria-labelledby="skills-heading" class="page-section">
-    <h2 id="skills-heading" class="section-label">skills</h2>
-    <ul style="list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.25rem;">
-      {cv.skills.map(skill => (
-        <li style="font-size: 0.88rem; color: var(--ink-soft); padding: 0.15rem 0.6rem; border: 1px solid var(--rule);">{skill}</li>
-      ))}
-    </ul>
+  <section class="page-section">
+    <span class="code-comment">// tools & languages</span>
+    <h2 class="code-heading">skills <span class="code-brace">{'{'}</span></h2>
+    <div class="code-body">
+      <ul style="list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem;">
+        {cv.skills.map(skill => (
+          <li style="font-size: 0.82rem; color: var(--ink-soft); padding: 0.15rem 0.6rem; border: 1px solid var(--rule);">{skill}</li>
+        ))}
+      </ul>
+    </div>
+    <span class="code-close code-brace">{'}'}</span>
   </section>
 
-  <!-- Service -->
-  <section aria-labelledby="service-heading" class="page-section">
-    <h2 id="service-heading" class="section-label">service</h2>
-    <ul class="now-list">
-      {cv.service.map(item => <li>{item}</li>)}
-    </ul>
+  <section class="page-section">
+    <span class="code-comment">// academic service</span>
+    <h2 class="code-heading">service <span class="code-brace">{'{'}</span></h2>
+    <div class="code-body">
+      <ul class="now-list">
+        {cv.service.map(item => <li>{item}</li>)}
+      </ul>
+    </div>
+    <span class="code-close code-brace">{'}'}</span>
   </section>
 
-  <!-- Awards -->
-  <section aria-labelledby="awards-heading" class="page-section">
-    <h2 id="awards-heading" class="section-label">awards</h2>
-    <ul class="now-list">
-      {cv.awards.map(item => <li>{item}</li>)}
-    </ul>
+  <section class="page-section">
+    <span class="code-comment">// recognition</span>
+    <h2 class="code-heading">awards <span class="code-brace">{'{'}</span></h2>
+    <div class="code-body">
+      <ul class="now-list">
+        {cv.awards.map(item => <li>{item}</li>)}
+      </ul>
+    </div>
+    <span class="code-close code-brace">{'}'}</span>
   </section>
 
   <div slot="margin">
     <div class="margin-note" style="margin-top: 5rem;">
       <span class="margin-stamp">pdf note</span>
-      PDF generated from the same data as this page via Typst.
+      PDF generated from the same source YAML via Typst.
     </div>
   </div>
 </Page>

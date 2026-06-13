@@ -26,22 +26,23 @@ const bibtexJson = pub.bibtex ? JSON.stringify(pub.bibtex) : 'null';
 ---
 
 <article class="pub-entry entry-list-item" id={pub.id}>
-  <h3 class="pub-title">{pub.title}</h3>
-  <p class="pub-authors">
+  <p class="pub-field">
+    <span class="pub-key">"authors"</span>:{' '}
     {pub.authors.map((author, i) => (
       <>
         {i > 0 && ', '}
-        {author === authorName
-          ? <span class="me">{author}</span>
-          : <span>{author}</span>
-        }
+        <span class={author === authorName ? 'pub-authors-me' : ''}>{author}</span>
       </>
     ))}
   </p>
-  <p class="pub-venue">
+  <p class="pub-field">
+    <span class="pub-key">"title"</span>:{' '}
+    <span class="pub-title-text">{pub.title}</span>
+  </p>
+  <p class="pub-field">
+    <span class="pub-key">"venue"</span>:{' '}
     {pub.venue} · {pub.year}
   </p>
-  <p class="pub-summary">{pub.summary}</p>
 
   <div class="pub-actions">
     {pub.links?.pdf && pub.links.pdf.length > 0 && (
