@@ -136,7 +136,7 @@ export async function handleAsk(
     return new Response(
       JSON.stringify({
         error: 'ask-box is not configured',
-        mailto: 'TODO(prabigya)@example.com',
+        mailto: 'acharyaprabigya@gmail.com',
       }),
       {
         status: 503,
@@ -209,7 +209,7 @@ export async function handleAsk(
     return new Response(
       JSON.stringify({
         error: 'the notebook is resting — try the MCP server or email prabigya directly',
-        mailto: 'TODO(prabigya)@example.com',
+        mailto: 'acharyaprabigya@gmail.com',
       }),
       { status: 429, headers: { 'Content-Type': 'application/json' } }
     );
@@ -307,7 +307,7 @@ export async function handleAsk(
     return new Response(
       JSON.stringify({
         error: 'ask-box is unavailable right now',
-        mailto: 'TODO(prabigya)@example.com',
+        mailto: 'acharyaprabigya@gmail.com',
       }),
       { status: 503, headers: { 'Content-Type': 'application/json' } }
     );

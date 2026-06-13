@@ -13,13 +13,15 @@ const formattedDate = updatedDate.toLocaleDateString('en-US', {
 });
 ---
 <Page title="Now" description={`What ${site.name} is working on right now`}>
-  <h1>Now</h1>
-  <p class="mono" style="font-size: 0.7em; color: var(--ink-ghost); margin-top: 0.25rem; margin-bottom: 2rem;">
-    updated <time datetime={now.updated}>{formattedDate}</time>
-  </p>
+  <section class="page-intro">
+    <h1>Now</h1>
+    <p class="mono" style="font-size: 0.7em; color: var(--ink-ghost); margin-top: 0.25rem;">
+      updated <time datetime={now.updated}>{formattedDate}</time>
+    </p>
+  </section>
 
-  <section aria-labelledby="working-on-heading" style="margin-bottom: 2rem;">
-    <span class="section-label" id="working-on-heading">working on</span>
+  <section aria-labelledby="working-on-heading" class="page-section">
+    <h2 id="working-on-heading" class="section-label">working on</h2>
     <ul class="now-list">
       {now.working_on.map(item => (
         <li>{item}</li>
@@ -27,8 +29,8 @@ const formattedDate = updatedDate.toLocaleDateString('en-US', {
     </ul>
   </section>
 
-  <section aria-labelledby="reading-heading" style="margin-bottom: 2rem;">
-    <span class="section-label" id="reading-heading">reading</span>
+  <section aria-labelledby="reading-heading" class="page-section">
+    <h2 id="reading-heading" class="section-label">reading</h2>
     <ul class="now-list">
       {now.reading.map(item => (
         <li>{item}</li>
@@ -36,8 +38,8 @@ const formattedDate = updatedDate.toLocaleDateString('en-US', {
     </ul>
   </section>
 
-  <section aria-labelledby="open-to-heading">
-    <span class="section-label" id="open-to-heading">open to</span>
+  <section aria-labelledby="open-to-heading" class="page-section">
+    <h2 id="open-to-heading" class="section-label">open to</h2>
     <ul class="now-list">
       {now.open_to.map(item => (
         <li>{item}</li>

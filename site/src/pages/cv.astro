@@ -7,22 +7,17 @@ const site = getSiteData();
 const publications = getPublications();
 ---
 <Page title="CV" description={`Curriculum vitae of ${site.name}`}>
-  <div style="display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem;">
-    <h1 style="margin-bottom: 0;">{site.name}</h1>
-    <a
-      href="/prabigya-acharya-cv.pdf"
-      class="mono"
-      style="font-size: 0.72em; color: var(--accent);"
-      download
-    >[download pdf]</a>
+  <div class="cv-page-header">
+    <h1>{site.name}</h1>
+    <a href="/prabigya-acharya-cv.pdf" class="mono" style="font-size: 0.72em; color: var(--accent);" download>[download pdf]</a>
   </div>
 
   <!-- Education -->
-  <section aria-labelledby="education-heading" style="margin-bottom: 2.5rem;">
-    <span class="section-label" id="education-heading">education</span>
+  <section aria-labelledby="education-heading" class="page-section">
+    <h2 id="education-heading" class="section-label">education</h2>
     <div>
       {cv.education.map(entry => (
-        <div class="cv-entry" style="border-top: 1px solid var(--rule); padding: 1rem 0;">
+        <div class="cv-entry">
           <div class="cv-entry-dates">{entry.start}–{entry.end}</div>
           <div class="cv-entry-body">
             <div class="cv-entry-org">{entry.org}</div>
@@ -39,11 +34,11 @@ const publications = getPublications();
   </section>
 
   <!-- Positions -->
-  <section aria-labelledby="positions-heading" style="margin-bottom: 2.5rem;">
-    <span class="section-label" id="positions-heading">positions</span>
+  <section aria-labelledby="positions-heading" class="page-section">
+    <h2 id="positions-heading" class="section-label">positions</h2>
     <div>
       {cv.positions.map(entry => (
-        <div class="cv-entry" style="border-top: 1px solid var(--rule); padding: 1rem 0;">
+        <div class="cv-entry">
           <div class="cv-entry-dates">{entry.start}–{entry.end}</div>
           <div class="cv-entry-body">
             <div class="cv-entry-org">{entry.org}</div>
@@ -60,21 +55,24 @@ const publications = getPublications();
   </section>
 
   <!-- Publications -->
-  <section aria-labelledby="pubs-heading" style="margin-bottom: 2.5rem;">
-    <span class="section-label" id="pubs-heading">publications</span>
-    {publications.map(pub => (
-      <div style="padding: 0.75rem 0; border-top: 1px solid var(--rule);">
-        <p style="font-size: 0.92rem; font-weight: 500; color: var(--ink);">{pub.title}</p>
-        <p style="font-size: 0.82rem; color: var(--ink-soft); margin-top: 0.15rem;">
-          {pub.authors.join(', ')} · {pub.venue} · {pub.year}
-        </p>
-      </div>
-    ))}
+  <section aria-labelledby="pubs-heading" class="page-section">
+    <h2 id="pubs-heading" class="section-label">publications</h2>
+    <div>
+      {publications.map(pub => (
+        <div class="cv-entry">
+          <div class="cv-entry-dates">{pub.year}</div>
+          <div class="cv-entry-body">
+            <div class="cv-entry-org" style="font-size: 0.95rem;">{pub.title}</div>
+            <div class="cv-entry-role">{pub.authors.join(', ')} · {pub.venue}</div>
+          </div>
+        </div>
+      ))}
+    </div>
   </section>
 
   <!-- Skills -->
-  <section aria-labelledby="skills-heading" style="margin-bottom: 2.5rem;">
-    <span class="section-label" id="skills-heading">skills</span>
+  <section aria-labelledby="skills-heading" class="page-section">
+    <h2 id="skills-heading" class="section-label">skills</h2>
     <ul style="list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.25rem;">
       {cv.skills.map(skill => (
         <li style="font-size: 0.88rem; color: var(--ink-soft); padding: 0.15rem 0.6rem; border: 1px solid var(--rule);">{skill}</li>
@@ -83,16 +81,16 @@ const publications = getPublications();
   </section>
 
   <!-- Service -->
-  <section aria-labelledby="service-heading" style="margin-bottom: 2.5rem;">
-    <span class="section-label" id="service-heading">service</span>
+  <section aria-labelledby="service-heading" class="page-section">
+    <h2 id="service-heading" class="section-label">service</h2>
     <ul class="now-list">
       {cv.service.map(item => <li>{item}</li>)}
     </ul>
   </section>
 
   <!-- Awards -->
-  <section aria-labelledby="awards-heading" style="margin-bottom: 2.5rem;">
-    <span class="section-label" id="awards-heading">awards</span>
+  <section aria-labelledby="awards-heading" class="page-section">
+    <h2 id="awards-heading" class="section-label">awards</h2>
     <ul class="now-list">
       {cv.awards.map(item => <li>{item}</li>)}
     </ul>

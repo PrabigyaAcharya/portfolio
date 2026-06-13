@@ -5,16 +5,16 @@ import { getSiteData } from '../lib/content';
 const site = getSiteData();
 ---
 <Page title="Colophon" description="How this site is built, what powers the machine layer, and the privacy posture.">
-  <h1>Colophon</h1>
-  <p style="color: var(--ink-soft); margin-top: 0.5rem; margin-bottom: 2rem; max-width: 52ch;">
-    How this site is built, what powers the machine layer, and how data is handled.
-  </p>
+  <section class="page-intro">
+    <h1>Colophon</h1>
+    <p class="page-lede">How this site is built, what powers the machine layer, and how data is handled.</p>
+  </section>
 
   <hr />
 
   <!-- ── How the site is built ──────────────────────────────────────────────── -->
 
-  <section aria-labelledby="stack-heading" style="margin-bottom: 2.5rem; margin-top: 2rem;">
+  <section aria-labelledby="stack-heading" class="page-section">
     <h2 id="stack-heading">How it is built</h2>
     <p>
       The visible site is built with <a href="https://astro.build">Astro 5</a> (fully static output)
@@ -47,7 +47,7 @@ const site = getSiteData();
 
   <!-- ── Machine layer ─────────────────────────────────────────────────────── -->
 
-  <section aria-labelledby="mcp-heading" style="margin-bottom: 2.5rem;">
+  <section aria-labelledby="mcp-heading" class="page-section">
     <h2 id="mcp-heading">Machine layer</h2>
     <p>
       This site exposes all its content to AI agents through four surfaces:
@@ -89,7 +89,7 @@ const site = getSiteData();
 
   <!-- ── Ask-this-notebook ─────────────────────────────────────────────────── -->
 
-  <section aria-labelledby="ask-heading" style="margin-bottom: 2.5rem;">
+  <section aria-labelledby="ask-heading" class="page-section">
     <h2 id="ask-heading">Ask-this-notebook</h2>
     <p>
       The ask-box on the homepage lets you ask questions about the research and writing here.
@@ -113,7 +113,7 @@ const site = getSiteData();
 
   <!-- ── Keyboard shortcuts ─────────────────────────────────────────────────── -->
 
-  <section aria-labelledby="keyboard-heading" style="margin-bottom: 2.5rem;">
+  <section aria-labelledby="keyboard-heading" class="page-section">
     <h2 id="keyboard-heading">Keyboard shortcuts</h2>
     <table aria-label="Keyboard shortcuts">
       <thead>
@@ -133,7 +133,7 @@ const site = getSiteData();
 
   <!-- ── Privacy ────────────────────────────────────────────────────────────── -->
 
-  <section aria-labelledby="privacy-heading" style="margin-bottom: 2.5rem;">
+  <section aria-labelledby="privacy-heading" class="page-section">
     <h2 id="privacy-heading">Privacy</h2>
     <p>
       No analytics. No tracking cookies. No third-party scripts except the Google Fonts
@@ -154,7 +154,7 @@ const site = getSiteData();
 
   <!-- ── Agent guestbook ────────────────────────────────────────────────────── -->
 
-  <section aria-labelledby="agents-heading" style="margin-bottom: 2.5rem;">
+  <section aria-labelledby="agents-heading" class="page-section">
     <h2 id="agents-heading">Agent guestbook</h2>
     <p style="color: var(--ink-soft); font-size: 0.92rem; margin-bottom: 1rem; max-width: 52ch;">
       AI agents that connect via the MCP server can sign the guestbook using the
@@ -190,7 +190,7 @@ const site = getSiteData();
 
   <!-- ── Eval leaderboard ───────────────────────────────────────────────────── -->
 
-  <section aria-labelledby="leaderboard-heading" style="margin-bottom: 2.5rem;">
+  <section aria-labelledby="leaderboard-heading" class="page-section">
     <h2 id="leaderboard-heading">Agent eval leaderboard</h2>
     <p style="color: var(--ink-soft); font-size: 0.92rem; margin-bottom: 1rem; max-width: 52ch;">
       AI agents can attempt a 10-question personal benchmark via the MCP server.

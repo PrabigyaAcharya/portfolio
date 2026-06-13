@@ -467,6 +467,25 @@ th {
   padding-left: 1rem;
 }
 
+/* ── Notebook post header ────────────────────────────────────────────────── */
+
+.post-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.post-header h1 {
+  margin-bottom: 0.5rem;
+}
+
+.post-header-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
 /* ── Notebook post list ──────────────────────────────────────────────────── */
 
 .post-list {
@@ -527,6 +546,102 @@ th {
   border-color: var(--accent);
   color: var(--accent);
   text-decoration: none;
+}
+
+/* ── Page structure ──────────────────────────────────────────────────────── */
+
+.page-intro {
+  margin-bottom: 3rem;
+}
+
+.page-lede {
+  color: var(--ink-soft);
+  margin-top: 0.5rem;
+  max-width: 52ch;
+}
+
+.page-section {
+  margin-bottom: 2.5rem;
+}
+
+/* section-label as a heading element: suppress default h2/h3 top margin */
+h2.section-label,
+h3.section-label {
+  margin-top: 0;
+}
+
+/* Year / section divider: mono label sitting on a hairline */
+.year-rule {
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  font-size: 0.75em;
+  font-weight: 400;
+  color: var(--ink-ghost);
+  letter-spacing: 0.1em;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+/* CV page header: name baseline-aligned with PDF download link */
+.cv-page-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.cv-page-header h1 {
+  margin-bottom: 0;
+}
+
+/* First cv-entry in a container group gets the opening top rule */
+div > .cv-entry:first-child {
+  border-top: 1px solid var(--rule);
+}
+
+/* Bibtex summary toggle — consistent with pub-abstract summary */
+.pub-bibtex summary {
+  cursor: pointer;
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  font-size: 0.72em;
+  color: var(--accent);
+  list-style: none;
+  display: inline-flex;
+}
+
+.pub-bibtex summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Bibtex copy button */
+.pub-bibtex-copy {
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  font-size: 0.7em;
+  color: var(--accent);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.pub-bibtex-copy:hover {
+  color: var(--accent-press);
+}
+
+/* Tag filter row */
+.filter-row {
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.filter-row .section-label {
+  margin-bottom: 0;
 }
 
 /* ── Now / CV sections ───────────────────────────────────────────────────── */

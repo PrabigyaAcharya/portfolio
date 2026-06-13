@@ -64,15 +64,10 @@ const bibtexJson = pub.bibtex ? JSON.stringify(pub.bibtex) : 'null';
     )}
     {pub.bibtex && (
       <details class="pub-bibtex">
-        <summary style="cursor: pointer; font-family: 'IBM Plex Mono', monospace; font-size: 0.72em; color: var(--accent); list-style: none; display: inline-flex;">[bibtex ⌄]</summary>
+        <summary>[bibtex ⌄]</summary>
         <div style="margin-top: 0.5rem;">
           <pre><code>{pub.bibtex}</code></pre>
-          <button
-            type="button"
-            class="copy-bibtex-btn"
-            data-bibtex={bibtexJson}
-            style="font-family: 'IBM Plex Mono', monospace; font-size: 0.7em; color: var(--accent); background: none; border: none; cursor: pointer; padding: 0;"
-          >[copy]</button>
+          <button type="button" class="copy-bibtex-btn pub-bibtex-copy" data-bibtex={bibtexJson}>[copy]</button>
         </div>
       </details>
     )}

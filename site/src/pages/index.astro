@@ -14,7 +14,6 @@ const recentPosts = allPosts
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
   .slice(0, 3);
 
-// Build-time telemetry snapshot from static lab.json stub
 interface LabSnapshot {
   status: string;
   received_at: string | null;
@@ -27,17 +26,13 @@ interface LabSnapshot {
   } | null;
 }
 
-// Note: at build time we use a default idle state; the worker serves live data.
-// We just render whatever is available so the HTML is meaningful without JS.
 const labSnapshot: LabSnapshot = { status: 'idle', received_at: null, latest: null };
 ---
 <Page title={site.name} description={site.tagline}>
-  <section aria-labelledby="intro-heading" style="margin-bottom: 3rem;">
+  <section aria-labelledby="intro-heading" class="page-intro">
     <h1 id="intro-heading">{site.name}</h1>
-    <p style="color: var(--ink-soft); font-size: 1rem; margin-top: 0.5rem; max-width: 52ch;">
-      {site.tagline}
-    </p>
-    <p class="mono" style="font-size: 0.72em; color: var(--ink-ghost); margin-top: 1rem;">
+    <p class="page-lede">{site.tagline}</p>
+    <p class="mono" style="font-size: 0.72em; color: var(--ink-ghost); margin-top: 0.75rem;">
       now: {now.working_on[0] ?? '…'}
     </p>
 
@@ -70,26 +65,20 @@ const labSnapshot: LabSnapshot = { status: 'idle', received_at: null, latest: nu
   </section>
 
   {selected.length > 0 && (
-    <section aria-labelledby="work-heading" style="margin-bottom: 3rem;">
-      <h2 id="work-heading">
-        <span class="section-label">selected work</span>
-      </h2>
+    <section aria-labelledby="work-heading" class="page-section">
+      <h2 id="work-heading" class="section-label">selected work</h2>
       {selected.map(pub => (
         <PublicationEntry pub={pub} />
       ))}
       <p style="margin-top: 1rem;">
-        <a href="/research" class="mono" style="font-size: 0.8em;">
-          all publications →
-        </a>
+        <a href="/research" class="mono" style="font-size: 0.8em;">all publications →</a>
       </p>
     </section>
   )}
 
   {recentPosts.length > 0 && (
-    <section aria-labelledby="notebook-heading">
-      <h2 id="notebook-heading">
-        <span class="section-label">notebook</span>
-      </h2>
+    <section aria-labelledby="notebook-heading" class="page-section">
+      <h2 id="notebook-heading" class="section-label">notebook</h2>
       <ul class="post-list" role="list">
         {recentPosts.map(post => (
           <li class="post-list-item entry-list-item">
@@ -106,9 +95,7 @@ const labSnapshot: LabSnapshot = { status: 'idle', received_at: null, latest: nu
         ))}
       </ul>
       <p style="margin-top: 1rem;">
-        <a href="/notebook" class="mono" style="font-size: 0.8em;">
-          all posts →
-        </a>
+        <a href="/notebook" class="mono" style="font-size: 0.8em;">all posts →</a>
       </p>
     </section>
   )}
