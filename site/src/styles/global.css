@@ -164,6 +164,29 @@ time {
   margin-right: 0.3em;
 }
 
+.sidebar-meta-value {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--ink-faint);
+  padding: 0.1rem 0 0.1rem 0.5rem;
+  line-height: 1.6;
+}
+
+.mcp-glyph { color: var(--accent); }
+
+.sidebar-mcp-copy {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--accent);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.2rem 0 0 0.5rem;
+  display: block;
+}
+
+.sidebar-mcp-copy:hover { text-decoration: underline; }
+
 /* Mobile: sidebar hidden by default */
 @media (max-width: 768px) {
   .sidebar {
