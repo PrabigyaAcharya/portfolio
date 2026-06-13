@@ -9,13 +9,17 @@ const publications = getPublications();
 <Page title="CV" description={`Curriculum vitae of ${site.name}`}>
   <div class="cv-page-header">
     <h1>{site.name}</h1>
-    <a href="/prabigya-acharya-cv.pdf" class="mono" style="font-size: 0.72em; color: var(--accent);" download>[download pdf]</a>
+    <a
+      href="/prabigya-acharya-cv.pdf"
+      style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent);"
+      download
+    >[download pdf]</a>
   </div>
 
   <section class="page-section">
     <span class="code-comment">// academic background</span>
     <h2 class="code-heading">education <span class="code-brace">{'{'}</span></h2>
-    <div class="code-body">
+    <div>
       {cv.education.map(entry => (
         <div class="cv-entry">
           <div class="cv-entry-dates">{entry.start}–{entry.end}</div>
@@ -31,13 +35,13 @@ const publications = getPublications();
         </div>
       ))}
     </div>
-    <span class="code-close code-brace">{'}'}</span>
+    <span class="code-close">{'}'}</span>
   </section>
 
   <section class="page-section">
     <span class="code-comment">// work experience</span>
     <h2 class="code-heading">positions <span class="code-brace">{'{'}</span></h2>
-    <div class="code-body">
+    <div>
       {cv.positions.map(entry => (
         <div class="cv-entry">
           <div class="cv-entry-dates">{entry.start}–{entry.end}</div>
@@ -53,65 +57,52 @@ const publications = getPublications();
         </div>
       ))}
     </div>
-    <span class="code-close code-brace">{'}'}</span>
+    <span class="code-close">{'}'}</span>
   </section>
 
   <section class="page-section">
     <span class="code-comment">// peer-reviewed work</span>
     <h2 class="code-heading">publications <span class="code-brace">{'{'}</span></h2>
-    <div class="code-body">
+    <div>
       {publications.map(pub => (
         <div class="cv-entry">
           <div class="cv-entry-dates">{pub.year}</div>
           <div class="cv-entry-body">
-            <div class="cv-entry-org" style="font-size: 0.92rem;">{pub.title}</div>
-            <div class="cv-entry-role">{pub.authors.join(', ')} · {pub.venue}</div>
+            <div class="cv-entry-org">{pub.title}</div>
+            <div class="cv-entry-role">{pub.authors.join(', ')} &middot; {pub.venue}</div>
           </div>
         </div>
       ))}
     </div>
-    <span class="code-close code-brace">{'}'}</span>
+    <span class="code-close">{'}'}</span>
   </section>
 
   <section class="page-section">
-    <span class="code-comment">// tools & languages</span>
+    <span class="code-comment">// tools &amp; languages</span>
     <h2 class="code-heading">skills <span class="code-brace">{'{'}</span></h2>
-    <div class="code-body">
-      <ul style="list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem;">
-        {cv.skills.map(skill => (
-          <li style="font-size: 0.82rem; color: var(--ink-soft); padding: 0.15rem 0.6rem; border: 1px solid var(--rule);">{skill}</li>
-        ))}
-      </ul>
-    </div>
-    <span class="code-close code-brace">{'}'}</span>
+    <ul style="list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem;">
+      {cv.skills.map(skill => (
+        <li style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--ink-soft); padding: 0.15rem 0.6rem; border: 1px solid var(--rule);">{skill}</li>
+      ))}
+    </ul>
+    <span class="code-close">{'}'}</span>
   </section>
 
   <section class="page-section">
     <span class="code-comment">// academic service</span>
     <h2 class="code-heading">service <span class="code-brace">{'{'}</span></h2>
-    <div class="code-body">
-      <ul class="now-list">
-        {cv.service.map(item => <li>{item}</li>)}
-      </ul>
-    </div>
-    <span class="code-close code-brace">{'}'}</span>
+    <ul class="now-list">
+      {cv.service.map(item => <li>{item}</li>)}
+    </ul>
+    <span class="code-close">{'}'}</span>
   </section>
 
   <section class="page-section">
     <span class="code-comment">// recognition</span>
     <h2 class="code-heading">awards <span class="code-brace">{'{'}</span></h2>
-    <div class="code-body">
-      <ul class="now-list">
-        {cv.awards.map(item => <li>{item}</li>)}
-      </ul>
-    </div>
-    <span class="code-close code-brace">{'}'}</span>
+    <ul class="now-list">
+      {cv.awards.map(item => <li>{item}</li>)}
+    </ul>
+    <span class="code-close">{'}'}</span>
   </section>
-
-  <div slot="margin">
-    <div class="margin-note" style="margin-top: 5rem;">
-      <span class="margin-stamp">pdf note</span>
-      PDF generated from the same source YAML via Typst.
-    </div>
-  </div>
 </Page>

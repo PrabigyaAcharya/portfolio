@@ -13,48 +13,37 @@ const formattedDate = updatedDate.toLocaleDateString('en-US', {
 <Page title="Now" description={`What ${site.name} is working on right now`}>
   <section class="page-intro">
     <h1>Now</h1>
-    <p style="font-size: 0.72em; color: var(--ink-ghost); margin-top: 0.25rem;">
+    <p style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--ink-faint); margin-top: 0.4rem;">
       updated <time datetime={now.updated}>{formattedDate}</time>
+      &ensp;&middot;&ensp;
+      <a href="https://nownownow.com/about" target="_blank" rel="noopener" style="color: var(--ink-faint);">what is this?</a>
     </p>
   </section>
 
   <section class="page-section">
     <span class="code-comment">// current focus</span>
     <h2 class="code-heading">working_on <span class="code-brace">{'{'}</span></h2>
-    <div class="code-body">
-      <ul class="now-list">
-        {now.working_on.map(item => <li>{item}</li>)}
-      </ul>
-    </div>
-    <span class="code-close code-brace">{'}'}</span>
+    <ul class="now-list">
+      {now.working_on.map(item => <li>{item}</li>)}
+    </ul>
+    <span class="code-close">{'}'}</span>
   </section>
 
   <section class="page-section">
     <span class="code-comment">// reading list</span>
     <h2 class="code-heading">reading <span class="code-brace">{'{'}</span></h2>
-    <div class="code-body">
-      <ul class="now-list">
-        {now.reading.map(item => <li>{item}</li>)}
-      </ul>
-    </div>
-    <span class="code-close code-brace">{'}'}</span>
+    <ul class="now-list">
+      {now.reading.map(item => <li>{item}</li>)}
+    </ul>
+    <span class="code-close">{'}'}</span>
   </section>
 
   <section class="page-section">
-    <span class="code-comment">// collaboration</span>
+    <span class="code-comment">// open to</span>
     <h2 class="code-heading">open_to <span class="code-brace">{'{'}</span></h2>
-    <div class="code-body">
-      <ul class="now-list">
-        {now.open_to.map(item => <li>{item}</li>)}
-      </ul>
-    </div>
-    <span class="code-close code-brace">{'}'}</span>
+    <ul class="now-list">
+      {now.open_to.map(item => <li>{item}</li>)}
+    </ul>
+    <span class="code-close">{'}'}</span>
   </section>
-
-  <div slot="margin">
-    <div class="margin-note" style="margin-top: 5rem;">
-      <span class="margin-stamp">inspired by</span>
-      <a href="https://nownownow.com/about" target="_blank" rel="noopener" style="font-style: normal;">nownownow.com</a>
-    </div>
-  </div>
 </Page>

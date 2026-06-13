@@ -26,8 +26,7 @@ const bibtexJson = pub.bibtex ? JSON.stringify(pub.bibtex) : 'null';
 ---
 
 <article class="pub-entry entry-list-item" id={pub.id}>
-  <p class="pub-field">
-    <span class="pub-key">"authors"</span>:{' '}
+  <p class="pub-authors">
     {pub.authors.map((author, i) => (
       <>
         {i > 0 && ', '}
@@ -35,14 +34,8 @@ const bibtexJson = pub.bibtex ? JSON.stringify(pub.bibtex) : 'null';
       </>
     ))}
   </p>
-  <p class="pub-field">
-    <span class="pub-key">"title"</span>:{' '}
-    <span class="pub-title-text">{pub.title}</span>
-  </p>
-  <p class="pub-field">
-    <span class="pub-key">"venue"</span>:{' '}
-    {pub.venue} · {pub.year}
-  </p>
+  <p class="pub-title">{pub.title}</p>
+  <p class="pub-venue">{pub.venue} &middot; {pub.year}</p>
 
   <div class="pub-actions">
     {pub.links?.pdf && pub.links.pdf.length > 0 && (
@@ -59,13 +52,13 @@ const bibtexJson = pub.bibtex ? JSON.stringify(pub.bibtex) : 'null';
     )}
     {pub.abstract && (
       <details class="pub-abstract">
-        <summary><span class="visually-hidden">abstract</span></summary>
+        <summary><span class="visually-hidden">toggle abstract</span></summary>
         <div class="abstract-body">{pub.abstract}</div>
       </details>
     )}
     {pub.bibtex && (
       <details class="pub-bibtex">
-        <summary>[bibtex ⌄]</summary>
+        <summary><span class="visually-hidden">toggle bibtex</span></summary>
         <div style="margin-top: 0.5rem;">
           <pre><code>{pub.bibtex}</code></pre>
           <button type="button" class="copy-bibtex-btn pub-bibtex-copy" data-bibtex={bibtexJson}>[copy]</button>

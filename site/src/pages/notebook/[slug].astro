@@ -28,7 +28,7 @@ const updatedDate = post.data.updated
   : null;
 ---
 <Base title={post.data.title} description={post.data.summary} math={math}>
-  <div class="page-wrap">
+  <div class="page-container">
     <nav class="breadcrumb" aria-label="Breadcrumb">
       <a href="/">prabigya</a>
       <span class="breadcrumb-sep">/</span>
@@ -37,77 +37,33 @@ const updatedDate = post.data.updated
       <span class="breadcrumb-current">{post.data.title}</span>
     </nav>
 
-    <div class="page">
-      <article class="page-main">
-        <header class="post-header">
-          <h1>{post.data.title}</h1>
-          <div class="post-header-meta">
-            <time style="font-size: 0.7em; color: var(--ink-ghost);" datetime={post.data.date.toISOString()}>
-              {formattedDate}
-            </time>
-            {updatedDate && (
-              <span style="font-size: 0.65em; color: var(--ink-ghost);">
-                last tended {updatedDate}
-              </span>
-            )}
-            {post.data.tags.length > 0 && (
-              <div class="post-tags">
-                {post.data.tags.map(tag => (
-                  <a href={`/notebook#tag-${tag}`} class="tag">{tag}</a>
-                ))}
-              </div>
-            )}
-          </div>
-        </header>
-
-        <div class="prose">
-          <Content />
+    <article>
+      <header class="post-header">
+        <h1>{post.data.title}</h1>
+        <div class="post-header-meta">
+          <time datetime={post.data.date.toISOString()}>{formattedDate}</time>
+          {updatedDate && (
+            <span>updated {updatedDate}</span>
+          )}
+          {post.data.tags.length > 0 && (
+            <div class="post-tags">
+              {post.data.tags.map(tag => (
+                <a href={`/notebook#tag-${tag}`} class="tag">{tag}</a>
+              ))}
+            </div>
+          )}
         </div>
+      </header>
 
-        <footer style="margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--rule);">
-          <a href="/notebook" style="font-size: 0.78em; color: var(--ink-faint);">← notebook</a>
-        </footer>
-      </article>
+      <div class="prose">
+        <Content />
+      </div>
 
-      <aside class="page-margin" aria-label="Margin notes" style="padding-top: 5rem;">
-        <div class="margin-note">
-          <span class="margin-stamp">posted</span>
-          {formattedDate}
-        </div>
-        {updatedDate && (
-          <div class="margin-note" style="margin-top: 1rem;">
-            <span class="margin-stamp">last tended</span>
-            {updatedDate}
-          </div>
-        )}
-      </aside>
-    </div>
+      <footer style="margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--rule);">
+        <a href="/notebook" style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--ink-faint); text-decoration: none;">← notebook</a>
+      </footer>
+    </article>
   </div>
 
   <Footer slot="footer" />
 </Base>
-
-<style>
-  .prose :global(h2) { margin-top: 2.5rem; }
-  .prose :global(h3) { margin-top: 2rem; }
-  .prose :global(p) { margin-bottom: 1.1em; }
-  .prose :global(img) {
-    max-width: 100%;
-    height: auto;
-    display: block;
-    margin: 1.5rem 0;
-  }
-  .prose :global(figure) { margin: 1.5rem 0; }
-  .prose :global(figcaption) {
-    font-size: 0.72em;
-    color: var(--ink-faint);
-    margin-top: 0.5rem;
-  }
-  .prose :global([data-footnote-ref]) {
-    color: var(--accent);
-    text-decoration: none;
-    font-size: 0.7em;
-    vertical-align: super;
-    line-height: 0;
-  }
-</style>

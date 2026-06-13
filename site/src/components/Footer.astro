@@ -2,24 +2,33 @@
 ---
 <footer class="site-footer" role="contentinfo">
   <div class="site-footer-inner">
-    <div class="mcp-line">
-      <span>§ this site speaks MCP —</span>
-      <code>claude mcp add prabigya https://prabigya.com.np/mcp</code>
-      <button type="button" class="copy-mcp" id="copy-mcp-footer" aria-label="Copy MCP command">[copy]</button>
+    <span class="footer-copy">&copy; Prabigya Acharya &middot; 2026</span>
+    <div class="footer-links">
+      <a href="/colophon">colophon</a>
+      <button class="theme-toggle" id="theme-toggle-footer" type="button" aria-label="Toggle color theme">
+        <span id="theme-paper-f">paper</span> / <span id="theme-lamp-f">lamplight</span>
+      </button>
     </div>
-    <span style="font-size: 0.7em; color: var(--ink-ghost);">&copy; Prabigya Acharya</span>
   </div>
 </footer>
 
 <script>
-  const btn = document.getElementById('copy-mcp-footer');
-  btn?.addEventListener('click', () => {
-    navigator.clipboard?.writeText('claude mcp add prabigya https://prabigya.com.np/mcp')
-      .then(() => {
-        if (btn) {
-          btn.textContent = 'copied';
-          setTimeout(() => { btn.textContent = '[copy]'; }, 1500);
-        }
-      });
+  const paperEl = document.getElementById('theme-paper-f');
+  const lampEl  = document.getElementById('theme-lamp-f');
+
+  function syncTheme() {
+    const cur = document.documentElement.getAttribute('data-theme') ?? 'paper';
+    paperEl?.classList.toggle('active', cur === 'paper');
+    lampEl?.classList.toggle('active', cur === 'lamplight');
+  }
+
+  syncTheme();
+
+  document.getElementById('theme-toggle-footer')?.addEventListener('click', () => {
+    const cur  = document.documentElement.getAttribute('data-theme');
+    const next = cur === 'lamplight' ? 'paper' : 'lamplight';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    syncTheme();
   });
 </script>

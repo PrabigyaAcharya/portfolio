@@ -1,34 +1,87 @@
-/* Design tokens — notebook portfolio */
+/* Design tokens — prabigya.com.np */
 
 :root {
-  /* paper mode (default) */
-  --paper: #FAF7F0;
-  --paper-raised: #F3EEE3;
-  --paper-code: #EDE7D9;   /* code-block surface (paper) */
-  --ink: #211E18;
-  --ink-soft: #46412F;
-  --ink-faint: #7A7260;
-  --ink-ghost: #A39A82;
-  --rule: #E2DBCB;
-  --accent: #8A3B22;
-  --accent-press: #6E2F1B;
+  /* Backgrounds */
+  --paper:          #F5F0E8;
+  --paper-raised:   #EDE8DC;
+  --paper-code:     #E2DBCC;
+  --accent-subtle:  #F0E6D3;
 
-  /* layout */
-  --max-prose: 64ch;
-  --margin-col: 11.5rem;
-  --gutter: 1.5rem;
-  --sidebar-width: 180px;
+  /* Ink */
+  --ink:            #1A1610;
+  --ink-soft:       #5C5347;
+  --ink-faint:      #9A8F82;
+  --ink-ghost:      #B8AFA0;
+
+  /* Accent — restrained amber */
+  --accent:         #B85C00;
+  --accent-press:   #8F4600;
+
+  /* Code / syntax nav */
+  --code-keyword:   #7A5C3A;
+  --code-bracket:   #9A8F82;
+  --code-index:     #B85C00;
+
+  /* Borders */
+  --rule:           #D8D0C0;
+  --border-medium:  #B8AFA0;
+
+  /* Lab status */
+  --lab-active:     #4A7C59;
+  --lab-idle:       #B85C00;
+  --lab-unknown:    #9A8F82;
+
+  /* Fonts */
+  --font-serif: 'EB Garamond', Georgia, serif;
+  --font-mono:  'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+
+  /* Layout */
+  --max-prose:     720px;
+  --margin-col:    160px;
+  --sidebar-width: 260px;
+  --gutter:        1.5rem;
 }
 
+/* Dark mode — system preference */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="paper"]) {
+    --paper:          #1A1610;
+    --paper-raised:   #221E16;
+    --paper-code:     #2A2520;
+    --accent-subtle:  #2A2010;
+    --ink:            #EDE8DC;
+    --ink-soft:       #B8AFA0;
+    --ink-faint:      #7A7060;
+    --ink-ghost:      #5A5248;
+    --accent:         #D4843A;
+    --accent-press:   #E09A58;
+    --code-keyword:   #C4A87A;
+    --code-bracket:   #7A7060;
+    --code-index:     #D4843A;
+    --rule:           #2E2820;
+    --border-medium:  #40382C;
+    --lab-active:     #6A9C79;
+    --lab-idle:       #D4843A;
+  }
+}
+
+/* Dark mode — explicit toggle */
 :root[data-theme="lamplight"] {
-  --paper: #1B1813;
-  --paper-raised: #242019;
-  --paper-code: #232019;   /* code-block surface (lamplight) */
-  --ink: #E8E2D4;
-  --ink-soft: #C9C1AD;
-  --ink-faint: #968D77;
-  --ink-ghost: #6E6755;
-  --rule: #3A342A;
-  --accent: #D08562;
-  --accent-press: #E09A78;
+  --paper:          #1A1610;
+  --paper-raised:   #221E16;
+  --paper-code:     #2A2520;
+  --accent-subtle:  #2A2010;
+  --ink:            #EDE8DC;
+  --ink-soft:       #B8AFA0;
+  --ink-faint:      #7A7060;
+  --ink-ghost:      #5A5248;
+  --accent:         #D4843A;
+  --accent-press:   #E09A58;
+  --code-keyword:   #C4A87A;
+  --code-bracket:   #7A7060;
+  --code-index:     #D4843A;
+  --rule:           #2E2820;
+  --border-medium:  #40382C;
+  --lab-active:     #6A9C79;
+  --lab-idle:       #D4843A;
 }

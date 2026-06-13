@@ -18,7 +18,8 @@ const allTags = [...new Set(posts.flatMap(p => p.data.tags))].sort();
 
   {allTags.length > 0 && (
     <div class="filter-row">
-      <span class="section-label">filter</span>
+      <span>filter:</span>
+      <a href="#" class="tag" id="tag-all">all</a>
       {allTags.map(tag => (
         <a href={`#tag-${tag}`} class="tag">{tag}</a>
       ))}
@@ -28,37 +29,31 @@ const allTags = [...new Set(posts.flatMap(p => p.data.tags))].sort();
   <ul class="post-list" role="list" id="post-list">
     {posts.map(post => (
       <li class="post-list-item entry-list-item" data-tags={post.data.tags.join(',')}>
-        <div>
-          <a href={`/notebook/${post.slug}`} class="post-title" style="text-decoration: none; display: block;">
+        <div class="post-row">
+          <a href={`/notebook/${post.slug}`} class="post-title-link">
             {post.data.title}
           </a>
-          <p class="post-summary">{post.data.summary}</p>
+          <time class="post-date" datetime={post.data.date.toISOString()}>
+            {post.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+          </time>
+        </div>
+        {post.data.summary && (
+          <p class="post-excerpt">{post.data.summary}</p>
+        )}
+        {post.data.tags.length > 0 && (
           <div class="post-tags" style="margin-top: 0.35rem;">
             {post.data.tags.map(tag => (
               <a href={`#tag-${tag}`} class="tag">{tag}</a>
             ))}
           </div>
-        </div>
-        <div style="text-align: right;">
-          <time class="post-meta" datetime={post.data.date.toISOString()}>
-            {post.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
-          </time>
-          {post.data.updated && (
-            <div style="font-size: 0.65em; color: var(--ink-ghost); margin-top: 0.2rem;">
-              tended {post.data.updated.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-            </div>
-          )}
-        </div>
+        )}
       </li>
     ))}
   </ul>
 
-  <div slot="margin">
-    <div class="margin-note" style="margin-top: 5rem;">
-      <span class="margin-stamp">rss</span>
-      <a href="/notebook/rss.xml" style="font-style: normal;">subscribe via rss</a>
-    </div>
-  </div>
+  <p style="margin-top: 1.5rem; font-family: var(--font-mono); font-size: 0.72rem; color: var(--ink-faint);">
+    <a href="/notebook/rss.xml" style="color: var(--ink-faint);">subscribe via RSS</a>
+  </p>
 </Page>
 
 <script>

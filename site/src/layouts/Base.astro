@@ -38,14 +38,14 @@ const fullTitle = title === siteName ? title : `${title} — ${siteName}`;
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap"
       media="print"
       onload="this.setAttribute('media','all')"
     />
     <noscript>
       <link
         rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap"
       />
     </noscript>
 
@@ -126,23 +126,13 @@ const fullTitle = title === siteName ? title : `${title} — ${siteName}`;
         const endpoint = strip.dataset.poll;
         if (!endpoint) return;
 
-        function updateStrip(data: {
+        function updateStatus(data: {
           status: string;
           latest?: { run_name?: string; loss?: number; epoch?: number; total_epochs?: number } | null;
         }) {
           strip!.dataset.status = data.status;
-          const statusEl = strip!.querySelector<HTMLElement>('[data-field="status"]');
-          if (statusEl) statusEl.textContent = data.status === 'training' ? 'training' : 'idle';
-          const runEl = strip!.querySelector<HTMLElement>('[data-field="run_name"]');
-          const lossEl = strip!.querySelector<HTMLElement>('[data-field="loss"]');
-          const epochEl = strip!.querySelector<HTMLElement>('[data-field="epoch"]');
-          if (data.status === 'training' && data.latest) {
-            if (runEl && data.latest.run_name) runEl.textContent = data.latest.run_name;
-            if (lossEl && data.latest.loss !== undefined) lossEl.textContent = `loss ${data.latest.loss.toFixed(4)}`;
-            if (epochEl && data.latest.epoch !== undefined && data.latest.total_epochs !== undefined) {
-              epochEl.textContent = `epoch ${data.latest.epoch}/${data.latest.total_epochs}`;
-            }
-          }
+          const wordEl = strip!.querySelector<HTMLElement>('[data-field="status"]');
+          if (wordEl) wordEl.textContent = data.status === 'training' ? 'training' : 'idle';
         }
 
         async function poll() {
@@ -150,7 +140,7 @@ const fullTitle = title === siteName ? title : `${title} — ${siteName}`;
             const res = await fetch(endpoint!);
             if (!res.ok) return;
             const data = await res.json();
-            updateStrip(data as Parameters<typeof updateStrip>[0]);
+            updateStatus(data as Parameters<typeof updateStatus>[0]);
           } catch { /* non-critical */ }
         }
 

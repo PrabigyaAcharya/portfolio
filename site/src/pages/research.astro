@@ -6,37 +6,36 @@ import { getSiteData, getPublicationsByYear } from '../lib/content';
 const site = getSiteData();
 const byYear = getPublicationsByYear();
 const years = [...byYear.keys()];
+
+const threads = site.research_threads ?? [];
 ---
 <Page title="Research" description={`Research and publications by ${site.name}`}>
   <section class="page-intro">
     <h1>Research</h1>
     <p class="page-lede">
-      I work on privacy-preserving NLP and 3D computer vision — from lightweight models for PII masking in conversational text, to Gaussian splatting pipelines for digitizing cultural heritage.
+      I work on privacy-preserving NLP and 3D computer vision — from lightweight models
+      for PII masking in conversational text, to Gaussian splatting pipelines for
+      digitising cultural heritage.
     </p>
   </section>
 
-  <div>
-    {years.map((year, i) => (
-      <details class="year-accordion" open={i === 0}>
-        <summary class="year-summary">
-          <span class="year-toggle"></span>
-          <span class="year-label">{year}</span>
-        </summary>
-        <div class="year-body">
-          {byYear.get(year)!.map(pub => (
-            <PublicationEntry pub={pub} />
-          ))}
-        </div>
-      </details>
-    ))}
-  </div>
-
-  <div slot="margin">
-    <div class="margin-note" style="margin-top: 4rem;">
-      <span class="margin-stamp">threads</span>
-      {site.research_threads.map(thread => (
-        <p style="margin-bottom: 0.75rem; font-style: normal; font-size: 0.9em;">{thread.name}</p>
+  {threads.length > 0 && (
+    <div class="filter-row">
+      <span style="color: var(--ink-faint);">threads:</span>
+      {threads.map(t => (
+        <span style="color: var(--ink-soft);">{t.name}</span>
       ))}
     </div>
+  )}
+
+  <div>
+    {years.map(year => (
+      <div style="margin-bottom: 2rem;">
+        <span class="code-comment">// {year}</span>
+        {byYear.get(year)!.map(pub => (
+          <PublicationEntry pub={pub} />
+        ))}
+      </div>
+    ))}
   </div>
 </Page>

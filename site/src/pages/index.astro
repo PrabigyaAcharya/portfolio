@@ -13,112 +13,139 @@ const allPosts = await getCollection('notebook', ({ data }) => !data.draft);
 const recentPosts = allPosts
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
   .slice(0, 3);
-
-interface LabSnapshot {
-  status: string;
-  received_at: string | null;
-  latest?: {
-    run_name?: string;
-    epoch?: number;
-    total_epochs?: number;
-    loss?: number;
-  } | null;
-}
-
-const labSnapshot: LabSnapshot = { status: 'idle', received_at: null, latest: null };
 ---
-<Page title={site.name} description={site.tagline} breadcrumb={[]}>
-  <!-- Hero -->
-  <section class="page-intro">
-    <span class="hero-tag">prabigya =v1.0;</span>
-    <h1 class="hero-title">{site.name}</h1>
-    <p class="page-lede">{site.tagline}</p>
-    <p style="font-size: 0.72em; color: var(--ink-ghost); margin-top: 0.75rem;">
-      now: {now.working_on[0] ?? '…'}
-    </p>
-    <div
-      class="telemetry-strip"
-      data-poll="/api/lab.json"
-      data-status={labSnapshot.status}
-    >
-      <span class="telemetry-label">lab</span>
-      <span class="telemetry-status" data-field="status">
-        {labSnapshot.status === 'training' ? 'training' : 'idle'}
-      </span>
-      {labSnapshot.status === 'training' && labSnapshot.latest?.run_name && (
-        <span class="telemetry-detail" data-field="run_name">{labSnapshot.latest.run_name}</span>
+<Page title={site.name} description={site.tagline} layout="home" breadcrumb={[]}>
+  <div class="home-grid">
+
+    <!-- ── Main column ──────────────────────────────────────────────────── -->
+    <div class="home-main">
+
+      <!-- Hero -->
+      <section class="hero-block">
+        <span class="hero-version">prabigya =v1.0;</span>
+        <h1 class="hero-title">{site.name}</h1>
+        <p class="hero-tagline">{site.tagline}</p>
+        <span class="hero-now">now: {now.working_on[0] ?? '…'}</span>
+        <div
+          class="lab-status"
+          data-poll="/api/lab.json"
+          data-status="idle"
+        >
+          <span class="lab-dot"></span>
+          lab <span data-field="status">idle</span>
+        </div>
+      </section>
+
+      <!-- Ask this notebook — ABOVE selected work -->
+      <AskBox />
+
+      <!-- Selected work -->
+      {selected.length > 0 && (
+        <section class="page-section">
+          <span class="code-comment">// selected work</span>
+          <h2 class="code-heading">selected_work <span class="code-brace">{'{'}</span></h2>
+          <div class="code-body">
+            {selected.map(pub => (
+              <PublicationEntry pub={pub} />
+            ))}
+            <p style="margin-top: 0.5rem;">
+              <a href="/research" style="font-family: var(--font-mono); font-size: 0.8rem;">all publications →</a>
+            </p>
+          </div>
+          <span class="code-close">{'}'}</span>
+        </section>
       )}
-      {labSnapshot.status === 'training' && labSnapshot.latest?.loss !== undefined && (
-        <span class="telemetry-detail" data-field="loss">loss {labSnapshot.latest.loss.toFixed(4)}</span>
-      )}
-      {labSnapshot.status === 'training' && labSnapshot.latest?.epoch !== undefined && labSnapshot.latest?.total_epochs !== undefined && (
-        <span class="telemetry-detail" data-field="epoch">epoch {labSnapshot.latest.epoch}/{labSnapshot.latest.total_epochs}</span>
+
+      <!-- Recent notebook -->
+      {recentPosts.length > 0 && (
+        <section class="page-section">
+          <span class="code-comment">// recent writing</span>
+          <h2 class="code-heading">notebook <span class="code-brace">{'{'}</span></h2>
+          <div class="code-body">
+            <ul class="post-list" role="list">
+              {recentPosts.map(post => (
+                <li class="post-list-item entry-list-item">
+                  <div class="post-row">
+                    <a href={`/notebook/${post.slug}`} class="post-title-link">
+                      {post.data.title}
+                    </a>
+                    <time
+                      class="post-date"
+                      datetime={post.data.date.toISOString()}
+                    >
+                      {post.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+                    </time>
+                  </div>
+                  {post.data.summary && (
+                    <p class="post-excerpt">{post.data.summary}</p>
+                  )}
+                </li>
+              ))}
+            </ul>
+            <p style="margin-top: 0.75rem;">
+              <a href="/notebook" style="font-family: var(--font-mono); font-size: 0.8rem;">all posts →</a>
+            </p>
+          </div>
+          <span class="code-close">{'}'}</span>
+        </section>
       )}
     </div>
-  </section>
 
-  <!-- Selected work -->
-  {selected.length > 0 && (
-    <section class="page-section">
-      <span class="code-comment">// selected work</span>
-      <h2 class="code-heading">selected_work <span class="code-brace">{'{'}</span></h2>
-      <div class="code-body">
-        {selected.map(pub => (
-          <PublicationEntry pub={pub} />
-        ))}
-        <p style="margin-top: 1rem;">
-          <a href="/research" style="font-size: 0.82em;">all publications →</a>
-        </p>
-      </div>
-      <span class="code-close code-brace">{'}'}</span>
-    </section>
-  )}
+    <!-- ── Right sidebar (desktop only) ─────────────────────────────────── -->
+    <aside class="home-sidebar" aria-label="Links and metadata">
 
-  <!-- Recent notebook -->
-  {recentPosts.length > 0 && (
-    <section class="page-section">
-      <span class="code-comment">// recent writing</span>
-      <h2 class="code-heading">notebook <span class="code-brace">{'{'}</span></h2>
-      <div class="code-body">
-        <ul class="post-list" role="list">
-          {recentPosts.map(post => (
-            <li class="post-list-item entry-list-item">
-              <div>
-                <a href={`/notebook/${post.slug}`} class="post-title" style="text-decoration: none;">
-                  {post.data.title}
-                </a>
-                <p class="post-summary">{post.data.summary}</p>
-              </div>
-              <time class="post-meta" datetime={post.data.date.toISOString()}>
-                {post.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
-              </time>
-            </li>
-          ))}
+      <div class="hs-block">
+        <span class="hs-struct">enum Links <span class="hs-bracket">{'{'}</span></span>
+        <ul class="hs-list">
+          <li>
+            <a href={site.links.github} class="hs-link" target="_blank" rel="noopener noreferrer">github</a>
+          </li>
+          <li>
+            <a href={site.links.scholar} class="hs-link" target="_blank" rel="noopener noreferrer">scholar</a>
+          </li>
+          <li>
+            <a href={`mailto:${site.links.email}`} class="hs-link">email</a>
+          </li>
         </ul>
-        <p style="margin-top: 1rem;">
-          <a href="/notebook" style="font-size: 0.82em;">all posts →</a>
-        </p>
+        <span class="hs-struct"><span class="hs-bracket">{'}'}</span></span>
       </div>
-      <span class="code-close code-brace">{'}'}</span>
-    </section>
-  )}
 
-  <!-- Ask box -->
-  <section class="page-section">
-    <span class="code-comment">// ask this notebook</span>
-    <AskBox />
-  </section>
+      <div class="hs-block">
+        <p class="hs-meta"><strong>location</strong> {site.location}</p>
+      </div>
 
-  <div slot="margin">
-    <div class="margin-note" style="margin-top: 8rem;">
-      <span class="margin-stamp">location</span>
-      {site.location}
-    </div>
-    <div class="margin-note" style="margin-top: 1.5rem;">
-      <span class="margin-stamp">research</span>
-      {site.research_threads.map(t => (
-        <p style="margin-bottom: 0.5rem; font-style: normal; font-size: 0.9em; color: var(--ink-faint);">{t.name}</p>
-      ))}
-    </div>
+      {site.research_threads && site.research_threads.length > 0 && (
+        <div class="hs-block">
+          <span class="hs-struct">research <span class="hs-bracket">{'{'}</span></span>
+          <ul class="hs-research-list">
+            {site.research_threads.map(t => (
+              <li class="hs-research-item">{t.name}</li>
+            ))}
+          </ul>
+          <span class="hs-struct"><span class="hs-bracket">{'}'}</span></span>
+        </div>
+      )}
+
+      <div class="mcp-invite">
+        <div class="mcp-invite-header">
+          <span class="mcp-glyph">§</span>
+          <span>this site speaks MCP</span>
+        </div>
+        <code class="mcp-command">claude mcp add prabigya</code>
+        <code class="mcp-endpoint">https://prabigya.com.np/mcp</code>
+        <button type="button" class="mcp-copy-btn" id="mcp-copy-sidebar">[copy]</button>
+      </div>
+
+    </aside>
   </div>
 </Page>
+
+<script>
+  document.getElementById('mcp-copy-sidebar')?.addEventListener('click', async function() {
+    try {
+      await navigator.clipboard.writeText('claude mcp add prabigya https://prabigya.com.np/mcp');
+      this.textContent = 'copied!';
+      setTimeout(() => { (this as HTMLButtonElement).textContent = '[copy]'; }, 2000);
+    } catch { /* clipboard unavailable */ }
+  });
+</script>

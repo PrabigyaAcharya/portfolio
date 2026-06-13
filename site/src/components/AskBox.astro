@@ -1,35 +1,38 @@
 ---
 ---
 <div class="ask-box" id="ask-box">
-  <span class="ask-label">ask this notebook</span>
+  <span class="ask-label">// ask this notebook</span>
   <form class="ask-form" id="ask-form" action="mailto:acharyaprabigya@gmail.com" method="get">
     <div class="ask-terminal">
-      <span class="ask-prompt">&gt;</span>
       <input
         type="text"
         id="ask-input"
         name="body"
         class="ask-input"
-        placeholder="type a question…"
+        placeholder="ask a question about this research…"
         maxlength="300"
         autocomplete="off"
         spellcheck="false"
+        aria-label="Ask a question"
       />
-      <button type="submit" class="ask-submit">ask</button>
+      <button type="submit" class="ask-submit">ask →</button>
     </div>
   </form>
+  <p class="ask-powered">
+    powered by MCP &middot; or <a href="mailto:acharyaprabigya@gmail.com">email directly</a>
+  </p>
   <div class="ask-answer" id="ask-answer" aria-live="polite" aria-atomic="true"></div>
 </div>
 
 <noscript>
-  <p class="ask-noscript" style="font-size: 0.78em; color: var(--ink-ghost);">
+  <p class="ask-noscript">
     JavaScript required for the ask-box. Use the <a href="/colophon#mcp-heading">MCP server</a> or <a href="mailto:acharyaprabigya@gmail.com">email directly</a>.
   </p>
 </noscript>
 
 <script>
-  const form = document.getElementById('ask-form') as HTMLFormElement | null;
-  const input = document.getElementById('ask-input') as HTMLInputElement | null;
+  const form     = document.getElementById('ask-form') as HTMLFormElement | null;
+  const input    = document.getElementById('ask-input') as HTMLInputElement | null;
   const answerEl = document.getElementById('ask-answer') as HTMLDivElement | null;
   if (!form || !input || !answerEl) throw new Error('ask-box elements missing');
 

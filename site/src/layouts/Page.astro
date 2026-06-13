@@ -6,13 +6,14 @@ export interface Props {
   title: string;
   description?: string;
   math?: boolean;
-  /** Pass empty array to suppress breadcrumb (homepage). Omit for auto-derived. */
+  /** Pass empty array to suppress breadcrumb. Omit for auto-derived. */
   breadcrumb?: Array<{ label: string; href?: string }>;
+  /** 'home' uses home-wrap + home-grid; 'default' uses page-container */
+  layout?: 'default' | 'home';
 }
 
-const { title, description, math = false, breadcrumb } = Astro.props;
+const { title, description, math = false, breadcrumb, layout = 'default' } = Astro.props;
 
-// Auto-derive breadcrumb from URL if not passed
 const crumbs: Array<{ label: string; href?: string }> = breadcrumb ?? (() => {
   const parts = Astro.url.pathname.split('/').filter(Boolean);
   return parts.map((part, i) => ({
@@ -21,32 +22,31 @@ const crumbs: Array<{ label: string; href?: string }> = breadcrumb ?? (() => {
   }));
 })();
 
-const showBreadcrumb = crumbs.length > 0;
+const showBreadcrumb = crumbs.length > 0 && layout !== 'home';
 ---
 <Base title={title} description={description} math={math}>
-  <div class="page-wrap">
-    {showBreadcrumb && (
-      <nav class="breadcrumb" aria-label="Breadcrumb">
-        <a href="/">prabigya</a>
-        {crumbs.map(crumb => (
-          <>
-            <span class="breadcrumb-sep">/</span>
-            {crumb.href
-              ? <a href={crumb.href}>{crumb.label}</a>
-              : <span class="breadcrumb-current">{crumb.label}</span>
-            }
-          </>
-        ))}
-      </nav>
-    )}
-    <div class="page">
-      <div class="page-main">
-        <slot />
-      </div>
-      <aside class="page-margin" aria-label="Margin notes">
-        <slot name="margin" />
-      </aside>
+  {layout === 'home' ? (
+    <div class="home-wrap">
+      <slot />
     </div>
-  </div>
+  ) : (
+    <div class="page-container">
+      {showBreadcrumb && (
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="/">prabigya</a>
+          {crumbs.map(crumb => (
+            <>
+              <span class="breadcrumb-sep">/</span>
+              {crumb.href
+                ? <a href={crumb.href}>{crumb.label}</a>
+                : <span class="breadcrumb-current">{crumb.label}</span>
+              }
+            </>
+          ))}
+        </nav>
+      )}
+      <slot />
+    </div>
+  )}
   <Footer slot="footer" />
 </Base>
