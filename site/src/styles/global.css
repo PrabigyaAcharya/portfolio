@@ -129,7 +129,7 @@ time {
 
 .sidebar-struct {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: 0.8rem;
   color: var(--ink-ghost);
   line-height: 1.8;
   white-space: nowrap;
@@ -147,7 +147,7 @@ time {
 .sidebar-link {
   display: block;
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   color: var(--ink-soft);
   text-decoration: none;
   padding: 0.18rem 0;

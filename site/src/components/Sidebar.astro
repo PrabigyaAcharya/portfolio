@@ -68,39 +68,6 @@ const currentPath = Astro.url.pathname;
     <p class="sidebar-struct"><span class="sidebar-bracket">{'}'}</span></p>
   </div>
 
-  <!-- Location -->
-  <div class="sidebar-block">
-    <p class="sidebar-struct sidebar-meta">
-      <span class="sidebar-keyword">location</span>
-    </p>
-    <p class="sidebar-meta-value">{site.location}</p>
-  </div>
-
-  <!-- Research threads -->
-  {site.research_threads && site.research_threads.length > 0 && (
-    <div class="sidebar-block">
-      <p class="sidebar-struct">
-        <span class="sidebar-keyword">research</span> <span class="sidebar-bracket">{'{'}</span>
-      </p>
-      <ul class="sidebar-list">
-        {site.research_threads.map(t => (
-          <li class="sidebar-meta-value">{t.name}</li>
-        ))}
-      </ul>
-      <p class="sidebar-struct"><span class="sidebar-bracket">{'}'}</span></p>
-    </div>
-  )}
-
-  <!-- MCP invite -->
-  <div class="sidebar-block sidebar-mcp">
-    <p class="sidebar-struct">
-      <span class="mcp-glyph">§</span> MCP
-    </p>
-    <p class="sidebar-meta-value" style="word-break: break-all;">claude mcp add prabigya</p>
-    <p class="sidebar-meta-value" style="word-break: break-all; color: var(--ink-faint);">https://prabigya.com.np/mcp</p>
-    <button type="button" class="sidebar-mcp-copy" id="sidebar-mcp-copy-btn">[copy]</button>
-  </div>
-
   <!-- Theme toggle -->
   <div style="margin-top: auto; padding-top: 1rem;">
     <button class="theme-toggle" id="theme-toggle-btn" type="button" aria-label="Toggle color theme">
