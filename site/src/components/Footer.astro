@@ -3,32 +3,6 @@
 <footer class="site-footer" role="contentinfo">
   <div class="site-footer-inner">
     <span class="footer-copy">&copy; Prabigya Acharya &middot; 2026</span>
-    <div class="footer-links">
-      <a href="/colophon">colophon</a>
-      <button class="theme-toggle" id="theme-toggle-footer" type="button" aria-label="Toggle color theme">
-        <span id="theme-paper-f">paper</span> / <span id="theme-lamp-f">lamplight</span>
-      </button>
-    </div>
+    <a href="/colophon" class="footer-links">colophon</a>
   </div>
 </footer>
-
-<script>
-  const paperEl = document.getElementById('theme-paper-f');
-  const lampEl  = document.getElementById('theme-lamp-f');
-
-  function syncTheme() {
-    const cur = document.documentElement.getAttribute('data-theme') ?? 'paper';
-    paperEl?.classList.toggle('active', cur === 'paper');
-    lampEl?.classList.toggle('active', cur === 'lamplight');
-  }
-
-  syncTheme();
-
-  document.getElementById('theme-toggle-footer')?.addEventListener('click', () => {
-    const cur  = document.documentElement.getAttribute('data-theme');
-    const next = cur === 'lamplight' ? 'paper' : 'lamplight';
-    document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('theme', next);
-    syncTheme();
-  });
-</script>

@@ -37,8 +37,8 @@
 
   /* Layout */
   --max-prose:     720px;
-  --margin-col:    160px;
-  --sidebar-width: 260px;
+  --sidebar-width: 180px;
+  --home-aside:    260px;
   --gutter:        1.5rem;
 }
 
