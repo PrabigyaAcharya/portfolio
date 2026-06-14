@@ -23,10 +23,7 @@ const fullTitle = title === siteName ? title : `${title} — ${siteName}`;
     <!-- Pre-paint theme script: runs before CSS to prevent flash -->
     <script is:inline>
       (function() {
-        var t = localStorage.getItem('theme');
-        if (!t) {
-          t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'lamplight' : 'paper';
-        }
+        var t = localStorage.getItem('theme') || 'lamplight';
         document.documentElement.setAttribute('data-theme', t);
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
           document.documentElement.setAttribute('data-reduced-motion', 'true');

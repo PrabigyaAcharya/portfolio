@@ -2,6 +2,18 @@
 
 @import './tokens.css';
 
+/* ── Selection + scrollbar ───────────────────────────────────────────────── */
+
+::selection {
+  background-color: var(--accent);
+  color: #0D0D0D;
+}
+
+::-webkit-scrollbar              { width: 6px; }
+::-webkit-scrollbar-track        { background: var(--paper); }
+::-webkit-scrollbar-thumb        { background: var(--border-medium); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover  { background: var(--ink-faint); }
+
 /* ── Reset ───────────────────────────────────────────────────────────────── */
 
 *,
@@ -15,14 +27,14 @@
 /* ── Base ────────────────────────────────────────────────────────────────── */
 
 html {
-  font-size: 16px;
+  font-size: 18px;
   background: var(--paper);
   color: var(--ink);
   scroll-behavior: smooth;
 }
 
 @media (max-width: 820px) {
-  html { font-size: 15px; }
+  html { font-size: 16px; }
 }
 
 body {
@@ -129,7 +141,7 @@ time {
 
 .sidebar-struct {
   font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: 0.92rem;
   color: var(--ink-ghost);
   line-height: 1.8;
   white-space: nowrap;
@@ -140,14 +152,14 @@ time {
 
 .sidebar-list {
   list-style: none;
-  padding: 0 0 0 0.5rem;
+  padding: 0 0 0 1.25rem;
   margin: 0;
 }
 
 .sidebar-link {
   display: block;
   font-family: var(--font-mono);
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   color: var(--ink-soft);
   text-decoration: none;
   padding: 0.18rem 0;
@@ -272,13 +284,13 @@ time {
 
 .page-container {
   max-width: var(--max-prose);
-  margin: 0 auto;
+  margin: 0;
   padding: 3rem var(--gutter) 5rem;
 }
 
 .home-wrap {
   max-width: calc(var(--max-prose) + var(--home-aside) + 4rem);
-  margin: 0 auto;
+  margin: 0;
   padding: 0 var(--gutter);
 }
 
@@ -336,12 +348,12 @@ time {
 
 .hero-title {
   font-family: var(--font-serif);
-  font-size: clamp(3rem, 8vw, 6rem);
+  font-size: clamp(2rem, 6vw, 4.5rem);
   font-weight: 500;
   line-height: 1.0;
   color: var(--ink);
   margin-bottom: 1.25rem;
-  text-wrap: balance;
+  text-wrap: nowrap;
 }
 
 .hero-tagline {
@@ -407,6 +419,7 @@ time {
 
 .code-body {
   margin-bottom: 0.25rem;
+  padding-left: 1.75rem;
 }
 
 .code-close {
@@ -993,8 +1006,8 @@ th {
   padding: 1rem 0;
   border-bottom: 1px solid var(--rule);
   display: grid;
-  grid-template-columns: 5rem 1fr;
-  gap: 1.25rem;
+  grid-template-columns: max-content 1fr;
+  gap: 1.75rem;
   align-items: start;
 }
 
@@ -1202,7 +1215,7 @@ div > .cv-entry:first-child { border-top: 1px solid var(--rule); }
 
 .theme-toggle {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   color: var(--ink-faint);
   background: none;
   border: none;
@@ -1222,7 +1235,7 @@ div > .cv-entry:first-child { border-top: 1px solid var(--rule); }
 
 .site-footer-inner {
   max-width: calc(var(--max-prose) + var(--home-aside) + 4rem);
-  margin: 0 auto;
+  margin: 0;
   padding: 0 var(--gutter);
   display: flex;
   justify-content: space-between;

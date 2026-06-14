@@ -1,87 +1,87 @@
-/* Design tokens — prabigya.com.np */
+/* Design tokens — prabigya.com.np — pragma.ooo dark palette */
 
 :root {
   /* Backgrounds */
-  --paper:          #F5F0E8;
-  --paper-raised:   #EDE8DC;
-  --paper-code:     #E2DBCC;
-  --accent-subtle:  #F0E6D3;
+  --paper:          #0D0D0D;
+  --paper-raised:   #141414;
+  --paper-code:     #1A1A1A;
+  --accent-subtle:  #0A1F12;
 
   /* Ink */
-  --ink:            #1A1610;
-  --ink-soft:       #5C5347;
-  --ink-faint:      #9A8F82;
-  --ink-ghost:      #B8AFA0;
+  --ink:            #F0EDE8;
+  --ink-soft:       #A8A49E;
+  --ink-faint:      #666057;
+  --ink-ghost:      #555047;
 
-  /* Accent — restrained amber */
-  --accent:         #B85C00;
-  --accent-press:   #8F4600;
+  /* Accent — electric green */
+  --accent:         #4AFF91;
+  --accent-press:   #3ACC78;
 
   /* Code / syntax nav */
-  --code-keyword:   #7A5C3A;
-  --code-bracket:   #9A8F82;
-  --code-index:     #B85C00;
+  --code-keyword:   #4AFF91;
+  --code-bracket:   #555047;
+  --code-index:     #4AFF91;
 
   /* Borders */
-  --rule:           #D8D0C0;
-  --border-medium:  #B8AFA0;
+  --rule:           #1E1E1E;
+  --border-medium:  #2A2A2A;
 
   /* Lab status */
-  --lab-active:     #4A7C59;
-  --lab-idle:       #B85C00;
-  --lab-unknown:    #9A8F82;
+  --lab-active:     #4AFF91;
+  --lab-idle:       #FFB347;
+  --lab-unknown:    #555047;
 
   /* Fonts */
   --font-serif: 'EB Garamond', Georgia, serif;
   --font-mono:  'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
 
   /* Layout */
-  --max-prose:     720px;
-  --sidebar-width: 210px;
+  --max-prose:     900px;
+  --sidebar-width: 260px;
   --home-aside:    260px;
   --gutter:        1.5rem;
 }
 
-/* Dark mode — system preference */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="paper"]) {
-    --paper:          #1A1610;
-    --paper-raised:   #221E16;
-    --paper-code:     #2A2520;
-    --accent-subtle:  #2A2010;
-    --ink:            #EDE8DC;
-    --ink-soft:       #B8AFA0;
-    --ink-faint:      #7A7060;
-    --ink-ghost:      #5A5248;
-    --accent:         #D4843A;
-    --accent-press:   #E09A58;
-    --code-keyword:   #C4A87A;
-    --code-bracket:   #7A7060;
-    --code-index:     #D4843A;
-    --rule:           #2E2820;
-    --border-medium:  #40382C;
-    --lab-active:     #6A9C79;
-    --lab-idle:       #D4843A;
-  }
+/* Explicit dark — same as root, for toggle target */
+:root[data-theme="lamplight"] {
+  --paper:          #0D0D0D;
+  --paper-raised:   #141414;
+  --paper-code:     #1A1A1A;
+  --accent-subtle:  #0A1F12;
+  --ink:            #F0EDE8;
+  --ink-soft:       #A8A49E;
+  --ink-faint:      #666057;
+  --ink-ghost:      #555047;
+  --accent:         #4AFF91;
+  --accent-press:   #3ACC78;
+  --code-keyword:   #4AFF91;
+  --code-bracket:   #555047;
+  --code-index:     #4AFF91;
+  --rule:           #1E1E1E;
+  --border-medium:  #2A2A2A;
+  --lab-active:     #4AFF91;
+  --lab-idle:       #FFB347;
+  --lab-unknown:    #555047;
 }
 
-/* Dark mode — explicit toggle */
-:root[data-theme="lamplight"] {
-  --paper:          #1A1610;
-  --paper-raised:   #221E16;
-  --paper-code:     #2A2520;
-  --accent-subtle:  #2A2010;
-  --ink:            #EDE8DC;
-  --ink-soft:       #B8AFA0;
-  --ink-faint:      #7A7060;
-  --ink-ghost:      #5A5248;
-  --accent:         #D4843A;
-  --accent-press:   #E09A58;
-  --code-keyword:   #C4A87A;
-  --code-bracket:   #7A7060;
-  --code-index:     #D4843A;
-  --rule:           #2E2820;
-  --border-medium:  #40382C;
-  --lab-active:     #6A9C79;
-  --lab-idle:       #D4843A;
+/* Paper (light) — warm amber fallback for toggle */
+:root[data-theme="paper"] {
+  --paper:          #F5F0E8;
+  --paper-raised:   #EDE8DC;
+  --paper-code:     #E2DBCC;
+  --accent-subtle:  #F0E6D3;
+  --ink:            #1A1610;
+  --ink-soft:       #5C5347;
+  --ink-faint:      #9A8F82;
+  --ink-ghost:      #B8AFA0;
+  --accent:         #B85C00;
+  --accent-press:   #8F4600;
+  --code-keyword:   #7A5C3A;
+  --code-bracket:   #9A8F82;
+  --code-index:     #B85C00;
+  --rule:           #D8D0C0;
+  --border-medium:  #B8AFA0;
+  --lab-active:     #4A7C59;
+  --lab-idle:       #B85C00;
+  --lab-unknown:    #9A8F82;
 }
