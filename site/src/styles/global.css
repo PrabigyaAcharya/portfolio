@@ -285,13 +285,13 @@ time {
 .page-container {
   max-width: var(--max-prose);
   margin: 0;
-  padding: 3rem var(--gutter) 5rem;
+  padding: 3rem var(--gutter) 5rem 4.5rem;
 }
 
 .home-wrap {
   max-width: calc(var(--max-prose) + var(--home-aside) + 4rem);
   margin: 0;
-  padding: 0 var(--gutter);
+  padding: 0 var(--gutter) 0 4.5rem;
 }
 
 @media (min-width: 900px) {
@@ -402,14 +402,14 @@ time {
 .code-comment {
   display: block;
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: 0.85rem;
   color: var(--ink-faint);
   margin-bottom: 0.2rem;
 }
 
 .code-heading {
   font-family: var(--font-mono);
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   font-weight: 400;
   color: var(--code-bracket);
   margin: 0 0 1.25rem;
@@ -425,7 +425,7 @@ time {
 .code-close {
   display: block;
   font-family: var(--font-mono);
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   color: var(--code-bracket);
 }
 
@@ -591,10 +591,13 @@ time {
   min-width: 0;
 }
 
-.post-title-link:hover {
+.post-title-link:hover,
+.post-list-item:hover .post-title-link {
   color: var(--accent);
   text-decoration: none;
 }
+
+.post-list-item { cursor: pointer; }
 
 .post-date {
   font-family: var(--font-mono);
@@ -869,6 +872,15 @@ time {
 }
 
 .mcp-copy-btn:hover { text-decoration: underline; }
+
+/* ── Colophon info column ────────────────────────────────────────────────── */
+
+.colophon-info {
+  margin-top: 3rem;
+  padding-left: 3rem;
+  border-left: 1px solid var(--rule);
+  max-width: 62ch;
+}
 
 /* ── Hairlines ───────────────────────────────────────────────────────────── */
 
