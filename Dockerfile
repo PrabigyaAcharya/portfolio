@@ -34,7 +34,8 @@ ENV SITE_URL=${SITE_URL}
 RUN npm run build --workspace @portfolio/site
 
 # ── Stage 2: serve ────────────────────────────────────────────────────────────
-FROM nginx:1.27-alpine AS runtime
+# Named `production` because that is the build target Dokploy passes by default.
+FROM nginx:1.27-alpine AS production
 
 # Origin of the Cloudflare Worker that backs the dynamic routes
 # (/mcp, /api/ask, guestbook, leaderboard, eval, live telemetry).
