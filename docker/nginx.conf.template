@@ -1,0 +1,110 @@
+# Served behind Dokploy's Traefik, which terminates TLS and forwards on :80.
+#
+# ${WORKER_ORIGIN} is substituted at container start from the env var of the
+# same name (nginx's own $variables are left alone via NGINX_ENVSUBST_FILTER).
+
+server {
+    listen      80;
+    listen      [::]:80;
+    server_name _;
+
+    root  /usr/share/nginx/html;
+    index index.html;
+
+    charset       utf-8;
+    charset_types text/plain text/markdown text/css application/json
+                  application/javascript application/xml image/svg+xml;
+
+    server_tokens off;
+    # Traefik owns the scheme; never emit http:// redirects of our own.
+    absolute_redirect off;
+
+    gzip            on;
+    gzip_vary       on;
+    gzip_min_length 512;
+    gzip_types      text/plain text/markdown text/css application/json
+                    application/javascript application/xml application/rss+xml
+                    application/atom+xml image/svg+xml;
+
+    add_header X-Content-Type-Options nosniff             always;
+    add_header Referrer-Policy strict-origin-when-cross-origin always;
+    add_header X-Frame-Options SAMEORIGIN                  always;
+
+    # ── Dynamic routes → Cloudflare Worker ────────────────────────────────────
+    # The worker keeps its D1/KV bindings and stays on Cloudflare; these paths
+    # are proxied so the browser (and MCP clients) see one origin.
+    resolver         1.1.1.1 8.8.8.8 valid=300s ipv6=off;
+    resolver_timeout 5s;
+    set $worker "${WORKER_ORIGIN}";
+
+    proxy_http_version    1.1;
+    proxy_ssl_server_name on;
+    proxy_set_header      Host              $proxy_host;
+    proxy_set_header      X-Forwarded-Host  $host;
+    proxy_set_header      X-Forwarded-Proto $scheme;
+    proxy_set_header      X-Forwarded-For   $proxy_add_x_forwarded_for;
+    proxy_set_header      X-Real-IP         $remote_addr;
+    proxy_connect_timeout 10s;
+    proxy_send_timeout    60s;
+    proxy_read_timeout    60s;
+
+    # MCP over Streamable HTTP: responses may stream, so no buffering.
+    # (No proxy_set_header here on purpose — one in this block would replace
+    # every inherited header directive above, not add to them.)
+    location = /mcp {
+        proxy_pass          $worker$request_uri;
+        proxy_buffering     off;
+        proxy_cache         off;
+        proxy_read_timeout  300s;
+    }
+
+    location = /api/ask            { proxy_pass $worker$request_uri; }
+    location = /api/leaderboard.json { proxy_pass $worker$request_uri; }
+    location ^~ /api/guestbook     { proxy_pass $worker$request_uri; }
+    location ^~ /api/eval          { proxy_pass $worker$request_uri; }
+
+    # Live telemetry, with the build-time snapshot as a fallback when the
+    # worker is unreachable (keeps the lab strip sensible instead of erroring).
+    location = /api/lab.json {
+        proxy_pass              $worker$request_uri;
+        proxy_intercept_errors  on;
+        error_page 502 503 504  = @lab_snapshot;
+    }
+    location @lab_snapshot {
+        try_files /api/lab.json =404;
+        expires   -1;
+    }
+
+    # ── Static site ───────────────────────────────────────────────────────────
+    # Content-hashed assets: safe to cache forever.
+    location /_astro/ {
+        expires 1y;
+        try_files $uri =404;
+    }
+
+    location /images/ {
+        expires 7d;
+        try_files $uri =404;
+    }
+
+    # nginx has no mime type for .md; the map is replaced only inside this
+    # location, which only ever serves markdown twins.
+    location ~ \.md$ {
+        types        { text/markdown md; }
+        default_type text/markdown;
+        expires      -1;
+    }
+
+    # Astro emits clean URLs as <route>/index.html.
+    location / {
+        expires   -1;
+        try_files $uri $uri/index.html $uri/ =404;
+    }
+
+    error_page 404 /404.html;
+    location = /404.html { internal; }
+
+    # Not part of the site; keeps noise out of the access log.
+    location = /favicon.ico { access_log off; log_not_found off; try_files $uri =404; }
+    location = /robots.txt  { access_log off; log_not_found off; try_files $uri =404; }
+}
