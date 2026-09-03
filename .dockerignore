@@ -1,0 +1,37 @@
+# Everything the image build must never see or copy.
+
+# Dependencies + build output (rebuilt inside the image)
+node_modules
+**/node_modules
+site/dist
+site/.astro
+shared/dist
+worker/.wrangler
+
+# Secrets — belong in Dokploy / wrangler secrets, never in an image layer
+.env
+.env.*
+**/.env
+**/.env.*
+.dev.vars
+**/*.dev.vars
+
+# Not needed to build the site (worker/package.json is still copied explicitly,
+# so worker/ itself stays in context — only its heavy bits are excluded above)
+.git
+.github
+.claude
+lab-agent
+worker/src
+worker/test
+worker/scripts
+docker-compose.yml
+/*.md
+
+# Local noise
+.DS_Store
+Thumbs.db
+.vscode
+*.log
+npm-debug.log*
+*.tsbuildinfo

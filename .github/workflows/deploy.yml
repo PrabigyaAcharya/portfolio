@@ -48,34 +48,21 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
-  # ── Build Astro site and deploy static files to VPS ───────────────────────────
+  # ── Site: Dokploy builds the Docker image from this repo ──────────────────────
+  # If Dokploy's own GitHub app / auto-deploy is enabled it redeploys on push and
+  # this job is a no-op. Set DOKPLOY_DEPLOY_WEBHOOK to gate the deploy on `ci`
+  # passing instead (Dokploy → Application → Deployments → Webhook URL).
   deploy-site:
     needs: ci
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: npm
-          cache-dependency-path: package-lock.json
-
-      - name: Install all workspace deps
-        run: npm ci
-
-      - name: Build site
-        run: npm run build -w site
+      - name: Trigger Dokploy deploy
         env:
-          SITE_URL: https://prabigya.com.np
-
-      - name: Deploy static files to VPS
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          port: ${{ secrets.VPS_PORT }}
-          source: "site/dist/"
-          target: "/home/${{ secrets.VPS_USER }}/portfolio-kit"
-          strip_components: 0
+          WEBHOOK: ${{ secrets.DOKPLOY_DEPLOY_WEBHOOK }}
+        run: |
+          if [ -z "$WEBHOOK" ]; then
+            echo "DOKPLOY_DEPLOY_WEBHOOK not set — relying on Dokploy auto-deploy."
+            exit 0
+          fi
+          curl --fail --silent --show-error -X POST "$WEBHOOK"
+          echo "Dokploy deploy triggered."

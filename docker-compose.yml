@@ -1,0 +1,21 @@
+# Local check of the production image:
+#   docker compose up --build   → http://localhost:8080
+#
+# Dokploy users: prefer the "Application" type pointed at the Dockerfile (see
+# DEPLOY.md). This file exists so the image can be exercised locally, and works
+# as-is if you'd rather use Dokploy's "Docker Compose" type instead — in that
+# case drop the `ports` block and let Traefik route to the container.
+services:
+  site:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SITE_URL: ${SITE_URL:-https://prabigya.com.np}
+    image: portfolio-site:local
+    environment:
+      # Cloudflare Worker backing /mcp, /api/ask, guestbook, eval, telemetry.
+      WORKER_ORIGIN: ${WORKER_ORIGIN:-https://portfolio-worker.workers.dev}
+    ports:
+      - "8080:80"
+    restart: unless-stopped
