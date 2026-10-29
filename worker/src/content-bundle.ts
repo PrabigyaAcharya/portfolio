@@ -1,5 +1,5 @@
 // AUTO-GENERATED — do not edit by hand; run `npm run bundle-content`
-// Generated at: 2026-06-10T19:11:06.438Z
+// Generated at: 2026-10-29T14:43:03.474Z
 
 export interface ResearchThread {
   id: string;
@@ -16,6 +16,7 @@ export interface SiteLinks {
 
 export interface SiteConfig {
   name: string;
+  role: string;
   tagline: string;
   location: string;
   links: SiteLinks;
@@ -97,11 +98,12 @@ export interface NotebookPost {
 
 export const site: SiteConfig = {
   "name": "Prabigya Acharya",
-  "tagline": "TODO(prabigya): one humble sentence about your research",
+  "role": "AI Researcher, Engineer and Communicator",
+  "tagline": "AI researcher figuring out how to make AI useful",
   "location": "Kathmandu, Nepal",
   "links": {
-    "github": "TODO(prabigya)",
-    "scholar": "TODO(prabigya)",
+    "github": "https://github.com/PrabigyaAcharya",
+    "scholar": "https://scholar.google.com/citations?user=5Hb1964AAAAJ",
     "email": "acharyaprabigya@gmail.com",
     "linkedin": "linkedin.com/in/aprab"
   },
@@ -109,13 +111,40 @@ export const site: SiteConfig = {
   "research_threads": [
     {
       "id": "thread-1",
-      "name": "TODO(prabigya): research theme",
-      "blurb": "TODO(prabigya): 1-2 sentences in your voice"
+      "name": "Privacy-preserving NLP",
+      "blurb": "Lightweight language models for PII masking in conversational text — accuracy and deployment at the edge."
+    },
+    {
+      "id": "thread-2",
+      "name": "3D Vision & Reconstruction",
+      "blurb": "Neural radiance fields and Gaussian splatting for digitizing cultural heritage sites."
+    },
+    {
+      "id": "thread-3",
+      "name": "NLP for Education",
+      "blurb": "Curriculum-grounded question generation in Nepali, organised by Bloom's taxonomy."
     }
   ]
 };
 
 export const publications: Publication[] = [
+  {
+    "id": "acharya2026generating",
+    "title": "Generating Curriculum Grounded Nepali Questions Based On Bloom’s Taxonomy",
+    "authors": [
+      "Prabigya Acharya"
+    ],
+    "venue": "5th Workshop on NLP for Positive Impact",
+    "year": 2026,
+    "thread": "thread-3",
+    "summary": "TODO(prabigya): One plain-language sentence describing what this paper does.",
+    "abstract": "TODO(prabigya): Full abstract text goes here (copy it from the OpenReview page).\n",
+    "links": {
+      "pdf": "https://openreview.net/pdf?id=fVl7RxEVSV"
+    },
+    "bibtex": "@inproceedings{acharya2026generating,\n  title={Generating Curriculum Grounded Nepali Questions Based On Bloom{\\textquoteright}s Taxonomy},\n  author={Prabigya Acharya},\n  booktitle={5th Workshop on NLP for Positive Impact},\n  year={2026},\n  url={https://openreview.net/forum?id=fVl7RxEVSV}\n}\n",
+    "selected": true
+  },
   {
     "id": "piimasking-preprint-2024",
     "title": "A Comparative Study of Light-weight Language Models for PII Masking and their Deployment for Real Conversational Texts",
@@ -135,88 +164,203 @@ export const publications: Publication[] = [
 ];
 
 export const now: NowData = {
-  "updated": "2026-06-10",
+  "updated": "2026-10-29",
   "working_on": [
-    "TODO(prabigya): current project or paper"
+    "Building agents at Cyberensic",
+    "Research coordinator at Sunway",
+    "Building AI interview at Astergaze"
   ],
   "reading": [
-    "TODO(prabigya): book or paper"
+    "Illiad by Homer",
+    "Manifold Steering Reveals the Shared Geometry of Neural Network Representation and Behavior"
   ],
   "open_to": [
-    "TODO(prabigya): collaborations, roles, etc."
+    "Research collaborations in NLP and computer vision, especially applications in education"
   ]
 };
 
 export const cv: CvData = {
   "education": [
     {
-      "org": "Pulchowk Campus, Tribhuvan University",
+      "org": "IOE, Pulchowk Campus, Tribhuvan University",
       "role": "Bachelor of Computer Engineering",
       "start": "2019",
       "end": "2024",
       "details": [
-        "TODO(prabigya): thesis or focus area"
+        "Graduated with distinction — 81.02/100 (Top 15% of class 14/96)",
+        "Curriculum spanning AI, NLP, computer vision, distributed systems, computer networks, and software engineering",
+        "Final year project: 3D Exhibition Environment using Gaussian Splatting for Nepalese heritage sites"
       ]
     }
   ],
   "positions": [
     {
-      "org": "Growthzilla",
-      "role": "Software Engineer",
-      "start": "April 2024",
-      "end": "November 2024",
+      "org": "Sunway College Kathmandu",
+      "role": "Undergraduate Research Coordinator",
+      "start": "May 2025",
+      "end": "Present",
       "details": [
-        "TODO(prabigya): what you did"
+        "Design Proposal and get students involved in industry related research projects",
+        "Guide students in research methodologies and project execution",
+        "Organize workshops and seminars to enhance research skills and knowledge sharing"
+      ]
+    },
+    {
+      "org": "NAAMII",
+      "role": "Research Assistant",
+      "start": "June 2025",
+      "end": "Present",
+      "details": [
+        "Will update soon!"
       ]
     },
     {
       "org": "NAAMII",
       "role": "Research Intern",
       "start": "November 2024",
-      "end": "June 2025",
+      "end": "April 2025",
       "details": [
-        "TODO(prabigya): what you did"
+        "Learned about research methodologies and creating 3D Vision data pipelines"
       ]
     },
     {
-      "org": "NAAMII",
-      "role": "Research Assisstant",
-      "start": "June 2025",
-      "end": "April 2026",
+      "org": "Growthzilla",
+      "role": "Software Engineer",
+      "start": "April 2024",
+      "end": "November 2024",
       "details": [
-        "TODO(prabigya): what you did"
-      ]
-    },
-    {
-      "org": "Sunway College Kathmandu",
-      "role": "Undergraduate Research Coordinator",
-      "start": "May 2025",
-      "end": "Current",
-      "details": [
-        "TODO(prabigya): what you did"
+        "Developed and managed the payment system using propay API",
+        "Crerated a transaction reconciliation and reporting system"
       ]
     }
   ],
+  "projects": [
+    {
+      "title": "3D Exhibition Environment using 3D Gaussian Splatting",
+      "description": "Full pipeline for 3D reconstruction and interactive visualization of Nepalese heritage sites using NeRF and Gaussian Splatting. Digitized 3 temples in Patan with occlusion masking; integrated into a Three.js exhibition platform.",
+      "tech": [
+        "Python",
+        "PyTorch",
+        "Three.js",
+        "Gaussian Splatting",
+        "Blender"
+      ],
+      "link": "https://github.com/Pramish-Aryal/3Drishya-2.0"
+    },
+    {
+      "title": "Discrypt – Privacy-Preserving Language Model",
+      "description": "NLP model using T5-small and Mistral-7B fine-tuned with QLoRA for PII detection and masking in chat conversations. REST API with Flask; deployed as a Discord bot for real-time privacy protection.",
+      "tech": [
+        "Python",
+        "Hugging Face",
+        "Flask",
+        "AWS SageMaker",
+        "T5",
+        "Mistral-7B"
+      ],
+      "link": "https://github.com/liza1212/Discrypt"
+    },
+    {
+      "title": "Yoggis – AI Yoga Trainer",
+      "description": "Pose classification system using PoseNet and a custom classifier for real-time posture correction. Achieved 94% classification accuracy on a custom yoga pose dataset.",
+      "tech": [
+        "Python",
+        "TensorFlow",
+        "PoseNet",
+        "OpenCV"
+      ],
+      "link": "https://github.com/Nadika18/MinorProject"
+    },
+    {
+      "title": "3D Reconstruction of Pimbahal",
+      "description": "Digitally reconstructed Pimbahal temple in Blender and hosted the interactive model using Three.js.",
+      "tech": [
+        "Blender",
+        "Three.js",
+        "JavaScript"
+      ],
+      "link": "https://github.com/MoAgr/3D-Model-of-Pimbahal"
+    },
+    {
+      "title": "Avritti – AI Music Generator",
+      "description": "Genetic algorithms to generate evolving music sequences. FastAPI backend with a Vue.js interface for real-time playback and user-driven music improvement.",
+      "tech": [
+        "Python",
+        "FastAPI",
+        "Vue.js",
+        "MIDIFile",
+        "Genetic Algorithms"
+      ],
+      "link": "https://github.com/PrabigyaAcharya/Avritti"
+    }
+  ],
   "skills": [
-    "TODO(prabigya): skill area"
+    "Machine Learning & Deep Learning — PyTorch, TensorFlow, Hugging Face",
+    "Natural Language Processing — T5, Mistral, QLoRA, fine-tuning",
+    "Computer Vision — PoseNet, OpenCV, NeRF, Gaussian Splatting",
+    "3D Visualization — Blender, Three.js",
+    "Backend — Python, FastAPI, Flask, AWS SageMaker",
+    "Frontend — Vue.js, JavaScript"
   ],
   "service": [
-    "TODO(prabigya): reviewing, organizing, etc."
+    "Provided Legal Professional and AI training to Lawyers at Bar Council as well as 800 graduates of Bar Council"
   ],
   "awards": [
-    "TODO(prabigya): award name, year"
+    "Merit-Based Scholarship, Pulchowk Campus (2019–2024) — awarded for academic excellence; covered tuition fees for 7 semesters"
   ]
 };
 
 export const evalQuestions: EvalQuestion[] = [
   {
     "id": "q01",
-    "question": "TODO(prabigya): a hard question from your research domain",
+    "question": "What is the arXiv ID of Prabigya's paper on PII masking?",
     "type": "exact"
   },
   {
     "id": "q02",
-    "question": "TODO(prabigya): another question",
+    "question": "What score (out of 100) did Prabigya achieve in their Bachelor's degree?",
+    "type": "numeric",
+    "tolerance": 0.1
+  },
+  {
+    "id": "q03",
+    "question": "How many temples were digitized in the 3D Gaussian Splatting heritage project?",
+    "type": "numeric",
+    "tolerance": 0
+  },
+  {
+    "id": "q04",
+    "question": "What is the name of the Discord bot built for real-time PII redaction?",
+    "type": "exact"
+  },
+  {
+    "id": "q05",
+    "question": "Which two lightweight language models were compared in the PII masking study?",
+    "type": "judged"
+  },
+  {
+    "id": "q06",
+    "question": "What web framework was used for the Discrypt REST API?",
+    "type": "exact"
+  },
+  {
+    "id": "q07",
+    "question": "Who is the co-author of Prabigya's PII masking paper?",
+    "type": "exact"
+  },
+  {
+    "id": "q08",
+    "question": "What algorithm does Avritti use to generate music?",
+    "type": "exact"
+  },
+  {
+    "id": "q09",
+    "question": "What institution did Prabigya complete their Bachelor's degree at?",
+    "type": "judged"
+  },
+  {
+    "id": "q10",
+    "question": "What does Prabigya's research on PII masking conclude about lightweight models compared to frontier LLMs?",
     "type": "judged"
   }
 ];
@@ -267,7 +411,7 @@ export const notebookPosts: NotebookPost[] = [
     "summary": "Embedding CLIP language features into 3D Gaussian Splatting scenes to make Gaussians semantically aware of what they represent.",
     "draft": false,
     "math": true,
-    "content": "I had been messing around with 3D Gaussian Splatting for a while and one thing that always bugged me was that the Gaussians are semantically blind. They know where things are and what color they are, but they have no idea *what* they are looking at. So I wanted to see if I could get them to understand language.\n\n## A Quick Background on 3D Gaussian Splatting\n\n3D Gaussian Splatting represents a scene as a collection of 3D Gaussians. Each Gaussian has a position (mean) in 3D space, a covariance (defined by scale and rotation), an opacity, and a color encoded via spherical harmonics. The `rasterization()` function in gsplat takes all of these and alpha-composites them onto a 2D image plane by sorting Gaussians by depth and blending them front to back.\n\nThe key formula for blending is:\n\n$$\nC_{\\text{pixel}} = \\sum_{i} T_i \\cdot \\alpha_i \\cdot c_i, \\quad T_i = \\prod_{j < i}(1 - \\alpha_j)\n$$\n\nwhere $T_i$ is the accumulated transmittance, $\\alpha_i$ is the opacity of the $i$-th Gaussian, and $c_i$ is its color. The `colors` argument in the rasterization call is not restricted to RGB — it can be any $N$-dimensional feature vector. This is the hook I used.\n\n## CLIP and What it Does\n\nCLIP (Contrastive Language-Image Pretraining) is a model from OpenAI trained on a massive dataset of image-text pairs. It learns a joint embedding space where images and text that describe each other end up close together. The result is that if you encode an image patch and a piece of text using CLIP, you can measure their similarity via cosine distance.\n\nSo a CLIP embedding of an image patch of a Pikachu plushie and the text \"Pikachu\" will have a high cosine similarity, while \"game controller\" would be lower. This is the property I wanted to bake into the 3D scene.\n\n## Where the CLIP Embeddings Came From: LangSplat\n\nLangSplat is a paper that first did this idea for 3DGS properly. Their pipeline is:\n\n1. Take all training images of the scene\n2. Run SAM (Segment Anything Model) on each image at three granularity scales: fine, segment, and whole\n3. For each segmented region, get a CLIP embedding (512-dimensional vector) from the CLIP image encoder\n4. Store these per-pixel CLIP embeddings aligned to each training image\n\nThey also train a small per-scene autoencoder to compress the 512-dim embeddings down to 3 dimensions, because rendering 512 channels per Gaussian per pixel would be far too expensive.\n\nI used the preprocessed dataset that LangSplat provides, which already has the per-pixel compressed CLIP embeddings stored as `.npy` files. This saved me a lot of the SAM + CLIP preprocessing work.\n\n## The Modification to `rasterization()`\n\nThe actual code change was less scary than it sounds. The `rasterization()` function in gsplat already supports arbitrary feature rendering. I added a CLIP feature attribute to each Gaussian — a 3-dimensional vector after compression — and passed it as the `colors` argument in an additional rasterization call.\n\nDuring training, alongside the standard RGB photometric loss, I added a feature reconstruction loss:\n\n$$\n\\mathcal{L}_{\\text{clip}} = \\| \\hat{F} - F_{\\text{gt}} \\|^2\n$$\n\nwhere $\\hat{F}$ is the rendered feature map from the Gaussians and $F_{\\text{gt}}$ is the ground truth per-pixel CLIP feature map from the LangSplat dataset. Since the rasterizer is differentiable, gradients flow back through the blending operation and update each Gaussian's CLIP feature attribute directly.\n\nTraining is two-staged: first the geometry and RGB are trained normally, then the CLIP feature attributes are initialized and optimized with the feature loss.\n\n## Querying the Scene\n\nAt inference time, the pipeline is:\n\n1. Encode a text query using CLIP's text encoder to get a 512-dim text embedding, then compress it with the same autoencoder down to 3 dimensions\n2. Render the CLIP feature field from any camera viewpoint using the same `rasterization()` call\n3. Compute cosine similarity between every pixel in the rendered feature map and the text embedding\n4. This gives a relevancy heatmap over the scene\n\n## Results\n\nI only tested on one scene. It contained a Pikachu plushie, an Xbox controller, a Joy-Con, UNO cards, and a Gundam figure on a couch corner.\n\nThe CLIP feature field when visualised:\n\n<!-- TODO: download to content/notebook/embedding-language-gaussian-splat/clip_render.png -->\n![Rendered CLIP feature field](https://prabigya.com.np/blogs/images/clip_gsplat/cliip_render.png \"fig. 1 — rendered CLIP feature field\")\n\nThe original scene for reference:\n\n<!-- TODO: download to content/notebook/embedding-language-gaussian-splat/original_scene.png -->\n![Original scene](https://prabigya.com.np/blogs/images/clip_gsplat/original_scene.png \"fig. 2 — original scene\")\n\nThe output was not great. The rendered feature field is blurry and noisy, mostly showing up as a washed-out red haze. However, if you look carefully, you can make out the rough outline of the Pikachu plushie — so something is being learned, just not cleanly.\n\nA few speculations on why:\n\n- The 3-dimensional compression from the autoencoder may be losing too much information. Going from 512 to 3 dimensions is aggressive, and the autoencoder is a small MLP.\n- Gaussian density in this scene may be insufficient to represent fine-grained semantic boundaries. Where geometry is thin or flat, Gaussians spread out and blur the feature field.\n- The blending formula for features is the same as for color, which means Gaussians behind other Gaussians contribute very little to the final feature. If front Gaussians carry incorrect features, the true signal from behind is suppressed.\n- The training may need more iterations or a different loss weighting between the RGB and feature losses. These two can conflict, and the feature signal might be getting drowned out.\n- Per-pixel CLIP features from SAM segmentation can be noisy at object boundaries, and this noise in the ground truth may confuse the optimization.\n\nThese are all guesses — I have not dug into which one is actually the culprit.\n\n## What This Could Be Used For\n\nIf it worked cleanly, you could use this for open-vocabulary object localization in 3D, semantic scene editing (selecting all Gaussians belonging to a queried object and manipulating them), or building 3D scene understanding systems that go beyond RGB appearance.\n\n## References\n\n- [LangSplat: 3D Language Gaussian Splatting](https://langsplat.github.io/)\n- [gsplat: An Open-Source Library for Gaussian Splatting Training and Rendering](https://github.com/nerfstudio-project/gsplat)\n- [CLIP: Learning Transferable Visual Models From Natural Language Supervision](https://arxiv.org/abs/2103.00020)\n- [Segment Anything](https://segment-anything.com/)"
+    "content": "I had been messing around with 3D Gaussian Splatting for a while and one thing that always bugged me was that the Gaussians are semantically blind. They know where things are and what color they are, but they have no idea *what* they are looking at. So I wanted to see if I could get them to understand language.\n\n## A Quick Background on 3D Gaussian Splatting\n\n3D Gaussian Splatting represents a scene as a collection of 3D Gaussians. Each Gaussian has a position (mean) in 3D space, a covariance (defined by scale and rotation), an opacity, and a color encoded via spherical harmonics. The `rasterization()` function in gsplat takes all of these and alpha-composites them onto a 2D image plane by sorting Gaussians by depth and blending them front to back.\n\nThe key formula for blending is:\n\n$$\nC_{\\text{pixel}} = \\sum_{i} T_i \\cdot \\alpha_i \\cdot c_i, \\quad T_i = \\prod_{j < i}(1 - \\alpha_j)\n$$\n\nwhere $T_i$ is the accumulated transmittance, $\\alpha_i$ is the opacity of the $i$-th Gaussian, and $c_i$ is its color. The `colors` argument in the rasterization call is not restricted to RGB — it can be any $N$-dimensional feature vector. This is the hook I used.\n\n## CLIP and What it Does\n\nCLIP (Contrastive Language-Image Pretraining) is a model from OpenAI trained on a massive dataset of image-text pairs. It learns a joint embedding space where images and text that describe each other end up close together. The result is that if you encode an image patch and a piece of text using CLIP, you can measure their similarity via cosine distance.\n\nSo a CLIP embedding of an image patch of a Pikachu plushie and the text \"Pikachu\" will have a high cosine similarity, while \"game controller\" would be lower. This is the property I wanted to bake into the 3D scene.\n\n## Where the CLIP Embeddings Came From: LangSplat\n\nLangSplat is a paper that first did this idea for 3DGS properly. Their pipeline is:\n\n1. Take all training images of the scene\n2. Run SAM (Segment Anything Model) on each image at three granularity scales: fine, segment, and whole\n3. For each segmented region, get a CLIP embedding (512-dimensional vector) from the CLIP image encoder\n4. Store these per-pixel CLIP embeddings aligned to each training image\n\nThey also train a small per-scene autoencoder to compress the 512-dim embeddings down to 3 dimensions, because rendering 512 channels per Gaussian per pixel would be far too expensive.\n\nI used the preprocessed dataset that LangSplat provides, which already has the per-pixel compressed CLIP embeddings stored as `.npy` files. This saved me a lot of the SAM + CLIP preprocessing work.\n\n## The Modification to `rasterization()`\n\nThe actual code change was less scary than it sounds. The `rasterization()` function in gsplat already supports arbitrary feature rendering. I added a CLIP feature attribute to each Gaussian — a 3-dimensional vector after compression — and passed it as the `colors` argument in an additional rasterization call.\n\nDuring training, alongside the standard RGB photometric loss, I added a feature reconstruction loss:\n\n$$\n\\mathcal{L}_{\\text{clip}} = \\| \\hat{F} - F_{\\text{gt}} \\|^2\n$$\n\nwhere $\\hat{F}$ is the rendered feature map from the Gaussians and $F_{\\text{gt}}$ is the ground truth per-pixel CLIP feature map from the LangSplat dataset. Since the rasterizer is differentiable, gradients flow back through the blending operation and update each Gaussian's CLIP feature attribute directly.\n\nTraining is two-staged: first the geometry and RGB are trained normally, then the CLIP feature attributes are initialized and optimized with the feature loss.\n\n## Querying the Scene\n\nAt inference time, the pipeline is:\n\n1. Encode a text query using CLIP's text encoder to get a 512-dim text embedding, then compress it with the same autoencoder down to 3 dimensions\n2. Render the CLIP feature field from any camera viewpoint using the same `rasterization()` call\n3. Compute cosine similarity between every pixel in the rendered feature map and the text embedding\n4. This gives a relevancy heatmap over the scene\n\n## Results\n\nI only tested on one scene. It contained a Pikachu plushie, an Xbox controller, a Joy-Con, UNO cards, and a Gundam figure on a couch corner.\n\nThe CLIP feature field when visualised:\n\n<!-- TODO: download to content/notebook/embedding-language-gaussian-splat/clip_render.png -->\n![Rendered CLIP feature field](/images/clip_gsplat/cliip_render.png \"fig. 1 — rendered CLIP feature field\")\n\nThe original scene for reference:\n\n<!-- TODO: download to content/notebook/embedding-language-gaussian-splat/original_scene.png -->\n![Original scene](/images/clip_gsplat/original_scene.png \"fig. 2 — original scene\")\n\nThe output was not great. The rendered feature field is blurry and noisy, mostly showing up as a washed-out red haze. However, if you look carefully, you can make out the rough outline of the Pikachu plushie — so something is being learned, just not cleanly.\n\nA few speculations on why:\n\n- The 3-dimensional compression from the autoencoder may be losing too much information. Going from 512 to 3 dimensions is aggressive, and the autoencoder is a small MLP.\n- Gaussian density in this scene may be insufficient to represent fine-grained semantic boundaries. Where geometry is thin or flat, Gaussians spread out and blur the feature field.\n- The blending formula for features is the same as for color, which means Gaussians behind other Gaussians contribute very little to the final feature. If front Gaussians carry incorrect features, the true signal from behind is suppressed.\n- The training may need more iterations or a different loss weighting between the RGB and feature losses. These two can conflict, and the feature signal might be getting drowned out.\n- Per-pixel CLIP features from SAM segmentation can be noisy at object boundaries, and this noise in the ground truth may confuse the optimization.\n\nThese are all guesses — I have not dug into which one is actually the culprit.\n\n## What This Could Be Used For\n\nIf it worked cleanly, you could use this for open-vocabulary object localization in 3D, semantic scene editing (selecting all Gaussians belonging to a queried object and manipulating them), or building 3D scene understanding systems that go beyond RGB appearance.\n\n## References\n\n- [LangSplat: 3D Language Gaussian Splatting](https://langsplat.github.io/)\n- [gsplat: An Open-Source Library for Gaussian Splatting Training and Rendering](https://github.com/nerfstudio-project/gsplat)\n- [CLIP: Learning Transferable Visual Models From Natural Language Supervision](https://arxiv.org/abs/2103.00020)\n- [Segment Anything](https://segment-anything.com/)"
   },
   {
     "slug": "tiny-image-generator",
@@ -282,6 +426,6 @@ export const notebookPosts: NotebookPost[] = [
     "summary": "Building a KDE-based handwritten letter generator using PCA for dimensionality reduction — no GPU required.",
     "draft": false,
     "math": true,
-    "content": "I came across this YouTube video [\"I Built a Mini 'GPT DALL-E' in One Day On a Laptop without GPU\"](https://www.youtube.com/watch?v=2oh7Yp04cM8) from the channel CompuFlair. In it, it presented a task of creating a handwritten digit generator under resource constraints. I found the video very interesting and wanted to implement the ideas discussed in it to create my own letter generator.\n\n## KDE and PCA\n\nKDE stands for [Kernel Density Estimator](https://en.wikipedia.org/wiki/Kernel_density_estimation). Kernel Density Estimation is a method for approximating a random variable's probability density function (PDF) using a finite sample.\n\nUsing kernels, we can estimate the p.d.f of a random variable. Mathematically, given that $x = (x_1, x_2, \\ldots, x_n)$ is an i.i.d sample from some univariate distribution of unknown density function, its Kernel Density Estimator is:\n\n$$\n\\hat{f}_h(x) = \\frac{1}{n}\\sum_{i=1}^{n}K_h(x - x_i)\n$$\n\nWhere $K_h$ is the scaled kernel and $h$ is the bandwidth of the kernel.\n\nIntuitively, given $n$ observations, we want to estimate the overall distribution from which they were drawn. Consider some points sampled from an unknown distribution:\n\n<!-- TODO: download to content/notebook/tiny-image-generator/image.png -->\n![Sample points from an unknown distribution](https://prabigya.com.np/blogs/images/tig/image.png \"fig. 1 — sample points from an unknown distribution\")\n\nAs we take more samples, through KDE we can estimate the underlying distribution:\n\n<!-- TODO: download to content/notebook/tiny-image-generator/image-1.png -->\n![KDE estimate overlaid on sample points](https://prabigya.com.np/blogs/images/tig/image-1.png \"fig. 2 — KDE estimate\")\n\nThe above can be written as:\n\n$$\n\\hat{f}_h(x) = \\frac{1}{nh}\\sum_{i=1}^{n}K\\!\\left(\\frac{x - x_i}{h}\\right)\n$$\n\nThe KDE weights distances of all observed data points — more nearby points means a higher estimate and a higher probability at that location.\n\nBandwidth selection matters. A lower bandwidth considers only close neighbors; a higher bandwidth widens the neighborhood. Too narrow a bandwidth gives an estimate that looks like this:\n\n<!-- TODO: download to content/notebook/tiny-image-generator/image-2.png -->\n![Overfitted narrow-bandwidth KDE](https://prabigya.com.np/blogs/images/tig/image-2.png \"fig. 3 — overfitted narrow bandwidth\")\n\n**Principal Component Analysis (PCA)** is a linear dimensionality reduction technique. The data are transformed onto a new coordinate system such that the directions of largest variance (the principal components) can be easily identified. Scikit-learn provides implementations of both KDE and PCA.\n\n## Implementation\n\nDiffusion models synthesize images that are highly likely under the learned probability distribution. Knowing $P$, we can generate new images from it.\n\nSince images are vectors (pixels as components), the distribution of an image can be estimated as:\n\n$$\nP(\\vec{x}) = \\frac{1}{nh}\\sum_{i=1}^{n}K\\!\\left(\\frac{x - x_i}{h}\\right)\n$$\n\nHowever, since image vectors are very high-dimensional (28×28 = 784 in our case), KDE degrades in this space. We reduce dimensionality with PCA first.\n\n### Imports\n\n```python\nimport numpy as np\nfrom torchvision.datasets import EMNIST\nfrom torchvision import transforms\n\nfrom sklearn.decomposition import PCA\nfrom sklearn.neighbors import KernelDensity\nfrom PIL import Image\n```\n\n### Dataloader\n\n```python\ndef get_emnist_data(split: str = \"train\", emnist_split: str = \"letters\"):\n    \"\"\"Returns EMNIST data as float32 array of shape (N, 784) normalized to [0, 1].\"\"\"\n    transform = transforms.Compose([\n        transforms.ToTensor(),\n        transforms.Lambda(lambda x: x.transpose(1, 2))  # fix rotation\n    ])\n\n    dataset = EMNIST(\n        root=\"./data\",\n        split=emnist_split,\n        train=(split == \"train\"),\n        download=True,\n        transform=transform\n    )\n\n    X, y = [], []\n    for img, label in dataset:\n        X.append(img.reshape(-1).numpy().astype(np.float32))\n        y.append(int(label))\n\n    return np.stack(X), np.array(y, dtype=int)\n\ntrain_data = get_emnist_data()\n```\n\n### Visualise the data\n\n```python\ndef show_examples(X, y, num=10):\n    plt.figure(figsize=(12, 2))\n    for i in range(num):\n        plt.subplot(1, num, i + 1)\n        plt.imshow(X[i].reshape(28, 28), cmap=\"gray\")\n        plt.title(str(y[i]))\n        plt.axis(\"off\")\n    plt.tight_layout()\n    plt.show()\n\nshow_examples(train_data[0], train_data[1])\n```\n\n<!-- TODO: download to content/notebook/tiny-image-generator/ig_ex.png -->\n![Sample EMNIST letter examples](https://prabigya.com.np/blogs/images/tig/ig_ex.png \"fig. 4 — sample EMNIST letters\")\n\n### PCA + KDE fitting\n\n```python\ndef fit_pca_kde(X: np.ndarray, n_components: int, bandwidth: float, kernel: str = \"gaussian\"):\n    pca = PCA(n_components=n_components, random_state=42)\n    Z = pca.fit_transform(X)\n    Z = np.nan_to_num(Z, nan=0.0, posinf=0.0, neginf=0.0).astype(np.float64)\n\n    kde = KernelDensity(kernel=kernel, bandwidth=bandwidth)\n    kde.fit(Z)\n    return pca, kde\n\n\ndef sample_images_improved(pca, kde, Z_train, n_samples):\n    rng = np.random.default_rng()\n    bandwidth_scale = 0.5\n    samples_Z = []\n\n    for _ in range(n_samples):\n        idx = rng.integers(0, len(Z_train))\n        noise = rng.normal(0, bandwidth_scale, size=Z_train[idx].shape)\n        samples_Z.append(Z_train[idx] + noise)\n\n    X_gen = pca.inverse_transform(np.array(samples_Z))\n    return np.clip(X_gen, 0.0, 1.0)\n\n\ndef save_images(X, out_dir, prefix=\"sample\", out_size=None):\n    out_dir.mkdir(parents=True, exist_ok=True)\n    for i, x in enumerate(X):\n        img_arr = (x.reshape(28, 28) * 255.0).astype(np.uint8)\n        img = Image.fromarray(img_arr, mode=\"L\")\n        if out_size and out_size > 28:\n            img = img.resize((out_size, out_size), resample=Image.LANCZOS)\n        img.save(out_dir / f\"{prefix}_{i:04d}.png\")\n\n\ndef fit_pca_kde_per_letter(X, y, n_components=50, bandwidth=1.0, kernel=\"gaussian\"):\n    \"\"\"Fit separate PCA+KDE models per letter class.\"\"\"\n    models = {}\n    for letter in np.unique(y):\n        X_letter = X[y == letter]\n        if len(X_letter) < n_components:\n            print(f\"Warning: letter {letter} has only {len(X_letter)} samples, skipping\")\n            continue\n        pca = PCA(n_components=n_components, whiten=True, random_state=42)\n        Z = pca.fit_transform(X_letter)\n        kde = KernelDensity(kernel=kernel, bandwidth=bandwidth)\n        kde.fit(Z)\n        models[letter] = (pca, kde, Z)\n    return models\n\n\ndef sample_letter(models, letter_label, n_samples):\n    if letter_label not in models:\n        raise ValueError(f\"Letter {letter_label} not found in models\")\n    pca, kde, Z_train = models[letter_label]\n    return sample_images_improved(pca, kde, Z_train, n_samples)\n```\n\n### Running everything\n\n```python\nX, y = train_data\nX = np.nan_to_num(X, nan=0.0, posinf=1.0, neginf=0.0).astype(np.float32)\n\nn_components = 50\nbandwidth = 0.5\nn_samples_per_letter = 5\nout_size = 112\n\nprint(\"Training PCA+KDE models per letter...\")\nmodels = fit_pca_kde_per_letter(X, y, n_components, bandwidth)\n\nall_samples = []\nfor letter_label in sorted(np.unique(y)):\n    print(f\"  Sampling letter {letter_label}...\")\n    all_samples.append(sample_letter(models, letter_label, n_samples_per_letter))\n\nX_gen = np.vstack(all_samples)\nout_dir = Path(\".\") / \"samples_letters\"\nsave_images(X_gen, out_dir, out_size=out_size)\nprint(f\"Saved {len(X_gen)} images to {out_dir}\")\n```\n\n## Results\n\n<!-- TODO: download to content/notebook/tiny-image-generator/a.png and f.png -->\n![Generated letter a](https://prabigya.com.np/blogs/images/tig/a.png \"fig. 5 — generated letter a\")\n![Generated letter f](https://prabigya.com.np/blogs/images/tig/f.png \"fig. 6 — generated letter f\")\n\n## References\n\n- [Kernel Density Estimation — Wikipedia](https://en.wikipedia.org/wiki/Kernel_density_estimation)\n- [KDE Visualizer](https://mathisonian.github.io/kde/)\n- [CompuFlair: I Built a Mini \"GPT DALL-E\" in One Day](https://www.youtube.com/watch?v=2oh7Yp04cM8)"
+    "content": "I came across this YouTube video [\"I Built a Mini 'GPT DALL-E' in One Day On a Laptop without GPU\"](https://www.youtube.com/watch?v=2oh7Yp04cM8) from the channel CompuFlair. In it, it presented a task of creating a handwritten digit generator under resource constraints. I found the video very interesting and wanted to implement the ideas discussed in it to create my own letter generator.\n\n## KDE and PCA\n\nKDE stands for [Kernel Density Estimator](https://en.wikipedia.org/wiki/Kernel_density_estimation). Kernel Density Estimation is a method for approximating a random variable's probability density function (PDF) using a finite sample.\n\nUsing kernels, we can estimate the p.d.f of a random variable. Mathematically, given that $x = (x_1, x_2, \\ldots, x_n)$ is an i.i.d sample from some univariate distribution of unknown density function, its Kernel Density Estimator is:\n\n$$\n\\hat{f}_h(x) = \\frac{1}{n}\\sum_{i=1}^{n}K_h(x - x_i)\n$$\n\nWhere $K_h$ is the scaled kernel and $h$ is the bandwidth of the kernel.\n\nIntuitively, given $n$ observations, we want to estimate the overall distribution from which they were drawn. Consider some points sampled from an unknown distribution:\n\n<!-- TODO: download to content/notebook/tiny-image-generator/image.png -->\n![Sample points from an unknown distribution](/images/tig/image.png \"fig. 1 — sample points from an unknown distribution\")\n\nAs we take more samples, through KDE we can estimate the underlying distribution:\n\n<!-- TODO: download to content/notebook/tiny-image-generator/image-1.png -->\n![KDE estimate overlaid on sample points](/images/tig/image-1.png \"fig. 2 — KDE estimate\")\n\nThe above can be written as:\n\n$$\n\\hat{f}_h(x) = \\frac{1}{nh}\\sum_{i=1}^{n}K\\!\\left(\\frac{x - x_i}{h}\\right)\n$$\n\nThe KDE weights distances of all observed data points — more nearby points means a higher estimate and a higher probability at that location.\n\nBandwidth selection matters. A lower bandwidth considers only close neighbors; a higher bandwidth widens the neighborhood. Too narrow a bandwidth gives an estimate that looks like this:\n\n<!-- TODO: download to content/notebook/tiny-image-generator/image-2.png -->\n![Overfitted narrow-bandwidth KDE](/images/tig/image-2.png \"fig. 3 — overfitted narrow bandwidth\")\n\n**Principal Component Analysis (PCA)** is a linear dimensionality reduction technique. The data are transformed onto a new coordinate system such that the directions of largest variance (the principal components) can be easily identified. Scikit-learn provides implementations of both KDE and PCA.\n\n## Implementation\n\nDiffusion models synthesize images that are highly likely under the learned probability distribution. Knowing $P$, we can generate new images from it.\n\nSince images are vectors (pixels as components), the distribution of an image can be estimated as:\n\n$$\nP(\\vec{x}) = \\frac{1}{nh}\\sum_{i=1}^{n}K\\!\\left(\\frac{x - x_i}{h}\\right)\n$$\n\nHowever, since image vectors are very high-dimensional (28×28 = 784 in our case), KDE degrades in this space. We reduce dimensionality with PCA first.\n\n### Imports\n\n```python\nimport numpy as np\nfrom torchvision.datasets import EMNIST\nfrom torchvision import transforms\n\nfrom sklearn.decomposition import PCA\nfrom sklearn.neighbors import KernelDensity\nfrom PIL import Image\n```\n\n### Dataloader\n\n```python\ndef get_emnist_data(split: str = \"train\", emnist_split: str = \"letters\"):\n    \"\"\"Returns EMNIST data as float32 array of shape (N, 784) normalized to [0, 1].\"\"\"\n    transform = transforms.Compose([\n        transforms.ToTensor(),\n        transforms.Lambda(lambda x: x.transpose(1, 2))  # fix rotation\n    ])\n\n    dataset = EMNIST(\n        root=\"./data\",\n        split=emnist_split,\n        train=(split == \"train\"),\n        download=True,\n        transform=transform\n    )\n\n    X, y = [], []\n    for img, label in dataset:\n        X.append(img.reshape(-1).numpy().astype(np.float32))\n        y.append(int(label))\n\n    return np.stack(X), np.array(y, dtype=int)\n\ntrain_data = get_emnist_data()\n```\n\n### Visualise the data\n\n```python\ndef show_examples(X, y, num=10):\n    plt.figure(figsize=(12, 2))\n    for i in range(num):\n        plt.subplot(1, num, i + 1)\n        plt.imshow(X[i].reshape(28, 28), cmap=\"gray\")\n        plt.title(str(y[i]))\n        plt.axis(\"off\")\n    plt.tight_layout()\n    plt.show()\n\nshow_examples(train_data[0], train_data[1])\n```\n\n<!-- TODO: download to content/notebook/tiny-image-generator/ig_ex.png -->\n![Sample EMNIST letter examples](/images/tig/ig_ex.png \"fig. 4 — sample EMNIST letters\")\n\n### PCA + KDE fitting\n\n```python\ndef fit_pca_kde(X: np.ndarray, n_components: int, bandwidth: float, kernel: str = \"gaussian\"):\n    pca = PCA(n_components=n_components, random_state=42)\n    Z = pca.fit_transform(X)\n    Z = np.nan_to_num(Z, nan=0.0, posinf=0.0, neginf=0.0).astype(np.float64)\n\n    kde = KernelDensity(kernel=kernel, bandwidth=bandwidth)\n    kde.fit(Z)\n    return pca, kde\n\n\ndef sample_images_improved(pca, kde, Z_train, n_samples):\n    rng = np.random.default_rng()\n    bandwidth_scale = 0.5\n    samples_Z = []\n\n    for _ in range(n_samples):\n        idx = rng.integers(0, len(Z_train))\n        noise = rng.normal(0, bandwidth_scale, size=Z_train[idx].shape)\n        samples_Z.append(Z_train[idx] + noise)\n\n    X_gen = pca.inverse_transform(np.array(samples_Z))\n    return np.clip(X_gen, 0.0, 1.0)\n\n\ndef save_images(X, out_dir, prefix=\"sample\", out_size=None):\n    out_dir.mkdir(parents=True, exist_ok=True)\n    for i, x in enumerate(X):\n        img_arr = (x.reshape(28, 28) * 255.0).astype(np.uint8)\n        img = Image.fromarray(img_arr, mode=\"L\")\n        if out_size and out_size > 28:\n            img = img.resize((out_size, out_size), resample=Image.LANCZOS)\n        img.save(out_dir / f\"{prefix}_{i:04d}.png\")\n\n\ndef fit_pca_kde_per_letter(X, y, n_components=50, bandwidth=1.0, kernel=\"gaussian\"):\n    \"\"\"Fit separate PCA+KDE models per letter class.\"\"\"\n    models = {}\n    for letter in np.unique(y):\n        X_letter = X[y == letter]\n        if len(X_letter) < n_components:\n            print(f\"Warning: letter {letter} has only {len(X_letter)} samples, skipping\")\n            continue\n        pca = PCA(n_components=n_components, whiten=True, random_state=42)\n        Z = pca.fit_transform(X_letter)\n        kde = KernelDensity(kernel=kernel, bandwidth=bandwidth)\n        kde.fit(Z)\n        models[letter] = (pca, kde, Z)\n    return models\n\n\ndef sample_letter(models, letter_label, n_samples):\n    if letter_label not in models:\n        raise ValueError(f\"Letter {letter_label} not found in models\")\n    pca, kde, Z_train = models[letter_label]\n    return sample_images_improved(pca, kde, Z_train, n_samples)\n```\n\n### Running everything\n\n```python\nX, y = train_data\nX = np.nan_to_num(X, nan=0.0, posinf=1.0, neginf=0.0).astype(np.float32)\n\nn_components = 50\nbandwidth = 0.5\nn_samples_per_letter = 5\nout_size = 112\n\nprint(\"Training PCA+KDE models per letter...\")\nmodels = fit_pca_kde_per_letter(X, y, n_components, bandwidth)\n\nall_samples = []\nfor letter_label in sorted(np.unique(y)):\n    print(f\"  Sampling letter {letter_label}...\")\n    all_samples.append(sample_letter(models, letter_label, n_samples_per_letter))\n\nX_gen = np.vstack(all_samples)\nout_dir = Path(\".\") / \"samples_letters\"\nsave_images(X_gen, out_dir, out_size=out_size)\nprint(f\"Saved {len(X_gen)} images to {out_dir}\")\n```\n\n## Results\n\n<!-- TODO: download to content/notebook/tiny-image-generator/a.png and f.png -->\n![Generated letter a](/images/tig/a.png \"fig. 5 — generated letter a\")\n![Generated letter f](/images/tig/f.png \"fig. 6 — generated letter f\")\n\n## References\n\n- [Kernel Density Estimation — Wikipedia](https://en.wikipedia.org/wiki/Kernel_density_estimation)\n- [KDE Visualizer](https://mathisonian.github.io/kde/)\n- [CompuFlair: I Built a Mini \"GPT DALL-E\" in One Day](https://www.youtube.com/watch?v=2oh7Yp04cM8)"
   }
 ];

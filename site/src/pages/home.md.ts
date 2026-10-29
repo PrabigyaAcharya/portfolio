@@ -13,6 +13,8 @@ export const GET: APIRoute = (context) => {
     `# ${site.name}`,
     `canonical: ${base}/home`,
     '',
+    `*${site.role}*`,
+    '',
     site.tagline,
     '',
     `Location: ${site.location}`,

@@ -1,5 +1,5 @@
 # Prabigya Acharya — research notebook
-# AI researcher working on privacy-preserving NLP, computer vision, and 3D reconstruction
+# AI researcher figuring out how to make AI useful
 
 ## Pages
 - / https://prabigya.com.np/ — landing page (a handheld console; click to enter)
