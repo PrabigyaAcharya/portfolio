@@ -1,91 +1,89 @@
 ---
-name: notebook-design
-description: The complete visual design system for this portfolio — typography, color tokens, layout grid, margin notes, dark "lamplight" mode, and component rules. Use this skill whenever writing or editing any HTML, CSS, Astro component, page layout, or visual element in site/, including small tweaks like spacing, link styles, or adding a new page. Also use it when reviewing visual output or screenshots.
+name: handheld-design
+description: The complete visual design system for this portfolio — a retro handheld console. Covers the shell/bezel/LCD palette, the three typefaces, materials (grain, LCD inset, domed buttons), motion, the Screen layout and LCD primitives, and what to keep out. Use this skill whenever writing or editing any HTML, CSS, Astro component, page layout, or visual element in site/, including small tweaks like spacing, link styles, or adding a new page. Also use it when reviewing visual output or screenshots.
 ---
 
-# Notebook design system
+# Handheld design system
 
-The site reads like a well-kept lab notebook: warm paper, one good serif, ink, a single accent the color of dried red ink, and a monospace voice reserved for anything machine-facing. The aesthetic risk is **restraint executed precisely** — the design succeeds through typography, spacing, and the margin-note system, never through decoration.
+The site is a handheld console. `/` shows the device floating on a warm-grey ground; clicking it "switches it on". Every other page is the handheld's screen filling the window: a lilac **bezel** framing an unlit olive **LCD**, a tab strip inside the screen, and printed lettering on the shell. The palette and layout are borrowed from an original-model handheld; **the trademarks are not** — no brand names, logos or slogans from real hardware, ever.
 
-A warning before you start: "cream background + serif + terracotta accent" is currently the most common AI-generated design cliché. This brief deliberately lives in that neighborhood, so what separates it from the cliché is execution: the working margin column, ledger-style hairlines, date stamps, the mono machine layer, and zero decorative elements. If you find yourself adding a gradient, a card shadow, a rounded "feature card", or a big friendly hero — stop; that's the template leaking in.
+Source handoff: `handoff/DESIGN.md` and `handoff/reference/*.html` (the reference HTML uses a canvas runtime — `<sc-if>`, `{{holes}}` — ignore that; the markup and CSS are the spec).
 
 ## Tokens (`site/src/styles/tokens.css`)
 
-```css
-:root {
-  /* paper mode */
-  --paper: #FAF7F0;        /* page background */
-  --paper-raised: #F3EEE3; /* code blocks, telemetry strip bg */
-  --ink: #211E18;          /* primary text */
-  --ink-soft: #46412F;     /* secondary text, summaries */
-  --ink-faint: #7A7260;    /* metadata, margin notes */
-  --ink-ghost: #A39A82;    /* date stamps, hints */
-  --rule: #E2DBCB;         /* hairlines, borders */
-  --accent: #8A3B22;       /* links, [pdf] [code], live dot — dried red ink */
-  --accent-press: #6E2F1B; /* hover/active */
-  --max-prose: 64ch;
-  --margin-col: 11.5rem;
-  --gutter: 1.5rem;
-}
-:root[data-theme="lamplight"] {
-  --paper: #1B1813;        /* dark paper, NOT black */
-  --paper-raised: #242019;
-  --ink: #E8E2D4;
-  --ink-soft: #C9C1AD;
-  --ink-faint: #968D77;
-  --ink-ghost: #6E6755;
-  --rule: #3A342A;
-  --accent: #D08562;       /* accent lightens in the dark; verify ≥4.5:1 on --paper */
-  --accent-press: #E09A78;
-}
-```
+Every colour goes through a token; never put a raw hex in a component. The only exceptions are the extrusion-face colour ramp (computed from `--shell-edge-near/far` with `color-mix`) and the Shiki theme object in `astro.config.mjs`, which can't read CSS variables.
 
-Rules for tokens:
-- Never introduce a raw hex value in a component; every color goes through a token.
-- Both themes ship day one. Theme = `data-theme` on `<html>`, set by an inline script before paint (reads `localStorage`, falls back to `prefers-color-scheme`). Toggle lives in the footer, labeled `paper / lamplight`, mono, 12px.
-- Verify contrast in **both** themes whenever you add a token pairing (4.5:1 body, 3:1 large/metadata).
+| token | hex | use |
+|---|---|---|
+| `--shell` | `#d3cfc7` | page ground, device body |
+| `--shell-edge-near` → `--shell-edge-far` | `#cbc6be` → `#9b968e` | 13 extrusion faces, front to back |
+| `--bezel` | `#9a94ab` | screen surround |
+| `--screen` | `#aaa82c` | unlit LCD — the ground for all reading |
+| `--screen-edge` | `#8f8d24` | LCD inner ring; tab hover ground |
+| `--screen-ink` | `#2f3317` | **all** text on the LCD (5.2:1 on `--screen`) |
+| `--screen-lit` / `--screen-lit-ink` | `#9bbc0f` / `#0f380f` | landing hover "powered on" state only |
+| `--print-blue` | `#2b35a6` | lettering printed on the shell (6.2:1 on `--shell`) |
+| `--print-blue-deep` | `#1b2275` | lettering on the **bezel** — plain blue is only 3.3:1 there |
+| `--magenta` (+ `-hi/-lo/-shadow/-letter`) | `#b2386f` | A/B buttons, top pinstripe |
+| `--lozenge` (+ `-shadow`) | `#a9a4ae` | select/start buttons, key hints; idle LED |
+| `--pad` | `#2a2a2d` | d-pad |
+| `--led` | `#c23a2b` | battery light — lit only while the lab is training |
+
+One palette only. There is no dark mode and no theme toggle; don't add one.
+
+Contrast rules: reading text on the LCD is always `--screen-ink` on `--screen` (or inverted). `--screen-ink-soft` is for placeholders only (2.6:1). Never put blue or magenta text on the LCD or on `--screen-deep`. Verify any new pairing (4.5:1 body, 3:1 large).
 
 ## Typography
 
-- **Serif (body & headings):** Newsreader (variable, self-hosted woff2, `font-display: swap`). Body 17px/1.65 desktop, 16px mobile. Headings use weight 500 with `text-wrap: balance`; never bold-heavy (no 700).
-- **Mono (machine voice):** IBM Plex Mono, 0.78em relative to context. Used for: dates, nav, section labels (letter-spaced 0.14em, lowercase or small-caps via `font-variant-caps`), link-actions like `[pdf] [bibtex]`, the MCP footer, telemetry, code.
-- **No sans-serif anywhere.** The two-voice system (serif = human, mono = machine) is a core concept; a third voice dilutes it.
-- Real typographic niceties: `font-feature-settings` for oldstyle numerals in prose (`"onum"`), tabular lining numerals in telemetry/leaderboard (`"tnum" , "lnum"`), real em dashes, `hanging-punctuation: first` where supported.
+- **Silkscreen** 400/700 (`--font-lcd`) — LCD headings (`h1`, `h2`), the tab strip, buttons, dates and small on-screen labels. **Never body copy.**
+- **Jost** italic 600/700 (`--font-print`) — anything "printed on the shell": wordmark, bezel status line, key hints, Switch off, landing hint.
+- **Public Sans** 400/500/600 (`--font-body`) — all reading text, 16–17px, line-height 1.5–1.65. `h3` and row titles are Public Sans 600.
+- Code uses the system monospace stack (`--font-code`).
 
-## Layout & the margin system
+## Materials and shapes
 
-Every content page uses one grid:
+- Device and bezel corners are large bottom-right only: `--radius-device` (`16px 16px 84px 16px`), `--radius-bezel` (`14px 14px 72px 14px`).
+- Shell grain: `--shell-grain`. LCD inset: `--lcd-inset`. Bezel bevel: `--bezel-bevel` plus a `0 6px 0 --shell-shadow` hard drop.
+- Pinstripe under the bezel top edge: 3px magenta over 3px blue (`.pinstripe`).
+- On the LCD, rules are 3px solid ink (`--rule-ink`); left-rule blocks are 4px (`.ink-rule`). No hairlines, no shadows, no rounded corners inside the screen.
+- D-pad arms are ribbed with `repeating-linear-gradient` and have a centre dimple; A/B are domed (radial highlight at 35% 28%, 4px hard shadow, engraved letters).
 
-```css
-.page { display: grid; grid-template-columns: minmax(0, var(--max-prose)) var(--margin-col); gap: var(--gutter); }
-```
+## Layout
 
-- **Main column:** prose, publication entries, post body.
-- **Margin column:** date stamps, sidenotes, per-paper backstories, footnote bodies. Margin text: serif italic 13px `--ink-faint`; stamps: mono 11px `--ink-ghost`. No borders or backgrounds on margin notes — position *is* the styling.
-- **Sidenotes:** footnotes in markdown (`[^1]`) render in the margin aligned with their reference (superscript number in `--accent`). Implement with a rehype plugin + CSS; at `max-width: 820px` the margin column disappears and sidenotes become `<details>` disclosures inline ("¹ ⌄"). This is the site's signature mechanic — budget real time to get alignment right (anchor each note to its ref with `position: absolute` within a shared positioning context, then resolve overlaps top-down with a few lines of JS as progressive enhancement; unstyled stacking is the no-JS fallback).
-- Hairlines (`1px solid var(--rule)`) separate sections like ledger rules. No other borders. `border-radius: 0` everywhere except the telemetry sparkline container (2px, barely perceptible).
+- `/` — `src/pages/index.astro` + `src/components/Handheld.astro`. The device is one `<a href="/home">`; everything on it is `aria-hidden` decoration. A visually-hidden nav lists the routes for crawlers.
+- Everything else uses `src/layouts/Screen.astro` with an `active` tab prop. The tabs are real `<a>` links to real routes (`/home /research /notebook /now /cv /ask`). Pages outside the tab set either light their parent tab (colophon → CV, posts → Notebook) or none (404).
+- Desktop: the window never scrolls; the LCD scrolls internally. ≤700px: the window scrolls, the bezel becomes a thin border, tabs wrap, key hints hide.
+- Content sits in `.view` (max 980px); prose in `.prose` (68ch).
 
-## Component rules
+## LCD primitives (`global.css`)
 
-- **Publication entry:** serif title → author line (Prabigya's name underlined with `text-decoration-color: var(--rule)`) → one-sentence summary in `--ink-soft` → mono action row `[pdf] [arXiv] [code] [bibtex ⌄]`. BibTeX expands via `<details>` into a `--paper-raised` block with a copy button (JS enhancement; selectable text is the fallback). Backstory goes in the margin.
-- **Links:** in prose, `--accent` with `text-underline-offset: 3px`, underline `--rule` turning `--accent` on hover. Mono action links get square brackets in the content, no underline.
-- **Telemetry strip:** mono header `lab · live` + status dot (CSS circle: `--accent` when training, `--ink-ghost` when idle — never green/red). Sparkline is inline SVG, single 1.5px `--accent` stroke, no axes, no chart library. Renders from build-time snapshot JSON; client JS polls `/api/lab.json` every 60s and swaps values with no animation beyond a 200ms opacity ease.
-- **Guestbook & leaderboard:** typeset as ledgers — mono date column, serif entry text, hairline between rows. The leaderboard is a plain `<table>` with tabular numerals. No medals, no avatars, no badges.
-- **Ask-box:** a single input rendered as a ruled line on paper (bottom-border only), mono placeholder `ask this notebook…`, answer appears below as serif prose with mono source citations like `→ publications.yaml`. No chat bubbles, no avatars, no streaming spinner (use the text `thinking…` in mono).
-- **Code blocks:** `--paper-raised` background, hairline border, Shiki theme customized to the token palette (build both theme variants).
+Use these before inventing anything:
 
-## Motion & interaction
+- `.lcd-display` — giant Silkscreen name with a 5px hard `--screen-deep` shadow (Home, 404 only).
+- `.lcd-lede`, `.lcd-small`, `.lcd-label` — large lede, 15px secondary, Silkscreen 11px label.
+- `.lcd-btn` — 3px ink outline button; also used on `<summary>` for `<details>` toggles (abstract, BibTeX), which keeps them working without JS.
+- `.lcd-rows` > `li` > `a.lcd-row` (`.row-main/.row-title/.row-sub/.row-meta`) — ruled list rows for posts and links.
+- `.ink-list` — ruled plain list. `.chip-list`, `.tag` — 2px outlined Silkscreen chips.
+- `.lcd-input` — bottom-ruled input, no box.
+- `.cursor.blink` — block cursor.
 
-- Allowed motion: opacity/transform ≤200ms on `<details>` open, theme change, telemetry refresh. Everything else: none. Respect `prefers-reduced-motion` (kill all transitions).
-- Keyboard: `j`/`k` move a subtle left-margin caret (`–` in `--accent`) through entries on list pages, `Enter` opens, `/` focuses Pagefind search, `t` toggles theme. Document these in the colophon. Visible `:focus-visible` outline: 1px solid `--accent`, offset 2px.
-- Hovers may only change color, never size or shadow.
+## Motion and interaction
 
-## Page inventory & voice
+- Landing swivel: `rotateY(-32deg) rotateX(8deg)` ↔ flat, keyframes 0–12% angled, 42–66% flat, 10s, `cubic-bezier(.45,0,.15,1)`, infinite; perspective 1400px. Idle float `translateY(0 → -8px)` 7s. Hover/focus lights the screen in `steps(3,end)` and pauses the swivel. **No scale or lift on hover.**
+- On the LCD, hovers **invert ink and screen in 2 stepped frames** (`--step-invert`), never smooth fades. The active tab is permanently inverted.
+- The block cursor blinks with `steps(1,end)`.
+- Landing → screen uses a cross-document View Transition on `view-transition-name: lcd` (CSS only).
+- `prefers-reduced-motion`: kill the idle float, the blink, the stepped transitions and the view transition. The swivel may stay. Below 700px the device faces the viewer with no swivel.
+- Keyboard (Screen.astro): ← → previous/next tab, Enter → Ask (focuses the input when already there), Esc → Home. Ignored while typing, with modifiers, or when Enter lands on a link/button/summary. Document changes in the colophon.
+- Focus: 3px `--print-blue` outline on the shell, 3px ink outline inside the LCD; LCD controls show focus by inverting.
 
-`/` (intro + selected work + recent notebook + telemetry + MCP footer) · `/research` (all publications, by year) · `/notebook` + `/notebook/[slug]` · `/now` · `/cv` (+ PDF link) · `/colophon` (how the site works, MCP instructions, guestbook + leaderboard live here or at `/agents`) · 404 ("this page isn't in the notebook").
+## Keep out
 
-Copy register: first person, lowercase mono labels, sentence case headings, no exclamation marks, no marketing verbs ("leverage", "passionate"). The MCP footer is one line: `§ this site speaks MCP — claude mcp add prabigya https://prabigya.com.np/mcp` with a copy affordance.
+- No brand lettering or slogans from real hardware.
+- No emoji, no generic SaaS card grids, no gradient washes outside the materials above, no drop-shadow cards on the LCD.
+- No second accent colour on the screen — the LCD is monochrome. Code highlighting is monochrome too (weight/italic/underline only).
+- Don't hardcode personal copy in components; it comes from `content/` (see the content-schema skill).
 
 ## Self-check before finishing any visual task
 
-Render both themes at 1280px and 360px (screenshot if the environment allows). Ask: does anything look like a SaaS template component? Is there exactly one accent color in view? Do margin notes align with their references? Would this page survive printing on actual paper? Remove one thing (Chanel rule) — there is almost always one element too many.
+Screenshot at 1440×900 and 390×844 (and 360px wide), and compare against `handoff/reference/`. Check: does it still read as one physical device? Is every on-screen colour ink or screen? Does it work with JS disabled (tabs navigate, `<details>` open, Ask falls back to mailto)? Is anything a stock web component wearing a costume? Remove one thing.
