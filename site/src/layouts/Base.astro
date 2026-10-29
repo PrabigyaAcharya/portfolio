@@ -16,7 +16,13 @@ const fontsHref = 'https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
-    <meta name="theme-color" content="#d3cfc7" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#d3cfc7" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#121214" />
+    <!-- Apply a remembered shell choice before first paint (set by the A button on the landing handheld). -->
+    <script is:inline>
+      try { const t = localStorage.getItem('theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch {}
+    </script>
     <title>{fullTitle}</title>
     {description && <meta name="description" content={description} />}
 

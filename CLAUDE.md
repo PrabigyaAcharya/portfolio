@@ -85,7 +85,7 @@ cd worker && npm test           # vitest for tool handlers + scoring
 ## Definition of done (every feature)
 
 1. Works with JavaScript disabled, or degrades to something sensible (telemetry strip shows last-known JSON rendered at build; ask-box shows a mailto fallback).
-2. Looks correct in the handheld palette at 1440×900 and 390×844 (there is one palette; no dark mode).
+2. Looks correct in both shells — grey and the black edition (dark mode) — at 1440×900 and 390×844.
 3. Readable at 360px wide; the bezel thins, tabs wrap and sidenotes collapse per the design skill.
 4. Any new content type is exposed in **all four** machine surfaces: page HTML, `.md` twin, `/api/*.json`, MCP tool. The content-schema skill has the checklist.
 5. `npm run check` and worker tests pass.

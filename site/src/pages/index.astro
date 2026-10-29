@@ -7,7 +7,6 @@ import { getSiteData } from '../lib/content';
 
 const site = getSiteData();
 const [firstName, ...rest] = site.name.split(' ');
-const threads = (site.research_threads ?? []).map(t => t.name).join(' · ');
 
 const routes = [
   { href: '/home',     label: 'Home' },
@@ -23,13 +22,12 @@ const routes = [
   <div class="landing">
     <header class="landing-head">
       <span class="landing-mark"><small>{firstName.toLowerCase()}</small>{rest.join(' ')}</span>
-      {threads && <span class="landing-byline">{threads}</span>}
+      <span class="landing-byline">{site.role}</span>
     </header>
 
     <main class="landing-stage" id="main">
       <h1 class="visually-hidden">{site.name}</h1>
       <Handheld href="/home" />
-      <p class="landing-hint">Click the handheld to switch it on</p>
 
       <nav class="visually-hidden" aria-label="Site">
         <ul>
@@ -74,16 +72,6 @@ const routes = [
     align-items: center;
     justify-content: center;
     gap: 26px;
-  }
-
-  .landing-hint {
-    font-family: var(--font-print);
-    font-style: italic;
-    font-weight: 600;
-    font-size: 14px;
-    letter-spacing: 0.04em;
-    color: var(--print-blue);
-    text-align: center;
   }
 
   @media (max-width: 700px) {

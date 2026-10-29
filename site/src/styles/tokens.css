@@ -1,19 +1,29 @@
 /* Design tokens — prabigya.com.np — handheld palette (see handheld-design skill) */
-/* One palette only: an unlit original-model handheld. No theme variants. */
+/* Two shells, one screen: the classic grey handheld and a black edition.
+   Shell, bezel and button colours are light-dark() pairs, so they follow
+   `color-scheme` — the system setting by default, or the toggle, which sets
+   [data-theme] on <html>. The LCD is identical in both and pins itself to
+   `color-scheme: light`. */
+
+:root { color-scheme: light dark; }
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"]  { color-scheme: dark; }
 
 :root {
-  /* Shell */
-  --shell:            #d3cfc7;  /* page ground, device body */
-  --shell-edge-near:  #cbc6be;  /* extrusion face closest to the front */
-  --shell-edge-far:   #9b968e;  /* extrusion face at the back */
-  --shell-shadow:     #b8b3ad;  /* hard drop under the bezel */
-  --shell-text:       #232226;  /* reading text on the shell (rare) */
+  /* Ground (the page behind the device) and shell */
+  --ground:           light-dark(#d3cfc7, #121214);
+  --shell:            light-dark(#d3cfc7, #1f1f22);  /* device body */
+  --shell-edge-near:  light-dark(#cbc6be, #1d1d20);  /* extrusion face closest to the front */
+  --shell-edge-far:   light-dark(#9b968e, #09090a);  /* extrusion face at the back */
+  --shell-shadow:     light-dark(#b8b3ad, #0d0d0f);  /* hard drop under the bezel */
+  --shell-text:       light-dark(#232226, #e4e1da);  /* reading text on the shell (rare) */
 
   /* Bezel */
-  --bezel:            #9a94ab;
-  --speaker:          #8f8aa0;
+  --bezel:            light-dark(#9a94ab, #2d2c33);
+  --speaker:          light-dark(#8f8aa0, #111113);
+  --speaker-hi:       light-dark(rgba(255,255,255,.35), rgba(255,255,255,.06));
 
-  /* LCD */
+  /* LCD — the same glass in both shells */
   --screen:           #aaa82c;  /* unlit LCD */
   --screen-edge:      #8f8d24;  /* inner frame ring, tab hover */
   --screen-deep:      #94921f;  /* hard text-shadow, code block ground */
@@ -25,32 +35,32 @@
   --screen-lit-ink:   #0f380f;
 
   /* Printed lettering + buttons */
-  --print-blue:       #2b35a6;
-  --print-blue-press: #1d2680;
-  --print-blue-deep:  #1b2275;  /* lettering on the bezel — plain blue is only 3.3:1 there */
+  --print-blue:       light-dark(#2b35a6, #8e96f2);
+  --print-blue-press: light-dark(#1d2680, #b0b6ff);
+  --print-blue-deep:  light-dark(#1b2275, #c5c9ff);  /* lettering on the bezel — plain blue is only 3.3:1 there */
   --magenta:          #b2386f;
   --magenta-hi:       #c4487f;
   --magenta-lo:       #91295a;
   --magenta-shadow:   #6e2046;
   --magenta-letter:   #7a2250;
-  --lozenge:          #a9a4ae;
-  --lozenge-hi:       #b9b4be;
-  --lozenge-lo:       #9c97a2;
-  --lozenge-shadow:   #7f7a86;
-  --pad:              #2a2a2d;
-  --pad-dimple:       #1a1a1c;
-  --pad-shadow:       #15151a;
-  --pad-label:        #c9c5bd;
-  --led:              #c23a2b;
+  --lozenge:          light-dark(#a9a4ae, #4b4953);
+  --lozenge-hi:       light-dark(#b9b4be, #5b5963);
+  --lozenge-lo:       light-dark(#9c97a2, #3e3c45);
+  --lozenge-shadow:   light-dark(#7f7a86, #1b1a1f);
+  --pad:              light-dark(#2a2a2d, #0c0c0e);
+  --pad-dimple:       light-dark(#1a1a1c, #050506);
+  --pad-shadow:       light-dark(#15151a, #000000);
+  --pad-label:        light-dark(#c9c5bd, #9c988f);
+  --led:              light-dark(#c23a2b, #e04a3a);
 
   /* Materials */
-  --shell-grain: repeating-linear-gradient(135deg, rgba(255,255,255,.06) 0 2px, rgba(0,0,0,.028) 2px 4px);
+  --shell-grain: repeating-linear-gradient(135deg, light-dark(rgba(255,255,255,.06), rgba(255,255,255,.025)) 0 2px, light-dark(rgba(0,0,0,.028), rgba(0,0,0,.14)) 2px 4px);
   --lcd-inset:   inset 0 0 0 4px var(--screen-edge), inset 0 12px 28px rgba(40,42,10,.22), inset 0 -2px 0 rgba(255,255,255,.08);
-  --bezel-bevel: inset 0 2px 0 rgba(255,255,255,.28), inset 0 -3px 0 rgba(0,0,0,.14);
+  --bezel-bevel: inset 0 2px 0 light-dark(rgba(255,255,255,.28), rgba(255,255,255,.08)), inset 0 -3px 0 light-dark(rgba(0,0,0,.14), rgba(0,0,0,.35));
+  --device-shadow: 0 60px 70px light-dark(rgba(30,28,24,.4), rgba(0,0,0,.7));
 
   /* Shapes */
   --radius-device: 16px 16px 84px 16px;
-  --radius-bezel:  14px 14px 72px 14px;
   --rule-ink:      3px solid var(--screen-ink);
 
   /* Fonts */

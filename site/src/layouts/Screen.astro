@@ -1,9 +1,10 @@
 ---
-// Screen.astro — every inside page: lilac bezel framing the LCD, tab strip,
-// key hints, "switch off". Each tab is a real route, so this works without JS;
+// Screen.astro — every inside page: lilac bezel framing the CRT-style LCD,
+// key hints and tab strip on the screen, power button on the bezel. Each tab is a real route, so this works without JS;
 // the script below only adds ← → / Enter / Esc and live lab status.
 import Base from './Base.astro';
-import { getSiteData, getNow } from '../lib/content';
+import BlockDrop from '../components/BlockDrop.astro';
+import { getSiteData } from '../lib/content';
 
 export type Tab = 'home' | 'research' | 'notebook' | 'now' | 'cv' | 'ask';
 
@@ -17,7 +18,6 @@ export interface Props {
 
 const { title, description, math = false, active } = Astro.props;
 const site = getSiteData();
-const now = getNow();
 
 const tabs: Array<{ id: Tab; href: string; label: string }> = [
   { id: 'home',     href: '/home',     label: 'Home' },
@@ -35,32 +35,40 @@ const [firstName, ...rest] = site.name.split(' ');
     <section class="bezel" aria-label="Display">
 
       <div class="bezel-bar">
-        <div class="bezel-status lab-status" data-poll="/api/lab.json" data-status="idle">
-          <span class="led" aria-hidden="true"></span>
-          <span>{now.working_on[0] ?? site.tagline}</span>
-          <span aria-live="polite">· lab <span class="lab-word" data-field="status">idle</span></span>
+        <div class="bezel-left">
+          <a class="power" href="/" aria-label="Switch off" title="Switch off">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M12 3v8" />
+              <path d="M6.3 6.8a8 8 0 1 0 11.4 0" />
+            </svg>
+          </a>
+          <div class="bezel-status lab-status" data-poll="/api/lab.json" data-status="idle" title="Lab idle">
+            <span class="led" aria-hidden="true"></span>
+            <span class="visually-hidden" aria-live="polite">Lab <span data-field="status">idle</span></span>
+          </div>
         </div>
         <span class="pinstripe" aria-hidden="true"></span>
         <a class="wordmark" href="/home"><small>{firstName.toLowerCase()}</small>{rest.join(' ')}</a>
       </div>
 
       <main class="lcd" id="main">
-        <nav class="tabs" aria-label="Screen">
-          {tabs.map(t => (
-            <a class="tab" href={t.href} data-tab={t.id} aria-current={t.id === active ? 'page' : undefined}>{t.label}</a>
-          ))}
-        </nav>
-        <slot />
+        <div class="lcd-scroll">
+          <div class="tab-row">
+            <nav class="tabs" aria-label="Screen">
+              {tabs.map(t => (
+                <a class="tab" href={t.href} data-tab={t.id} aria-current={t.id === active ? 'page' : undefined}>{t.label}</a>
+              ))}
+            </nav>
+            <ul class="key-hints" aria-label="Keyboard shortcuts">
+              <li><span class="key key-arrow" aria-hidden="true">←</span><span class="key key-arrow" aria-hidden="true">→</span><span>Browse</span></li>
+              <li><span class="key" aria-hidden="true">Enter</span><span>Ask</span></li>
+              <li><span class="key" aria-hidden="true">Esc</span><span>Back</span></li>
+            </ul>
+          </div>
+          <slot />
+        </div>
+        <BlockDrop />
       </main>
-
-      <div class="bezel-foot">
-        <ul class="key-hints" aria-label="Keyboard shortcuts">
-          <li><span class="key" aria-hidden="true">←</span><span class="key" aria-hidden="true">→</span><span>Browse</span></li>
-          <li><span class="key" aria-hidden="true">Enter</span><span>Ask</span></li>
-          <li><span class="key" aria-hidden="true">Esc</span><span>Back</span></li>
-        </ul>
-        <a class="off" href="/">Switch off</a>
-      </div>
 
     </section>
   </div>
@@ -115,6 +123,7 @@ const [firstName, ...rest] = site.name.split(' ');
         const data = await res.json() as { status?: string };
         const status = data.status === 'training' ? 'training' : 'idle';
         strip!.dataset.status = status;
+        strip!.title = `Lab ${status}`;
         const word = strip!.querySelector<HTMLElement>('[data-field="status"]');
         if (word) word.textContent = status;
       } catch { /* non-critical */ }
