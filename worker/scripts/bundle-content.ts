@@ -114,6 +114,7 @@ export interface SiteLinks {
   scholar: string;
   email: string;
   linkedin: string;
+  cv_pdf?: string;
 }
 
 export interface SiteConfig {

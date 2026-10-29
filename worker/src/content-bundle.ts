@@ -1,5 +1,5 @@
 // AUTO-GENERATED — do not edit by hand; run `npm run bundle-content`
-// Generated at: 2026-10-29T14:43:03.474Z
+// Generated at: 2026-10-29T16:31:47.430Z
 
 export interface ResearchThread {
   id: string;
@@ -12,6 +12,7 @@ export interface SiteLinks {
   scholar: string;
   email: string;
   linkedin: string;
+  cv_pdf?: string;
 }
 
 export interface SiteConfig {
@@ -105,7 +106,8 @@ export const site: SiteConfig = {
     "github": "https://github.com/PrabigyaAcharya",
     "scholar": "https://scholar.google.com/citations?user=5Hb1964AAAAJ",
     "email": "acharyaprabigya@gmail.com",
-    "linkedin": "linkedin.com/in/aprab"
+    "linkedin": "linkedin.com/in/aprab",
+    "cv_pdf": "https://raw.githubusercontent.com/PrabigyaAcharya/portfolio/main/content/Prabigya_Acharya_CV.pdf"
   },
   "mcp_endpoint": "https://prabigya.com.np/mcp",
   "research_threads": [

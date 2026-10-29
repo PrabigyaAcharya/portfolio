@@ -13,6 +13,7 @@ export const SiteLinksSchema = z.object({
   scholar: z.string(),
   email: z.string(),
   linkedin: z.string(),
+  cv_pdf: z.string().optional(),
 });
 
 export const SiteSchema = z.object({

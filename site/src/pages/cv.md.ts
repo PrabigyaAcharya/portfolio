@@ -13,6 +13,7 @@ export const GET: APIRoute = (context) => {
   const lines: string[] = [
     `# CV — ${site.name}`,
     `canonical: ${base}/cv`,
+    ...(site.links.cv_pdf ? [`pdf: ${site.links.cv_pdf}`] : []),
     '',
     `## Education`,
     '',

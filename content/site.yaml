@@ -7,6 +7,9 @@ links:
   scholar: "https://scholar.google.com/citations?user=5Hb1964AAAAJ"
   email: "acharyaprabigya@gmail.com"
   linkedin: "linkedin.com/in/aprab"
+  # The CV PDF lives in this repo (content/Prabigya_Acharya_CV.pdf); replace the
+  # file and push to update it.
+  cv_pdf: "https://raw.githubusercontent.com/PrabigyaAcharya/portfolio/main/content/Prabigya_Acharya_CV.pdf"
 mcp_endpoint: "https://prabigya.com.np/mcp"
 research_threads:
   - id: thread-1

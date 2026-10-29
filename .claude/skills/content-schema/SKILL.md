@@ -18,7 +18,7 @@ name: "Prabigya Acharya"
 role: "TODO(prabigya): short professional role line"   # landing header byline, get_bio, /home.md
 tagline: "TODO(prabigya): one humble sentence about your research"
 location: "TODO(prabigya)"
-links: { github: "...", scholar: "...", email: "...", linkedin: "..." }   # all TODO
+links: { github: "...", scholar: "...", email: "...", linkedin: "...", cv_pdf: "..." }   # all TODO; cv_pdf optional
 mcp_endpoint: "https://prabigya.com.np/mcp"
 research_threads:            # used to group /research and power search_my_work
   - id: thread-1
@@ -68,7 +68,7 @@ Body conventions: footnotes `[^n]` become margin sidenotes (design skill owns th
 
 `now.yaml`: `updated:` date plus short lists (`working_on`, `reading`, `open_to`), each item one line. Renders the `/now` page, the mono "now:" line on the homepage, and the MCP `get_now` tool.
 
-`cv.yaml`: sections (`education`, `positions`, `publications: from-publications-yaml`, `skills`, `service`, `awards`) with `org / role / start / end / details[]` entries. One file renders both the `/cv` page and the Typst PDF (`scripts/build-cv.ts` → `cv.typ` → `prabigya-acharya-cv.pdf` in `public/`). The PDF must contain a footnote: "Generated from the same data as prabigya.com.np/cv".
+`cv.yaml`: sections (`education`, `positions`, `publications: from-publications-yaml`, `skills`, `service`, `awards`) with `org / role / start / end / details[]` entries. `cv.yaml` renders the `/cv` page. For now the CV PDF is a hand-made file committed at `content/Prabigya_Acharya_CV.pdf` and served from GitHub raw via `site.yaml` `links.cv_pdf`; the planned Typst build (`scripts/build-cv.ts`) is not wired up yet.
 
 ## `content/eval/questions.yaml`
 

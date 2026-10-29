@@ -23,6 +23,7 @@ const SiteLinksSchema = z.object({
   scholar: z.string(),
   email: z.string(),
   linkedin: z.string(),
+  cv_pdf: z.string().optional(),
 });
 
 const SiteSchema = z.object({

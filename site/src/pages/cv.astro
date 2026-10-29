@@ -10,7 +10,7 @@ const handle = (url: string) => url.replace(/^https?:\/\//, '').replace(/\/$/, '
 const linkedinHref = site.links.linkedin.startsWith('http') ? site.links.linkedin : `https://${site.links.linkedin}`;
 
 const elsewhere = [
-  { label: 'Curriculum vitae', meta: 'PDF',                        href: '/prabigya-acharya-cv.pdf', download: true },
+  ...(site.links.cv_pdf ? [{ label: 'Curriculum vitae', meta: 'PDF', href: site.links.cv_pdf, download: true }] : []),
   { label: 'GitHub',           meta: handle(site.links.github),    href: site.links.github },
   { label: 'Google Scholar',   meta: 'Citations',                  href: site.links.scholar },
   { label: 'LinkedIn',         meta: handle(linkedinHref),         href: linkedinHref },
