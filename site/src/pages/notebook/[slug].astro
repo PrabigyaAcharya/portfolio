@@ -1,6 +1,5 @@
 ---
-import Base from '../../layouts/Base.astro';
-import Footer from '../../components/Footer.astro';
+import Screen from '../../layouts/Screen.astro';
 import { getCollection, type CollectionEntry } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -19,51 +18,38 @@ const { post } = Astro.props;
 const { Content } = await post.render();
 const math = post.data.math ?? false;
 
-const formattedDate = post.data.date.toLocaleDateString('en-US', {
-  year: 'numeric', month: 'long', day: 'numeric',
-});
-
-const updatedDate = post.data.updated
-  ? post.data.updated.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
-  : null;
+const fmt = (d: Date) => d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 ---
-<Base title={post.data.title} description={post.data.summary} math={math}>
-  <div class="page-container">
-    <nav class="breadcrumb" aria-label="Breadcrumb">
-      <a href="/">prabigya</a>
-      <span class="breadcrumb-sep">/</span>
-      <a href="/notebook">notebook</a>
-      <span class="breadcrumb-sep">/</span>
-      <span class="breadcrumb-current">{post.data.title}</span>
-    </nav>
-
-    <article>
-      <header class="post-header">
-        <h1>{post.data.title}</h1>
-        <div class="post-header-meta">
-          <time datetime={post.data.date.toISOString()}>{formattedDate}</time>
-          {updatedDate && (
-            <span>updated {updatedDate}</span>
-          )}
-          {post.data.tags.length > 0 && (
-            <div class="post-tags">
-              {post.data.tags.map(tag => (
-                <a href={`/notebook#tag-${tag}`} class="tag">{tag}</a>
-              ))}
-            </div>
-          )}
+<Screen title={post.data.title} description={post.data.summary} math={math} active="notebook">
+  <article class="view post">
+    <header class="post-head">
+      <p class="lcd-label"><a href="/notebook">Notebook</a> /</p>
+      <h1>{post.data.title}</h1>
+      <p class="lcd-label post-meta">
+        <time datetime={post.data.date.toISOString()}>{fmt(post.data.date)}</time>
+        {post.data.updated && <span>Updated {fmt(post.data.updated)}</span>}
+      </p>
+      {post.data.tags.length > 0 && (
+        <div class="filter-row">
+          {post.data.tags.map(tag => <a href={`/notebook#tag-${tag}`} class="tag">{tag}</a>)}
         </div>
-      </header>
+      )}
+    </header>
 
-      <div class="prose">
-        <Content />
-      </div>
+    <div class="prose">
+      <Content />
+    </div>
 
-      <footer style="margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--rule);">
-        <a href="/notebook" style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--ink-faint); text-decoration: none;">← notebook</a>
-      </footer>
-    </article>
-  </div>
+    <footer class="btn-row post-foot">
+      <a class="lcd-btn" href="/notebook">Back to notebook</a>
+      <a class="lcd-btn" href={`/notebook/${post.slug}.md`}>Markdown</a>
+    </footer>
+  </article>
+</Screen>
 
-  <Footer slot="footer" />
-</Base>
+<style>
+  .post-head { display: flex; flex-direction: column; gap: 10px; padding-bottom: 14px; border-bottom: var(--rule-ink); }
+  .post-head h1 { max-width: 30ch; }
+  .post-meta { display: flex; flex-wrap: wrap; gap: 4px 18px; }
+  .post-foot { margin-top: 24px; padding-top: 18px; border-top: var(--rule-ink); }
+</style>

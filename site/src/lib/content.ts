@@ -27,6 +27,7 @@ const SiteLinksSchema = z.object({
 
 const SiteSchema = z.object({
   name: z.string(),
+  role: z.string(),
   tagline: z.string(),
   location: z.string(),
   links: SiteLinksSchema,
@@ -71,9 +72,17 @@ const CVEntrySchema = z.object({
   details: z.array(z.string()).optional(),
 });
 
+const CVProjectSchema = z.object({
+  title: z.string(),
+  description: z.string(),
+  tech: z.array(z.string()),
+  link: z.string(),
+});
+
 const CVSchema = z.object({
   education: z.array(CVEntrySchema),
   positions: z.array(CVEntrySchema),
+  projects: z.array(CVProjectSchema).optional(),
   skills: z.array(z.string()),
   service: z.array(z.string()),
   awards: z.array(z.string()),

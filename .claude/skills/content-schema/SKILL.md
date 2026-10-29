@@ -15,6 +15,7 @@ All personal facts are placeholders until Prabigya fills them in. Use `TODO(prab
 
 ```yaml
 name: "Prabigya Acharya"
+role: "TODO(prabigya): short professional role line"   # landing header byline, get_bio, /home.md
 tagline: "TODO(prabigya): one humble sentence about your research"
 location: "TODO(prabigya)"
 links: { github: "...", scholar: "...", email: "...", linkedin: "..." }   # all TODO

@@ -1,0 +1,21 @@
+---
+import Screen from '../layouts/Screen.astro';
+import { getSiteData } from '../lib/content';
+
+const site = getSiteData();
+---
+<Screen title="Home" description={site.tagline} active="home">
+  <div class="view home-view">
+    <h1 class="lcd-display">{site.name}</h1>
+    <p class="lcd-lede">{site.tagline}.</p>
+    <p class="lcd-label home-hint">
+      <span>Arrow keys to browse. Enter to ask a question.</span>
+      <span class="cursor blink" aria-hidden="true"></span>
+    </p>
+  </div>
+</Screen>
+
+<style>
+  .home-view { flex: 1 1 auto; justify-content: center; gap: 24px; padding: 8px 0; }
+  .home-hint { display: flex; align-items: center; gap: 8px; margin-top: 8px; font-size: 12px; }
+</style>

@@ -1,87 +1,74 @@
-/* Design tokens — prabigya.com.np — pragma.ooo dark palette */
+/* Design tokens — prabigya.com.np — handheld palette (see handheld-design skill) */
+/* Two shells, one screen: the classic grey handheld and a black edition.
+   Shell, bezel and button colours are light-dark() pairs, so they follow
+   `color-scheme` — the system setting by default, or the toggle, which sets
+   [data-theme] on <html>. The LCD is identical in both and pins itself to
+   `color-scheme: light`. */
+
+:root { color-scheme: light dark; }
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"]  { color-scheme: dark; }
 
 :root {
-  /* Backgrounds */
-  --paper:          #0D0D0D;
-  --paper-raised:   #141414;
-  --paper-code:     #1A1A1A;
-  --accent-subtle:  #0A1F12;
+  /* Ground (the page behind the device) and shell */
+  --ground:           light-dark(#d3cfc7, #121214);
+  --shell:            light-dark(#d3cfc7, #1f1f22);  /* device body */
+  --shell-edge-near:  light-dark(#cbc6be, #1d1d20);  /* extrusion face closest to the front */
+  --shell-edge-far:   light-dark(#9b968e, #09090a);  /* extrusion face at the back */
+  --shell-shadow:     light-dark(#b8b3ad, #0d0d0f);  /* hard drop under the bezel */
+  --shell-text:       light-dark(#232226, #e4e1da);  /* reading text on the shell (rare) */
 
-  /* Ink */
-  --ink:            #F0EDE8;
-  --ink-soft:       #A8A49E;
-  --ink-faint:      #666057;
-  --ink-ghost:      #555047;
+  /* Bezel */
+  --bezel:            light-dark(#9a94ab, #2d2c33);
+  --speaker:          light-dark(#8f8aa0, #111113);
+  --speaker-hi:       light-dark(rgba(255,255,255,.35), rgba(255,255,255,.06));
 
-  /* Accent — electric green */
-  --accent:         #4AFF91;
-  --accent-press:   #3ACC78;
+  /* LCD — the same glass in both shells */
+  --screen:           #aaa82c;  /* unlit LCD */
+  --screen-edge:      #8f8d24;  /* inner frame ring, tab hover */
+  --screen-deep:      #94921f;  /* hard text-shadow, code block ground */
+  --screen-ink:       #2f3317;  /* all text on the LCD */
+  --screen-ink-soft:  #5d612c;  /* placeholders, secondary on-screen text */
+  --screen-hi:        #eef0b8;  /* text on --screen-edge */
+  --screen-lit:       #9bbc0f;  /* hover "powered on" state only */
+  --screen-lit-edge:  #7f9a0a;
+  --screen-lit-ink:   #0f380f;
 
-  /* Code / syntax nav */
-  --code-keyword:   #4AFF91;
-  --code-bracket:   #555047;
-  --code-index:     #4AFF91;
+  /* Printed lettering + buttons */
+  --print-blue:       light-dark(#2b35a6, #8e96f2);
+  --print-blue-press: light-dark(#1d2680, #b0b6ff);
+  --print-blue-deep:  light-dark(#1b2275, #c5c9ff);  /* lettering on the bezel — plain blue is only 3.3:1 there */
+  --magenta:          #b2386f;
+  --magenta-hi:       #c4487f;
+  --magenta-lo:       #91295a;
+  --magenta-shadow:   #6e2046;
+  --magenta-letter:   #7a2250;
+  --lozenge:          light-dark(#a9a4ae, #4b4953);
+  --lozenge-hi:       light-dark(#b9b4be, #5b5963);
+  --lozenge-lo:       light-dark(#9c97a2, #3e3c45);
+  --lozenge-shadow:   light-dark(#7f7a86, #1b1a1f);
+  --pad:              light-dark(#2a2a2d, #0c0c0e);
+  --pad-dimple:       light-dark(#1a1a1c, #050506);
+  --pad-shadow:       light-dark(#15151a, #000000);
+  --pad-label:        light-dark(#c9c5bd, #9c988f);
+  --led:              light-dark(#c23a2b, #e04a3a);
 
-  /* Borders */
-  --rule:           #1E1E1E;
-  --border-medium:  #2A2A2A;
+  /* Materials */
+  --shell-grain: repeating-linear-gradient(135deg, light-dark(rgba(255,255,255,.06), rgba(255,255,255,.025)) 0 2px, light-dark(rgba(0,0,0,.028), rgba(0,0,0,.14)) 2px 4px);
+  --lcd-inset:   inset 0 0 0 4px var(--screen-edge), inset 0 12px 28px rgba(40,42,10,.22), inset 0 -2px 0 rgba(255,255,255,.08);
+  --bezel-bevel: inset 0 2px 0 light-dark(rgba(255,255,255,.28), rgba(255,255,255,.08)), inset 0 -3px 0 light-dark(rgba(0,0,0,.14), rgba(0,0,0,.35));
+  --device-shadow: 0 60px 70px light-dark(rgba(30,28,24,.4), rgba(0,0,0,.7));
 
-  /* Lab status */
-  --lab-active:     #4AFF91;
-  --lab-idle:       #FFB347;
-  --lab-unknown:    #555047;
+  /* Shapes */
+  --radius-device: 16px 16px 84px 16px;
+  --rule-ink:      3px solid var(--screen-ink);
 
   /* Fonts */
-  --font-serif: 'EB Garamond', Georgia, serif;
-  --font-mono:  'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+  --font-lcd:   'Silkscreen', ui-monospace, monospace;      /* LCD headings, tabs, small labels — never body */
+  --font-print: 'Jost', 'Futura', system-ui, sans-serif;     /* printed shell lettering, always italic */
+  --font-body:  'Public Sans', system-ui, sans-serif;        /* all reading text */
+  --font-code:  ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
 
-  /* Layout */
-  --max-prose:     900px;
-  --sidebar-width: 260px;
-  --home-aside:    260px;
-  --gutter:        1.5rem;
-}
-
-/* Explicit dark — same as root, for toggle target */
-:root[data-theme="lamplight"] {
-  --paper:          #0D0D0D;
-  --paper-raised:   #141414;
-  --paper-code:     #1A1A1A;
-  --accent-subtle:  #0A1F12;
-  --ink:            #F0EDE8;
-  --ink-soft:       #A8A49E;
-  --ink-faint:      #666057;
-  --ink-ghost:      #555047;
-  --accent:         #4AFF91;
-  --accent-press:   #3ACC78;
-  --code-keyword:   #4AFF91;
-  --code-bracket:   #555047;
-  --code-index:     #4AFF91;
-  --rule:           #1E1E1E;
-  --border-medium:  #2A2A2A;
-  --lab-active:     #4AFF91;
-  --lab-idle:       #FFB347;
-  --lab-unknown:    #555047;
-}
-
-/* Paper (light) — warm amber fallback for toggle */
-:root[data-theme="paper"] {
-  --paper:          #F5F0E8;
-  --paper-raised:   #EDE8DC;
-  --paper-code:     #E2DBCC;
-  --accent-subtle:  #F0E6D3;
-  --ink:            #1A1610;
-  --ink-soft:       #5C5347;
-  --ink-faint:      #9A8F82;
-  --ink-ghost:      #B8AFA0;
-  --accent:         #B85C00;
-  --accent-press:   #8F4600;
-  --code-keyword:   #7A5C3A;
-  --code-bracket:   #9A8F82;
-  --code-index:     #B85C00;
-  --rule:           #D8D0C0;
-  --border-medium:  #B8AFA0;
-  --lab-active:     #4A7C59;
-  --lab-idle:       #B85C00;
-  --lab-unknown:    #9A8F82;
+  /* Motion */
+  --step-invert: .12s steps(2, end);
 }

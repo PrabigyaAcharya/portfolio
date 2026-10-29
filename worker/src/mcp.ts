@@ -282,7 +282,7 @@ export function buildMcpServer(env: Env): McpServer {
   // ── get_bio ────────────────────────────────────────────────────────────────
   server.tool(
     'get_bio',
-    'Get basic bio: name, tagline, location, and links.',
+    'Get basic bio: name, role, tagline, location, and links.',
     {},
     () => {
       return {
@@ -292,6 +292,7 @@ export function buildMcpServer(env: Env): McpServer {
             source: 'site.yaml',
             data: {
               name: site.name,
+              role: site.role,
               tagline: site.tagline,
               location: site.location,
               links: site.links,

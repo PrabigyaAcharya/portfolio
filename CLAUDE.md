@@ -4,7 +4,7 @@
 
 A personal site for an AI researcher/engineer, built as a **research notebook with a machine-readable layer**. Two audiences, one source of truth:
 
-1. **Humans** get a quiet, typographically serious site: publications with personal margin notes, a markdown blog ("the notebook"), CV, now page, colophon.
+1. **Humans** get the site as a retro handheld console: a 3D device on the landing page that "switches on" into its screen, where publications, a markdown blog ("the notebook"), CV, now page, an ask box and the colophon are tabs on the LCD.
 2. **AI agents** get the same content as structured data: an MCP server, `llms.txt`, JSON endpoints, and markdown versions of every page.
 
 Three signature features live on top: a **live lab telemetry strip** (what's training on my workstation right now), an **agent guestbook** (AI agents that connect via MCP can sign it), and an **agent eval leaderboard** (a 10-question personal benchmark agents can attempt; scores are public).
@@ -12,8 +12,8 @@ Three signature features live on top: a **live lab telemetry strip** (what's tra
 ## Non-negotiable principles
 
 - **Single source of truth.** All content lives in `content/` as YAML + markdown. The website, the MCP server, the JSON API, the CV PDF, and llms.txt are all *renderings* of the same files. Never duplicate content into a component or the worker.
-- **Static-first, server-rendered.** The current site is a client-rendered SPA that is invisible to crawlers and agents — this rebuild exists partly to fix that. Every page must render meaningful HTML with JavaScript disabled. JS is allowed only for progressive enhancement (telemetry polling, ask-box, keyboard nav, theme toggle).
-- **Restraint is the design.** No hero animations, no cards with shadows, no parallax, no gradients. If a feature needs visual flair to feel cool, it is the wrong feature. Read `.claude/skills/notebook-design/SKILL.md` before writing any CSS or page layout.
+- **Static-first, server-rendered.** The current site is a client-rendered SPA that is invisible to crawlers and agents — this rebuild exists partly to fix that. Every page must render meaningful HTML with JavaScript disabled. JS is allowed only for progressive enhancement (telemetry polling, ask-box, keyboard nav). Each LCD tab is a real route, not a client-side view.
+- **The device is the design.** Everything is either shell, bezel or LCD; materials and motion come only from the handheld spec (stepped LCD inverts, the landing swivel). No SaaS cards, no gradient washes, no emoji, no real-hardware trademarks. Read `.claude/skills/handheld-design/SKILL.md` before writing any CSS or page layout.
 - **Placeholders are loud.** You do not know Prabigya's real publications, bio, or research focus. Wherever real personal content is needed, insert clearly marked `TODO(prabigya): ...` placeholders with realistic *structure* but obviously fake text (e.g. "Paper title goes here"). Never invent plausible-sounding papers, affiliations, or biography — fake-but-plausible is worse than obviously-fake.
 - **The machine layer is a first-class product.** Treat the MCP server and JSON API with the same care as the visible site: versioned schemas, helpful error messages, rate limits.
 
@@ -63,7 +63,7 @@ Monorepo layout:
 
 ## Skills — read before working
 
-- `.claude/skills/notebook-design/SKILL.md` — the full visual system (type, color, margin notes, dark "lamplight" mode). **Read before any HTML/CSS work.**
+- `.claude/skills/handheld-design/SKILL.md` — the full visual system (shell/bezel/LCD palette, type, materials, motion, LCD primitives). **Read before any HTML/CSS work.**
 - `.claude/skills/content-schema/SKILL.md` — exact YAML/frontmatter schemas and the rules for keeping site/MCP/API in sync. **Read before touching anything in `content/` or any code that consumes it.**
 - `.claude/skills/mcp-and-agent-layer/SKILL.md` — MCP tools, guestbook, eval leaderboard, telemetry protocol, ask-box, and all the security/abuse rules. **Read before touching `worker/` or `lab-agent/`.**
 
@@ -85,8 +85,8 @@ cd worker && npm test           # vitest for tool handlers + scoring
 ## Definition of done (every feature)
 
 1. Works with JavaScript disabled, or degrades to something sensible (telemetry strip shows last-known JSON rendered at build; ask-box shows a mailto fallback).
-2. Looks correct in both paper (light) and lamplight (dark) mode.
-3. Readable at 360px wide; margin notes collapse per the design skill.
+2. Looks correct in both shells — grey and the black edition (dark mode) — at 1440×900 and 390×844.
+3. Readable at 360px wide; the bezel thins, tabs wrap and sidenotes collapse per the design skill.
 4. Any new content type is exposed in **all four** machine surfaces: page HTML, `.md` twin, `/api/*.json`, MCP tool. The content-schema skill has the checklist.
 5. `npm run check` and worker tests pass.
 6. No real-sounding fabricated personal facts anywhere.

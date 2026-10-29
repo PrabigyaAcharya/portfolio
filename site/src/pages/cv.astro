@@ -1,108 +1,99 @@
 ---
-import Page from '../layouts/Page.astro';
-import { getCV, getSiteData, getPublications } from '../lib/content';
+import Screen from '../layouts/Screen.astro';
+import { getCV, getSiteData, getPublications, type CVEntry } from '../lib/content';
 
 const cv = getCV();
 const site = getSiteData();
 const publications = getPublications();
+
+const handle = (url: string) => url.replace(/^https?:\/\//, '').replace(/\/$/, '').split('/').pop() ?? url;
+const linkedinHref = site.links.linkedin.startsWith('http') ? site.links.linkedin : `https://${site.links.linkedin}`;
+
+const elsewhere = [
+  { label: 'Curriculum vitae', meta: 'PDF',                        href: '/prabigya-acharya-cv.pdf', download: true },
+  { label: 'GitHub',           meta: handle(site.links.github),    href: site.links.github },
+  { label: 'Google Scholar',   meta: 'Citations',                  href: site.links.scholar },
+  { label: 'LinkedIn',         meta: handle(linkedinHref),         href: linkedinHref },
+  { label: 'Email',            meta: site.links.email,             href: `mailto:${site.links.email}` },
+  { label: 'Colophon',         meta: 'How this site is made',      href: '/colophon' },
+];
+
+const sections: Array<{ title: string; entries: CVEntry[] }> = [
+  { title: 'Education', entries: cv.education },
+  { title: 'Positions', entries: cv.positions },
+];
 ---
-<Page title="CV" description={`Curriculum vitae of ${site.name}`}>
-  <div class="cv-page-header">
-    <h1>{site.name}</h1>
-    <a
-      href="/prabigya-acharya-cv.pdf"
-      style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent);"
-      download
-    >[download pdf]</a>
+<Screen title="CV" description={`Curriculum vitae of ${site.name}`} active="cv">
+  <div class="view">
+    <h1>CV and elsewhere</h1>
+
+    <ul class="lcd-rows">
+      {elsewhere.map(l => (
+        <li>
+          <a class="lcd-row" href={l.href} download={l.download ? '' : undefined}>
+            <span class="row-title">{l.label}</span>
+            <span class="row-meta">{l.meta}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    {sections.map(s => s.entries.length > 0 && (
+      <section class="section">
+        <h2>{s.title}</h2>
+        <div>
+          {s.entries.map(entry => (
+            <div class="cv-entry">
+              <div class="cv-entry-dates">{entry.start}–{entry.end}</div>
+              <div>
+                <div class="cv-entry-org">{entry.org}</div>
+                <div class="cv-entry-role">{entry.role}</div>
+                {entry.details && entry.details.length > 0 && (
+                  <ul class="cv-entry-details">{entry.details.map(d => <li>{d}</li>)}</ul>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    ))}
+
+    {publications.length > 0 && (
+      <section class="section">
+        <h2>Publications</h2>
+        <div>
+          {publications.map(pub => (
+            <div class="cv-entry">
+              <div class="cv-entry-dates">{pub.year}</div>
+              <div>
+                <div class="cv-entry-org">{pub.title}</div>
+                <div class="cv-entry-role">{pub.authors.join(', ')} · {pub.venue}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {cv.skills.length > 0 && (
+      <section class="section">
+        <h2>Skills</h2>
+        <ul class="chip-list">{cv.skills.map(skill => <li>{skill}</li>)}</ul>
+      </section>
+    )}
+
+    {cv.service.length > 0 && (
+      <section class="section">
+        <h2>Service</h2>
+        <ul class="ink-list">{cv.service.map(item => <li>{item}</li>)}</ul>
+      </section>
+    )}
+
+    {cv.awards.length > 0 && (
+      <section class="section">
+        <h2>Awards</h2>
+        <ul class="ink-list">{cv.awards.map(item => <li>{item}</li>)}</ul>
+      </section>
+    )}
   </div>
-
-  <section class="page-section">
-    <span class="code-comment">// academic background</span>
-    <h2 class="code-heading">education <span class="code-brace">{'{'}</span></h2>
-    <div>
-      {cv.education.map(entry => (
-        <div class="cv-entry">
-          <div class="cv-entry-dates">{entry.start}–{entry.end}</div>
-          <div class="cv-entry-body">
-            <div class="cv-entry-org">{entry.org}</div>
-            <div class="cv-entry-role">{entry.role}</div>
-            {entry.details && entry.details.length > 0 && (
-              <ul class="cv-entry-details">
-                {entry.details.map(d => <li>{d}</li>)}
-              </ul>
-            )}
-          </div>
-        </div>
-      ))}
-    </div>
-    <span class="code-close">{'}'}</span>
-  </section>
-
-  <section class="page-section">
-    <span class="code-comment">// work experience</span>
-    <h2 class="code-heading">positions <span class="code-brace">{'{'}</span></h2>
-    <div>
-      {cv.positions.map(entry => (
-        <div class="cv-entry">
-          <div class="cv-entry-dates">{entry.start}–{entry.end}</div>
-          <div class="cv-entry-body">
-            <div class="cv-entry-org">{entry.org}</div>
-            <div class="cv-entry-role">{entry.role}</div>
-            {entry.details && entry.details.length > 0 && (
-              <ul class="cv-entry-details">
-                {entry.details.map(d => <li>{d}</li>)}
-              </ul>
-            )}
-          </div>
-        </div>
-      ))}
-    </div>
-    <span class="code-close">{'}'}</span>
-  </section>
-
-  <section class="page-section">
-    <span class="code-comment">// research work</span>
-    <h2 class="code-heading">publications <span class="code-brace">{'{'}</span></h2>
-    <div>
-      {publications.map(pub => (
-        <div class="cv-entry">
-          <div class="cv-entry-dates">{pub.year}</div>
-          <div class="cv-entry-body">
-            <div class="cv-entry-org">{pub.title}</div>
-            <div class="cv-entry-role">{pub.authors.join(', ')} &middot; {pub.venue}</div>
-          </div>
-        </div>
-      ))}
-    </div>
-    <span class="code-close">{'}'}</span>
-  </section>
-
-  <section class="page-section">
-    <span class="code-comment">// tools &amp; languages</span>
-    <h2 class="code-heading">skills <span class="code-brace">{'{'}</span></h2>
-    <ul style="list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem;">
-      {cv.skills.map(skill => (
-        <li style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--ink-soft); padding: 0.15rem 0.6rem; border: 1px solid var(--rule);">{skill}</li>
-      ))}
-    </ul>
-    <span class="code-close">{'}'}</span>
-  </section>
-
-  <section class="page-section">
-    <span class="code-comment">// academic service</span>
-    <h2 class="code-heading">service <span class="code-brace">{'{'}</span></h2>
-    <ul class="now-list">
-      {cv.service.map(item => <li>{item}</li>)}
-    </ul>
-    <span class="code-close">{'}'}</span>
-  </section>
-
-  <section class="page-section">
-    <span class="code-comment">// recognition</span>
-    <h2 class="code-heading">awards <span class="code-brace">{'{'}</span></h2>
-    <ul class="now-list">
-      {cv.awards.map(item => <li>{item}</li>)}
-    </ul>
-    <span class="code-close">{'}'}</span>
-  </section>
-</Page>
+</Screen>

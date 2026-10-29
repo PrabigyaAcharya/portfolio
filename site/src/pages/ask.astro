@@ -1,0 +1,21 @@
+---
+import Screen from '../layouts/Screen.astro';
+import AskBox from '../components/AskBox.astro';
+import { getSiteData } from '../lib/content';
+
+const site = getSiteData();
+---
+<Screen title="Ask" description={`Ask questions about ${site.name}'s papers and notes`} active="ask">
+  <div class="view ask-view">
+    <h1>Ask this notebook</h1>
+    <p class="lcd-small">
+      Questions about my papers, posts and tools get answered from the notes themselves,
+      and nothing else. Answers cite the files they came from.
+    </p>
+    <AskBox />
+  </div>
+</Screen>
+
+<style>
+  .ask-view { max-width: 640px; gap: 12px; }
+</style>

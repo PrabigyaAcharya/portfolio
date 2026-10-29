@@ -1,5 +1,6 @@
 name: "Prabigya Acharya"
-tagline: "AI researcher working on privacy-preserving NLP, computer vision, and 3D reconstruction"
+role: "AI Researcher, Engineer and Communicator"
+tagline: "AI researcher figuring out how to make AI useful"
 location: "Kathmandu, Nepal"
 links:
   github: "https://github.com/PrabigyaAcharya"
@@ -14,3 +15,6 @@ research_threads:
   - id: thread-2
     name: "3D Vision & Reconstruction"
     blurb: "Neural radiance fields and Gaussian splatting for digitizing cultural heritage sites."
+  - id: thread-3
+    name: "NLP for Education"
+    blurb: "Curriculum-grounded question generation in Nepali, organised by Bloom's taxonomy."

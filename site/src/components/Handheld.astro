@@ -1,0 +1,477 @@
+---
+// Handheld.astro — the pure-CSS 3D handheld on the landing page.
+// Port of handoff/reference/landing.html. The whole body is one link into the
+// site, and the controls on it work too. The d-pad arms preview a section on
+// the device's own screen (a "trailer"; Start or the body then opens it), the
+// lozenges go to GitHub and Scholar, and A switches between the grey and
+// black shells. Without JS the arms are plain links into their sections.
+import { getCollection } from 'astro:content';
+import { getSiteData, getPublications, getNow, getCV } from '../lib/content';
+
+export interface Props {
+  href: string;
+}
+
+const { href } = Astro.props;
+const site = getSiteData();
+
+const FACES = 13;
+const [firstName, ...rest] = site.name.split(' ');
+
+// Trailer lines for each d-pad section, all read from content/.
+const pubs = getPublications();
+const now = getNow();
+const cv = getCV();
+const posts = (await getCollection('notebook', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`;
+const sections = [
+  { id: 'research', arm: 'up',    label: 'Work',  title: 'Research', href: '/research',
+    lines: [plural(pubs.length, 'publication'), ...site.research_threads.map(t => t.name)] },
+  { id: 'notebook', arm: 'left',  label: 'Notes', title: 'Notebook', href: '/notebook',
+    lines: posts.slice(0, 3).map(p => p.data.title) },
+  { id: 'cv',       arm: 'right', label: 'CV',    title: 'CV',       href: '/cv',
+    lines: cv.positions.slice(0, 3).map(p => `${p.role}, ${p.org}`) },
+  { id: 'now',      arm: 'down',  label: 'Now',   title: 'Now',      href: '/now',
+    lines: [...now.working_on, ...now.reading.map(r => `Reading ${r}`)] },
+].map(sec => ({ ...sec, lines: sec.lines.slice(0, 3) }));
+---
+<div class="scale">
+  <div class="settle">
+    <div class="idle">
+      <div class="device">
+
+        {Array.from({ length: FACES }, (_, i) => (
+          <span class={i === FACES - 1 ? 'face back' : 'face'} aria-hidden="true" style={`--i:${i}`}></span>
+        ))}
+
+        <!-- The whole body is the link: a layer under the decoration, which
+             lets clicks fall through to it. Only the controls sit above. -->
+        <a class="device-link" href={href} aria-label={`Switch on the handheld and open ${site.name}'s site`}></a>
+
+        <span class="dev-bezel" aria-hidden="true">
+          <span class="dev-bar">
+            <span class="dev-power">
+              <svg viewBox="0 0 24 24" focusable="false">
+                <path d="M12 3v8" />
+                <path d="M6.3 6.8a8 8 0 1 0 11.4 0" />
+              </svg>
+            </span>
+            <span class="dev-pin"></span>
+          </span>
+          <span class="dev-lcd">
+            <span class="dev-panel" data-panel="home">
+              <span class="dev-name">{site.name}</span>
+              <span class="dev-tagline">{site.tagline}</span>
+            </span>
+            {sections.map(sec => (
+              <span class="dev-panel" data-panel={sec.id} hidden>
+                <span class="dev-title">{sec.title}</span>
+                <span class="dev-lines">
+                  {sec.lines.map(line => <span class="dev-line">{line}</span>)}
+                </span>
+              </span>
+            ))}
+            <span class="dev-start">
+              <span>Press start</span>
+              <span class="dev-cursor blink"></span>
+            </span>
+          </span>
+        </span>
+
+        <span class="visually-hidden" aria-live="polite" data-preview-status></span>
+
+        <span class="dev-mark" aria-hidden="true"><small>{firstName.toLowerCase()}</small> {rest.join(' ')}</span>
+
+        <span class="dev-controls">
+          <span class="dpad">
+            {sections.map(sec => (
+              <a class={`arm ${sec.arm}`} href={sec.href} data-preview={sec.id} data-title={sec.title} aria-label={sec.title}>{sec.label}</a>
+            ))}
+            <span class="hub" aria-hidden="true"></span>
+          </span>
+          <span class="ab">
+            <a class="ab-btn b" href={href} aria-label="Start">
+              <span class="dome" aria-hidden="true">B</span><span class="ab-label" aria-hidden="true">Start</span>
+            </a>
+            <!-- A swaps the grey shell for the black edition. Disabled until
+                 the script runs; without JS the shell follows the system. -->
+            <button class="ab-btn a" type="button" data-theme-toggle aria-label="Dark mode" aria-pressed="false" disabled>
+              <span class="dome" aria-hidden="true">A</span><span class="ab-label" aria-hidden="true">Theme</span>
+            </button>
+          </span>
+        </span>
+
+        <span class="dev-bottom">
+          <span class="lozenges">
+            <a class="loz" href={site.links.github} rel="me"><span class="loz-btn" aria-hidden="true"></span><span class="loz-label">GitHub</span></a>
+            <a class="loz" href={site.links.scholar} rel="me"><span class="loz-btn" aria-hidden="true"></span><span class="loz-label">Scholar</span></a>
+          </span>
+          <span class="speaker" aria-hidden="true">
+            {Array.from({ length: 6 }, () => <span class="slot"></span>)}
+          </span>
+        </span>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // A button: flip the shell. The choice is remembered and applied before
+  // paint on every page by Base.astro.
+  const root = document.documentElement;
+  const system = window.matchMedia('(prefers-color-scheme: dark)');
+  const isDark = () => (root.dataset.theme ?? (system.matches ? 'dark' : 'light')) === 'dark';
+
+  for (const b of document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]')) {
+    const sync = () => {
+      b.setAttribute('aria-pressed', String(isDark()));
+      b.title = isDark() ? 'Switch to the grey shell' : 'Switch to the black shell';
+    };
+    b.disabled = false;
+    b.addEventListener('click', () => {
+      const next = isDark() ? 'light' : 'dark';
+      root.dataset.theme = next;
+      try { localStorage.setItem('theme', next); } catch { /* private mode: still flips for this page */ }
+      sync();
+    });
+    system.addEventListener('change', sync);
+    sync();
+  }
+
+  // D-pad: preview a section on the device's screen instead of jumping into
+  // it. Start (B) and the body then open whatever is on screen. Pressing the
+  // lit arm again goes back to the title screen. Arrow keys press the arms.
+  const device = document.querySelector<HTMLElement>('.device');
+  if (device) {
+    const link = device.querySelector<HTMLAnchorElement>('.device-link')!;
+    const start = device.querySelector<HTMLAnchorElement>('.ab-btn.b')!;
+    const status = device.querySelector<HTMLElement>('[data-preview-status]')!;
+    const panels = Array.from(device.querySelectorAll<HTMLElement>('.dev-panel'));
+    const arms = Array.from(device.querySelectorAll<HTMLAnchorElement>('.arm[data-preview]'));
+    const home = { href: link.getAttribute('href')!, label: link.getAttribute('aria-label')! };
+    let current = 'home';
+
+    const show = (arm: HTMLAnchorElement | null) => {
+      const id = arm?.dataset.preview ?? 'home';
+      current = id;
+      for (const p of panels) {
+        const on = p.dataset.panel === id;
+        p.hidden = !on;
+        if (on) { p.classList.remove('flash'); void p.offsetWidth; p.classList.add('flash'); }
+      }
+      for (const a of arms) a.toggleAttribute('aria-current', a === arm);
+      const href = arm ? arm.href : home.href;
+      link.href = start.href = href;
+      link.setAttribute('aria-label', arm ? `Open ${arm.dataset.title}` : home.label);
+      status.textContent = arm ? `${arm.dataset.title} preview. Press Start to open.` : '';
+    };
+
+    for (const arm of arms) {
+      arm.setAttribute('aria-label', `Preview ${arm.dataset.title}`);
+      arm.addEventListener('click', (e) => {
+        e.preventDefault();
+        show(current === arm.dataset.preview ? null : arm);
+      });
+    }
+
+    const keys: Record<string, string> = { ArrowUp: 'up', ArrowLeft: 'left', ArrowRight: 'right', ArrowDown: 'down' };
+    document.addEventListener('keydown', (e) => {
+      if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || !(e.key in keys)) return;
+      const arm = device.querySelector<HTMLAnchorElement>(`.arm.${keys[e.key]}`);
+      if (!arm) return;
+      e.preventDefault();
+      arm.classList.add('pressed');
+      setTimeout(() => arm.classList.remove('pressed'), 120);
+      arm.click();
+    });
+  }
+</script>
+
+<style>
+  .scale { perspective: 1400px; perspective-origin: 50% 50%; }
+
+  /* ── Motion: angled at rest, turns to face you on hover ─────────────── */
+  /* Hover is read off the untransformed wrapper so the turning device
+     never slides out from under the cursor mid-swing. */
+  .settle {
+    transform: rotateY(-32deg) rotateX(8deg);
+    transition: transform .9s cubic-bezier(.45, 0, .15, 1);
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
+  .scale:hover .settle,
+  .scale:focus-within .settle { transform: rotateY(0) rotateX(0); }
+
+  @keyframes idle {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-8px); }
+  }
+  .idle { animation: idle 7s ease-in-out infinite; transform-style: preserve-3d; will-change: transform; }
+
+  /* ── Body ─────────────────────────────────────────────────────────────── */
+  .device {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 360px;
+    height: 600px;
+    padding: 18px 18px 22px;
+    background-color: var(--shell);
+    background-image: var(--shell-grain);
+    border-radius: var(--radius-device);
+    transform-style: preserve-3d;
+  }
+  /* Decoration is see-through to the pointer, so clicks land on the link. */
+  .device > :not(.device-link) { pointer-events: none; }
+  .device-link {
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-device);
+    pointer-events: auto;
+  }
+  .device-link:focus-visible { outline: 3px solid var(--print-blue); outline-offset: 6px; }
+
+  /* 13 extrusion faces, lightest nearest the front; shadow on the back one. */
+  .face {
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-device);
+    pointer-events: none;
+    background: color-mix(in srgb, var(--shell-edge-far) calc(var(--i) * 100% / 12), var(--shell-edge-near));
+    transform: translateZ(calc(-4px * (var(--i) + 1)));
+  }
+  .face.back { box-shadow: var(--device-shadow); }
+
+  /* ── Bezel + LCD ──────────────────────────────────────────────────────── */
+  .dev-bezel {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px 14px 18px;
+    background: var(--bezel);
+    border-radius: 8px 8px 34px 8px;
+    box-shadow: var(--bezel-bevel);
+  }
+  .dev-bar { display: flex; align-items: center; gap: 10px; }
+  /* The same red-tinted power button as the inside view's bezel, scaled down. */
+  .dev-power {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    color: var(--led);
+    background: radial-gradient(circle at 35% 28%,
+      color-mix(in srgb, var(--led) 18%, var(--lozenge-hi)) 0,
+      color-mix(in srgb, var(--led) 24%, var(--lozenge)) 55%,
+      color-mix(in srgb, var(--led) 30%, var(--lozenge-lo)) 100%);
+    box-shadow: 0 1px 0 color-mix(in srgb, var(--led) 30%, var(--lozenge-shadow)), inset 0 1px 0 rgba(255,255,255,.4);
+  }
+  .dev-power svg { width: 10px; height: 10px; fill: none; stroke: currentColor; stroke-width: 2.8; stroke-linecap: round; }
+  .dev-pin { flex: 1 1 auto; display: flex; flex-direction: column; gap: 2px; }
+  .dev-pin::before, .dev-pin::after { content: ''; display: block; height: 2px; }
+  .dev-pin::before { background: var(--magenta); }
+  .dev-pin::after  { background: var(--print-blue); }
+
+  .dev-lcd {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 12px;
+    height: 250px;
+    padding: 20px 22px;
+    background: var(--screen);
+    color: var(--screen-ink);
+    border-radius: 4px;
+    box-shadow: inset 0 0 0 4px var(--screen-edge), inset 0 8px 18px rgba(40, 42, 10, .22);
+    transition: background-color .4s steps(3, end), box-shadow .4s, color .4s steps(3, end);
+    view-transition-name: lcd;
+    color-scheme: light;
+  }
+  .dev-name {
+    font-family: var(--font-lcd);
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 1;
+    text-shadow: 3px 3px 0 rgba(0, 0, 0, .12);
+  }
+  .dev-tagline { font-size: 13px; font-weight: 500; line-height: 1.4; max-width: 30ch; }
+
+  /* One panel on screen at a time: the title screen, or a section trailer. */
+  .dev-panel { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+  .dev-panel[hidden] { display: none; }
+  .dev-panel.flash { animation: panel-in .24s steps(3, end); }
+  @keyframes panel-in { from { opacity: 0; } to { opacity: 1; } }
+  .dev-title {
+    font-family: var(--font-lcd);
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 1;
+    text-shadow: 3px 3px 0 rgba(0, 0, 0, .12);
+  }
+  .dev-lines { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+  .dev-line {
+    position: relative;
+    padding-left: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .dev-line::before { content: ''; position: absolute; left: 0; top: .45em; width: 5px; height: 5px; background: currentColor; }
+  .dev-start {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 6px;
+    font-family: var(--font-lcd);
+    font-size: 10px;
+  }
+  .dev-cursor { display: inline-block; width: 7px; height: 11px; background: currentColor; }
+
+  /* Hover / focus: the screen powers on in three stepped frames. */
+  .scale:hover .dev-lcd,
+  .device:has(.device-link:focus-visible) .dev-lcd {
+    background: var(--screen-lit);
+    color: var(--screen-lit-ink);
+    box-shadow: inset 0 0 0 4px var(--screen-lit-edge), inset 0 8px 18px rgba(20, 40, 0, .25), 0 0 40px rgba(155, 188, 15, .35);
+  }
+
+  .dev-mark {
+    padding: 0 4px;
+    font-family: var(--font-print);
+    font-style: italic;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--print-blue);
+  }
+  .dev-mark small { font-weight: 500; font-size: 11px; }
+
+  /* ── D-pad + A/B ──────────────────────────────────────────────────────── */
+  /* Controls sit a hair in front of the link layer so they always win the
+     hit test; within them, only the real controls take the pointer. */
+  .dev-controls, .dev-bottom { transform: translateZ(1px); }
+  .dev-controls :is(a, button), .dev-bottom a { pointer-events: auto; color: inherit; text-decoration: none; }
+  .dev-controls { display: flex; align-items: center; justify-content: space-between; padding: 4px 4px 0; }
+
+  .dpad {
+    display: grid;
+    grid-template-columns: repeat(3, 32px);
+    grid-template-rows: repeat(3, 32px);
+    filter: drop-shadow(0 3px 0 var(--pad-shadow));
+  }
+  .arm {
+    display: flex;
+    background-color: var(--pad);
+    font-family: var(--font-lcd);
+    font-size: 6px;
+    color: var(--pad-label);
+  }
+  .up, .down { grid-column: 2; justify-content: center; background-image: repeating-linear-gradient(0deg, rgba(255,255,255,.07) 0 2px, transparent 2px 5px); }
+  .left, .right { grid-row: 2; align-items: center; background-image: repeating-linear-gradient(90deg, rgba(255,255,255,.07) 0 2px, transparent 2px 5px); }
+  .up    { grid-row: 1; align-items: flex-start; padding-top: 4px; border-radius: 4px 4px 0 0; }
+  .down  { grid-row: 3; align-items: flex-end; padding-bottom: 4px; border-radius: 0 0 4px 4px; }
+  .left  { grid-column: 1; justify-content: flex-start; padding-left: 4px; border-radius: 4px 0 0 4px; }
+  .right { grid-column: 3; justify-content: flex-end; padding-right: 5px; border-radius: 0 4px 4px 0; }
+  .hub   { grid-column: 2; grid-row: 2; background: radial-gradient(circle at 50% 45%, var(--pad-dimple) 0 7px, var(--pad) 8px); }
+  .dpad .arm { color: var(--pad-label); }
+  .arm:focus-visible { outline: 2px solid var(--print-blue); outline-offset: 1px; }
+  /* Pressed: the arm darkens and its label nudges toward the hub. */
+  .arm:active, .arm.pressed { background-color: var(--pad-dimple); }
+  .up:is(:active, .pressed)    { padding-top: 6px; }
+  .down:is(:active, .pressed)  { padding-bottom: 2px; }
+  .left:is(:active, .pressed)  { padding-left: 6px; }
+  .right:is(:active, .pressed) { padding-right: 3px; }
+  /* The arm whose trailer is on screen keeps a lit label. */
+  .arm[aria-current] { color: var(--screen-lit); }
+
+  .ab { display: flex; gap: 14px; align-items: flex-end; padding-right: 4px; transform: rotate(-12deg); }
+  .ab-btn { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .ab-btn.b { transform: translateY(10px); }
+  button.ab-btn {
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+  }
+  button.ab-btn:disabled { cursor: default; }
+  .ab-btn:focus-visible { outline: none; }
+  .ab-btn:focus-visible .dome { outline: 3px solid var(--print-blue); outline-offset: 3px; }
+  /* Pressed: the dome sinks onto its shadow. */
+  .ab-btn:not(:disabled):active .dome {
+    transform: rotate(12deg) translateY(3px);
+    box-shadow: 0 1px 0 var(--magenta-shadow), inset 0 -2px 0 rgba(0,0,0,.2), inset 0 2px 0 rgba(255,255,255,.12);
+  }
+  .dome {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 28%, var(--magenta-hi) 0, var(--magenta) 48%, var(--magenta-lo) 100%);
+    box-shadow: 0 4px 0 var(--magenta-shadow), inset 0 -3px 0 rgba(0,0,0,.2), inset 0 2px 0 rgba(255,255,255,.18);
+    font-family: var(--font-print);
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--magenta-letter);
+    text-shadow: 0 1px 0 rgba(255,255,255,.22);
+    transform: rotate(12deg);
+  }
+  .ab-label, .loz-label {
+    font-family: var(--font-print);
+    font-style: italic;
+    font-weight: 700;
+    font-size: 7px;
+    letter-spacing: 0.08em;
+    color: var(--print-blue);
+  }
+
+  /* ── Lozenges + speaker ───────────────────────────────────────────────── */
+  .dev-bottom { display: flex; align-items: flex-end; justify-content: space-between; margin-top: auto; padding: 0 4px; }
+  .lozenges { display: flex; gap: 14px; transform: translateX(40px); }
+  .loz { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+  .loz-btn {
+    display: block;
+    width: 44px;
+    height: 13px;
+    border-radius: 999px;
+    background: linear-gradient(180deg, var(--lozenge-hi) 0, var(--lozenge) 55%, var(--lozenge-lo) 100%);
+    box-shadow: 0 2px 0 var(--lozenge-shadow), inset 0 1px 0 rgba(255,255,255,.4);
+    transform: skewX(-14deg);
+  }
+  .loz:focus-visible { outline: none; }
+  .loz:focus-visible .loz-btn { outline: 2px solid var(--print-blue); outline-offset: 2px; }
+  .loz:active .loz-btn { transform: skewX(-14deg) translateY(2px); box-shadow: 0 0 0 transparent, inset 0 1px 0 rgba(255,255,255,.4); }
+  .speaker { display: flex; gap: 7px; padding-right: 6px; transform: rotate(-12deg); }
+  .slot {
+    display: block;
+    width: 5px;
+    height: 44px;
+    border-radius: 3px;
+    background: var(--speaker);
+    box-shadow: inset 0 2px 3px rgba(0,0,0,.4), 0 1px 0 var(--speaker-hi);
+  }
+
+  /* ── Preferences + small screens ──────────────────────────────────────── */
+  @media (prefers-reduced-motion: reduce) {
+    .idle, .blink, .dev-panel.flash { animation: none; }
+  }
+
+  /* Phones: no hover to straighten it, so it simply faces you; scaled to fit. */
+  @media (max-width: 700px) {
+    .settle { transform: none; transition: none; }
+  }
+  @media (max-width: 420px) { .scale { zoom: .88; } }
+  @media (max-width: 360px) { .scale { zoom: .8; } }
+  @media (max-height: 780px) and (min-width: 701px) { .scale { zoom: .84; } }
+  @media (max-height: 660px) and (min-width: 701px) { .scale { zoom: .72; } }
+</style>

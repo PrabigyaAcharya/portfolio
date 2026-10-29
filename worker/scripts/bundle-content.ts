@@ -118,6 +118,7 @@ export interface SiteLinks {
 
 export interface SiteConfig {
   name: string;
+  role: string;
   tagline: string;
   location: string;
   links: SiteLinks;
@@ -162,9 +163,17 @@ export interface CVEntry {
   details?: string[];
 }
 
+export interface CvProject {
+  title: string;
+  description: string;
+  tech: string[];
+  link: string;
+}
+
 export interface CvData {
   education: CVEntry[];
   positions: CVEntry[];
+  projects?: CvProject[];
   skills: string[];
   service: string[];
   awards: string[];

@@ -1,49 +1,41 @@
 ---
-import Page from '../layouts/Page.astro';
+import Screen from '../layouts/Screen.astro';
 import { getNow, getSiteData } from '../lib/content';
 
 const now = getNow();
 const site = getSiteData();
 
-const updatedDate = new Date(now.updated);
-const formattedDate = updatedDate.toLocaleDateString('en-US', {
-  year: 'numeric', month: 'long', day: 'numeric',
-});
+const formattedDate = new Date(now.updated).toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+const [headline, ...alsoWorkingOn] = now.working_on;
 ---
-<Page title="Now" description={`What ${site.name} is working on right now`}>
-  <section class="page-intro">
+<Screen title="Now" description={`What ${site.name} is working on right now`} active="now">
+  <div class="view">
     <h1>Now</h1>
-    <p style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--ink-faint); margin-top: 0.4rem;">
-      updated <time datetime={now.updated}>{formattedDate}</time>
-      &ensp;&middot;&ensp;
-      <a href="https://nownownow.com/about" target="_blank" rel="noopener" style="color: var(--ink-faint);">what is this?</a>
+    {headline && <p class="lcd-lede">{headline}.</p>}
+
+    {alsoWorkingOn.length > 0 && (
+      <ul class="ink-list">
+        {alsoWorkingOn.map(item => <li>{item}</li>)}
+      </ul>
+    )}
+
+    {now.reading.length > 0 && (
+      <section class="section">
+        <h2>Reading</h2>
+        <ul class="ink-list">{now.reading.map(item => <li>{item}</li>)}</ul>
+      </section>
+    )}
+
+    {now.open_to.length > 0 && (
+      <section class="section">
+        <h2>Open to</h2>
+        <ul class="ink-list">{now.open_to.map(item => <li>{item}</li>)}</ul>
+      </section>
+    )}
+
+    <p class="lcd-label">
+      Updated <time datetime={now.updated}>{formattedDate}</time>
+      · <a href="https://nownownow.com/about" target="_blank" rel="noopener">What is this?</a>
     </p>
-  </section>
-
-  <section class="page-section">
-    <span class="code-comment">// current focus</span>
-    <h2 class="code-heading">working_on <span class="code-brace">{'{'}</span></h2>
-    <ul class="now-list">
-      {now.working_on.map(item => <li>{item}</li>)}
-    </ul>
-    <span class="code-close">{'}'}</span>
-  </section>
-
-  <section class="page-section">
-    <span class="code-comment">// reading list</span>
-    <h2 class="code-heading">reading <span class="code-brace">{'{'}</span></h2>
-    <ul class="now-list">
-      {now.reading.map(item => <li>{item}</li>)}
-    </ul>
-    <span class="code-close">{'}'}</span>
-  </section>
-
-  <section class="page-section">
-    <span class="code-comment">// open to</span>
-    <h2 class="code-heading">open_to <span class="code-brace">{'{'}</span></h2>
-    <ul class="now-list">
-      {now.open_to.map(item => <li>{item}</li>)}
-    </ul>
-    <span class="code-close">{'}'}</span>
-  </section>
-</Page>
+  </div>
+</Screen>

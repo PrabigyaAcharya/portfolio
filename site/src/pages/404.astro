@@ -1,19 +1,18 @@
 ---
-import Page from '../layouts/Page.astro';
+import Screen from '../layouts/Screen.astro';
 ---
-<Page title="Not found">
-  <h1 style="margin-bottom: 0.5rem;">404</h1>
-  <p style="color: var(--ink-soft); font-size: 1rem;">
-    This page isn't in the notebook.
-  </p>
-  <p style="margin-top: 1.5rem;">
-    <a href="/">← return home</a>
-  </p>
-
-  <div slot="margin">
-    <div class="margin-note" style="margin-top: 3rem;">
-      <span class="margin-stamp">perhaps</span>
-      try the <a href="/notebook">notebook</a> or <a href="/research">research</a> pages.
+<Screen title="Not found">
+  <div class="view lost">
+    <h1 class="lcd-display">404</h1>
+    <p class="lcd-lede">This page isn't in the notebook.</p>
+    <div class="btn-row">
+      <a class="lcd-btn" href="/home">Home</a>
+      <a class="lcd-btn" href="/notebook">Notebook</a>
+      <a class="lcd-btn" href="/research">Research</a>
     </div>
   </div>
-</Page>
+</Screen>
+
+<style>
+  .lost { flex: 1 1 auto; justify-content: center; gap: 24px; }
+</style>
