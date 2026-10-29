@@ -1,87 +1,64 @@
-/* Design tokens — prabigya.com.np — pragma.ooo dark palette */
+/* Design tokens — prabigya.com.np — handheld palette (see handheld-design skill) */
+/* One palette only: an unlit original-model handheld. No theme variants. */
 
 :root {
-  /* Backgrounds */
-  --paper:          #0D0D0D;
-  --paper-raised:   #141414;
-  --paper-code:     #1A1A1A;
-  --accent-subtle:  #0A1F12;
+  /* Shell */
+  --shell:            #d3cfc7;  /* page ground, device body */
+  --shell-edge-near:  #cbc6be;  /* extrusion face closest to the front */
+  --shell-edge-far:   #9b968e;  /* extrusion face at the back */
+  --shell-shadow:     #b8b3ad;  /* hard drop under the bezel */
+  --shell-text:       #232226;  /* reading text on the shell (rare) */
 
-  /* Ink */
-  --ink:            #F0EDE8;
-  --ink-soft:       #A8A49E;
-  --ink-faint:      #666057;
-  --ink-ghost:      #555047;
+  /* Bezel */
+  --bezel:            #9a94ab;
+  --speaker:          #8f8aa0;
 
-  /* Accent — electric green */
-  --accent:         #4AFF91;
-  --accent-press:   #3ACC78;
+  /* LCD */
+  --screen:           #aaa82c;  /* unlit LCD */
+  --screen-edge:      #8f8d24;  /* inner frame ring, tab hover */
+  --screen-deep:      #94921f;  /* hard text-shadow, code block ground */
+  --screen-ink:       #2f3317;  /* all text on the LCD */
+  --screen-ink-soft:  #5d612c;  /* placeholders, secondary on-screen text */
+  --screen-hi:        #eef0b8;  /* text on --screen-edge */
+  --screen-lit:       #9bbc0f;  /* hover "powered on" state only */
+  --screen-lit-edge:  #7f9a0a;
+  --screen-lit-ink:   #0f380f;
 
-  /* Code / syntax nav */
-  --code-keyword:   #4AFF91;
-  --code-bracket:   #555047;
-  --code-index:     #4AFF91;
+  /* Printed lettering + buttons */
+  --print-blue:       #2b35a6;
+  --print-blue-press: #1d2680;
+  --print-blue-deep:  #1b2275;  /* lettering on the bezel — plain blue is only 3.3:1 there */
+  --magenta:          #b2386f;
+  --magenta-hi:       #c4487f;
+  --magenta-lo:       #91295a;
+  --magenta-shadow:   #6e2046;
+  --magenta-letter:   #7a2250;
+  --lozenge:          #a9a4ae;
+  --lozenge-hi:       #b9b4be;
+  --lozenge-lo:       #9c97a2;
+  --lozenge-shadow:   #7f7a86;
+  --pad:              #2a2a2d;
+  --pad-dimple:       #1a1a1c;
+  --pad-shadow:       #15151a;
+  --pad-label:        #c9c5bd;
+  --led:              #c23a2b;
 
-  /* Borders */
-  --rule:           #1E1E1E;
-  --border-medium:  #2A2A2A;
+  /* Materials */
+  --shell-grain: repeating-linear-gradient(135deg, rgba(255,255,255,.06) 0 2px, rgba(0,0,0,.028) 2px 4px);
+  --lcd-inset:   inset 0 0 0 4px var(--screen-edge), inset 0 12px 28px rgba(40,42,10,.22), inset 0 -2px 0 rgba(255,255,255,.08);
+  --bezel-bevel: inset 0 2px 0 rgba(255,255,255,.28), inset 0 -3px 0 rgba(0,0,0,.14);
 
-  /* Lab status */
-  --lab-active:     #4AFF91;
-  --lab-idle:       #FFB347;
-  --lab-unknown:    #555047;
+  /* Shapes */
+  --radius-device: 16px 16px 84px 16px;
+  --radius-bezel:  14px 14px 72px 14px;
+  --rule-ink:      3px solid var(--screen-ink);
 
   /* Fonts */
-  --font-serif: 'EB Garamond', Georgia, serif;
-  --font-mono:  'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+  --font-lcd:   'Silkscreen', ui-monospace, monospace;      /* LCD headings, tabs, small labels — never body */
+  --font-print: 'Jost', 'Futura', system-ui, sans-serif;     /* printed shell lettering, always italic */
+  --font-body:  'Public Sans', system-ui, sans-serif;        /* all reading text */
+  --font-code:  ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
 
-  /* Layout */
-  --max-prose:     900px;
-  --sidebar-width: 260px;
-  --home-aside:    260px;
-  --gutter:        1.5rem;
-}
-
-/* Explicit dark — same as root, for toggle target */
-:root[data-theme="lamplight"] {
-  --paper:          #0D0D0D;
-  --paper-raised:   #141414;
-  --paper-code:     #1A1A1A;
-  --accent-subtle:  #0A1F12;
-  --ink:            #F0EDE8;
-  --ink-soft:       #A8A49E;
-  --ink-faint:      #666057;
-  --ink-ghost:      #555047;
-  --accent:         #4AFF91;
-  --accent-press:   #3ACC78;
-  --code-keyword:   #4AFF91;
-  --code-bracket:   #555047;
-  --code-index:     #4AFF91;
-  --rule:           #1E1E1E;
-  --border-medium:  #2A2A2A;
-  --lab-active:     #4AFF91;
-  --lab-idle:       #FFB347;
-  --lab-unknown:    #555047;
-}
-
-/* Paper (light) — warm amber fallback for toggle */
-:root[data-theme="paper"] {
-  --paper:          #F5F0E8;
-  --paper-raised:   #EDE8DC;
-  --paper-code:     #E2DBCC;
-  --accent-subtle:  #F0E6D3;
-  --ink:            #1A1610;
-  --ink-soft:       #5C5347;
-  --ink-faint:      #9A8F82;
-  --ink-ghost:      #B8AFA0;
-  --accent:         #B85C00;
-  --accent-press:   #8F4600;
-  --code-keyword:   #7A5C3A;
-  --code-bracket:   #9A8F82;
-  --code-index:     #B85C00;
-  --rule:           #D8D0C0;
-  --border-medium:  #B8AFA0;
-  --lab-active:     #4A7C59;
-  --lab-idle:       #B85C00;
-  --lab-unknown:    #9A8F82;
+  /* Motion */
+  --step-invert: .12s steps(2, end);
 }

@@ -1,34 +1,50 @@
 ---
+// AskBox.astro — "ask this notebook". Without JS the form is a mailto;
+// with JS it POSTs to /api/ask (the worker) and renders the grounded answer.
+import { getSiteData } from '../lib/content';
+
+const site = getSiteData();
+const mailto = `mailto:${site.links.email}`;
 ---
-<div class="ask-box" id="ask-box">
-  <span class="ask-label">// ask this notebook</span>
-  <form class="ask-form" id="ask-form" action="mailto:acharyaprabigya@gmail.com" method="get">
-    <div class="ask-terminal">
-      <input
-        type="text"
-        id="ask-input"
-        name="body"
-        class="ask-input"
-        placeholder="ask a question about this research…"
-        maxlength="300"
-        autocomplete="off"
-        spellcheck="false"
-        aria-label="Ask a question"
-      />
-      <button type="submit" class="ask-submit">ask →</button>
-    </div>
-  </form>
-  <p class="ask-powered">
-    powered by MCP &middot; or <a href="mailto:acharyaprabigya@gmail.com">email directly</a>
-  </p>
-  <div class="ask-answer" id="ask-answer" aria-live="polite" aria-atomic="true"></div>
-</div>
+<form class="ask-form" id="ask-form" action={mailto} method="get">
+  <label for="ask-input" class="lcd-label">Your question</label>
+  <input
+    type="text"
+    id="ask-input"
+    name="body"
+    class="lcd-input"
+    placeholder="Type, then press Enter"
+    maxlength="300"
+    autocomplete="off"
+    spellcheck="false"
+  />
+  <div class="btn-row">
+    <button type="submit" class="lcd-btn">Ask</button>
+    <a class="lcd-btn" href="/home">Back</a>
+  </div>
+</form>
+
+<div class="ask-answer" id="ask-answer" aria-live="polite" aria-atomic="true"></div>
+
+<p class="lcd-small">
+  Powered by MCP · or <a href={mailto}>email directly</a>.
+</p>
 
 <noscript>
-  <p class="ask-noscript">
-    JavaScript required for the ask-box. Use the <a href="/colophon#mcp-heading">MCP server</a> or <a href="mailto:acharyaprabigya@gmail.com">email directly</a>.
+  <p class="lcd-small">
+    Without JavaScript, Ask opens your mail client instead. Agents can use the
+    <a href="/colophon#mcp-h2">MCP server</a>.
   </p>
 </noscript>
+
+<style>
+  .ask-form { display: flex; flex-direction: column; gap: 12px; margin-top: 6px; }
+  .ask-answer:empty { display: none; }
+  .ask-answer { display: flex; flex-direction: column; gap: 10px; max-width: 64ch; }
+  .ask-answer :global(.ask-status) { display: flex; align-items: center; gap: 8px; }
+  .ask-answer :global(.ask-text) { font-size: 17px; line-height: 1.6; white-space: pre-line; }
+  .ask-answer :global(.ask-sources) { display: flex; flex-wrap: wrap; gap: 4px 14px; }
+</style>
 
 <script>
   const form     = document.getElementById('ask-form') as HTMLFormElement | null;
@@ -36,19 +52,25 @@
   const answerEl = document.getElementById('ask-answer') as HTMLDivElement | null;
   if (!form || !input || !answerEl) throw new Error('ask-box elements missing');
 
+  function el(tag: string, className: string, text?: string) {
+    const node = document.createElement(tag);
+    node.className = className;
+    if (text) node.textContent = text;
+    return node;
+  }
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const question = input.value.trim();
     if (!question) return;
 
-    answerEl.innerHTML = '';
-    const block = document.createElement('div');
-    block.className = 'ask-answer-block';
-    const thinking = document.createElement('span');
-    thinking.className = 'ask-thinking';
-    thinking.textContent = 'thinking…';
-    block.appendChild(thinking);
-    answerEl.appendChild(block);
+    answerEl.replaceChildren();
+    const status = el('p', 'lcd-label ask-status');
+    status.append(el('span', '', 'Searching papers and notes'));
+    const cursor = el('span', 'cursor blink');
+    cursor.setAttribute('aria-hidden', 'true');
+    status.append(cursor);
+    answerEl.append(status);
 
     try {
       const res = await fetch('/api/ask', {
@@ -64,42 +86,31 @@
         mailto?: string;
       };
 
-      block.innerHTML = '';
+      answerEl.replaceChildren();
 
       if (data.error) {
-        const errEl = document.createElement('p');
-        errEl.className = 'ask-error';
-        errEl.textContent = data.error;
+        const errEl = el('p', 'ask-text', data.error);
         if (data.mailto) {
-          errEl.textContent += ' ';
+          errEl.append(' ');
           const link = document.createElement('a');
           link.href = `mailto:${data.mailto}`;
-          link.textContent = 'email directly';
-          errEl.appendChild(link);
+          link.textContent = 'Email directly';
+          errEl.append(link);
         }
-        block.appendChild(errEl);
+        answerEl.append(errEl);
         return;
       }
 
       if (data.answer) {
-        const answerText = document.createElement('p');
-        answerText.className = 'ask-answer-text';
-        answerText.textContent = data.answer;
-        block.appendChild(answerText);
-
+        answerEl.append(el('p', 'ask-text ink-rule', data.answer));
         if (data.sources && data.sources.length > 0) {
-          const sourcesEl = document.createElement('p');
-          sourcesEl.className = 'ask-sources';
-          sourcesEl.textContent = data.sources.map((s: string) => `→ ${s}`).join('  ');
-          block.appendChild(sourcesEl);
+          const sources = el('p', 'lcd-label ask-sources');
+          data.sources.forEach(s => sources.append(el('span', '', `→ ${s}`)));
+          answerEl.append(sources);
         }
       }
     } catch {
-      block.innerHTML = '';
-      const errEl = document.createElement('p');
-      errEl.className = 'ask-error';
-      errEl.textContent = 'could not reach the notebook right now.';
-      block.appendChild(errEl);
+      answerEl.replaceChildren(el('p', 'ask-text', 'Could not reach the notebook right now.'));
     }
   });
 </script>

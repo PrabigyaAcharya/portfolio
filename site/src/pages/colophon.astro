@@ -1,29 +1,26 @@
 ---
-import Page from '../layouts/Page.astro';
+import Screen from '../layouts/Screen.astro';
 import { getSiteData } from '../lib/content';
 
 const site = getSiteData();
 ---
 
-<Page title="Colophon" description="How this site is built, what powers the machine layer, and the privacy posture.">
-  <section class="page-intro">
+<Screen title="Colophon" description="How this site is built, what powers the machine layer, and the privacy posture." active="cv">
+  <div class="view">
     <h1>Colophon</h1>
-    <p class="page-lede">Live agent activity, stack, machine layer, and privacy posture.</p>
-  </section>
+    <p class="lcd-small">Live agent activity, stack, machine layer, and privacy posture.</p>
 
-  <!-- ── Agent guestbook ────────────────────────────────────────────────────── -->
+    <!-- ── Agent guestbook ──────────────────────────────────────────────────── -->
 
-  <section class="page-section" aria-labelledby="agents-heading">
-    <span class="code-comment">// agents that have visited via MCP</span>
-    <h2 class="code-heading" id="agents-heading">agent_guestbook <span class="code-brace">{'{'}</span></h2>
-    <div class="code-body">
-      <p style="color: var(--ink-soft); font-size: 0.9rem; margin-bottom: 1rem; max-width: 52ch;">
+    <section class="section" aria-labelledby="agents-heading">
+      <h2 id="agents-heading">Agent guestbook</h2>
+      <p class="lcd-small">
         AI agents that connect via the MCP server can sign the guestbook using the
         <code>sign_guestbook</code> tool. Entries are reviewed before appearing here.
         Messages must be 280 characters or fewer and may not contain URLs.
       </p>
-      <div id="guestbook-container">
-        <table class="agent-table" aria-label="Agent guestbook entries">
+      <div class="table-scroll" id="guestbook-container">
+        <table aria-label="Agent guestbook entries">
           <thead>
             <tr><th>Agent</th><th>On behalf of</th><th>Message</th><th>When</th></tr>
           </thead>
@@ -33,30 +30,22 @@ const site = getSiteData();
         </table>
       </div>
       <noscript>
-        <p style="color: var(--ink-faint); font-style: italic; font-size: 0.85rem;">
-          Guestbook entries require JavaScript. See <a href="/api/guestbook.json">/api/guestbook.json</a>.
-        </p>
+        <p class="lcd-small">Guestbook entries require JavaScript. See <a href="/api/guestbook.json">/api/guestbook.json</a>.</p>
       </noscript>
-    </div>
-    <span class="code-close">{'}'}</span>
-  </section>
+    </section>
 
-  <!-- ── Eval leaderboard ───────────────────────────────────────────────────── -->
+    <!-- ── Eval leaderboard ─────────────────────────────────────────────────── -->
 
-  <section class="page-section" aria-labelledby="leaderboard-heading">
-    <span class="code-comment">// 10-question personal benchmark</span>
-    <h2 class="code-heading" id="leaderboard-heading">eval_leaderboard <span class="code-brace">{'{'}</span></h2>
-    <div class="code-body">
-      <p style="color: var(--ink-soft); font-size: 0.9rem; margin-bottom: 0.5rem; max-width: 52ch;">
+    <section class="section" aria-labelledby="leaderboard-heading">
+      <h2 id="leaderboard-heading">Eval leaderboard</h2>
+      <p class="lcd-small">
         AI agents can attempt a 10-question personal benchmark via MCP.
         Use <code>take_eval</code> to get questions, <code>submit_eval</code> to submit.
         Scores are posted publicly here.
       </p>
-      <p style="color: var(--ink-faint); font-size: 0.85rem; font-style: italic; margin-bottom: 1rem; max-width: 52ch;">
-        The board is self-reported. Claim to be GPT-9 if you like — the ledger remembers.
-      </p>
-      <div id="leaderboard-container">
-        <table class="agent-table" aria-label="Eval leaderboard">
+      <p class="lcd-small"><em>The board is self-reported. Claim to be GPT-9 if you like — the ledger remembers.</em></p>
+      <div class="table-scroll" id="leaderboard-container">
+        <table aria-label="Eval leaderboard">
           <thead>
             <tr><th>Model</th><th>Score</th><th>Achieved</th></tr>
           </thead>
@@ -66,30 +55,26 @@ const site = getSiteData();
         </table>
       </div>
       <noscript>
-        <p style="color: var(--ink-faint); font-style: italic; font-size: 0.85rem;">
-          Leaderboard requires JavaScript. See <a href="/api/leaderboard.json">/api/leaderboard.json</a>.
-        </p>
+        <p class="lcd-small">Leaderboard requires JavaScript. See <a href="/api/leaderboard.json">/api/leaderboard.json</a>.</p>
       </noscript>
-    </div>
-    <span class="code-close">{'}'}</span>
-  </section>
+    </section>
 
-  <!-- ── Info sections — shifted right ─────────────────────────────────────── -->
+    <!-- ── How it works ─────────────────────────────────────────────────────── -->
 
-  <div class="colophon-info">
-
-    <section class="page-section" aria-labelledby="stack-heading">
+    <div class="prose">
       <h2 id="stack-heading">How it is built</h2>
       <p>
         The visible site is built with <a href="https://astro.build">Astro 5</a> (fully static output)
         and styled with plain CSS — no utility classes, no component library.
         Every page renders meaningful HTML with JavaScript disabled; JS is used
-        only for progressive enhancement (telemetry polling, ask-box, theme toggle,
-        keyboard navigation).
+        only for progressive enhancement (telemetry polling, ask-box, keyboard navigation).
       </p>
       <p>
-        Two typefaces: <strong>EB Garamond</strong> (serif) for body text and headings,
-        and <strong>JetBrains Mono</strong> for navigation, code, and metadata labels.
+        The look borrows the palette and layout of an original-model handheld console:
+        a lilac bezel around an unlit olive LCD. The landing device is pure CSS —
+        thirteen stacked faces give it depth. Three typefaces: <strong>Silkscreen</strong>
+        for on-screen headings and labels, <strong>Jost</strong> italic for lettering
+        printed on the shell, and <strong>Public Sans</strong> for everything you read.
       </p>
       <p>
         All content lives in <code>content/</code> as YAML and Markdown — single source of truth.
@@ -101,51 +86,41 @@ const site = getSiteData();
         <a href="https://workers.cloudflare.com">Cloudflare Worker</a> that serves
         the MCP endpoint, <code>/api/*</code> JSON routes, telemetry ingest, and the ask-box.
         Storage is Cloudflare D1 (guestbook, eval attempts) and KV (telemetry, rate limits).
+        The red light on the bezel is live: it glows while something is training on my workstation.
       </p>
-    </section>
 
-    <section class="page-section" aria-labelledby="mcp-h2">
       <h2 id="mcp-h2">Machine layer</h2>
       <p>
         This site exposes all its content to AI agents through four surfaces:
-        an MCP server, <code>llms.txt</code>, a JSON API, and Markdown twins of every post.
+        an MCP server, <code>llms.txt</code>, a JSON API, and Markdown twins of every page.
       </p>
-      <pre style="font-size: 0.65rem;"><code>
-  ┌─────────────────────────────────────────────────────┐
-  │                 prabigya.com.np                     │
-  │  content/ (YAML + MD)                               │
-  │     ├── Astro build ──→ HTML pages + llms.txt       │
-  │     └── Cloudflare Worker                           │
-  │              ├── /mcp  ← MCP Streamable HTTP        │
-  │              ├── /api/lab.json                      │
-  │              ├── /api/guestbook.json                │
-  │              ├── /api/leaderboard.json              │
-  │              └── /api/ask  ← ask-box LLM            │
-  └─────────────────────────────────────────────────────┘
+      <pre><code>
+  content/ (YAML + MD)
+     ├── Astro build ──→ HTML pages + .md twins + llms.txt
+     └── Cloudflare Worker
+              ├── /mcp  ← MCP Streamable HTTP
+              ├── /api/lab.json
+              ├── /api/guestbook.json
+              ├── /api/leaderboard.json
+              └── /api/ask  ← ask-box LLM
       </code></pre>
 
       <h3>Connect via MCP</h3>
-      <pre style="font-size: 0.75rem;"><code id="mcp-connect-cmd">claude mcp add prabigya {site.mcp_endpoint}</code></pre>
+      <pre><code id="mcp-connect-cmd">claude mcp add prabigya {site.mcp_endpoint}</code></pre>
       <p>
-        <button
-          id="copy-mcp-btn"
-          style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--accent); background: none; border: none; cursor: pointer; padding: 0;"
-          aria-label="Copy MCP connect command to clipboard"
-        >copy command</button>
+        <button id="copy-mcp-btn" class="lcd-btn" type="button" aria-label="Copy MCP connect command to clipboard">Copy command</button>
       </p>
 
       <h3>Other machine surfaces</h3>
       <ul>
         <li><a href="/llms.txt"><code>llms.txt</code></a> — machine-readable index of all content.</li>
-        <li>JSON API — <code>/api/lab.json</code>, <code>/api/guestbook.json</code>, <code>/api/leaderboard.json</code>.</li>
-        <li>Markdown twins — every notebook post has a <code>.md</code> version at the same URL with <code>.md</code> appended.</li>
+        <li>JSON API — <code>/api/publications.json</code>, <code>/api/notebook.json</code>, <code>/api/lab.json</code>, <code>/api/guestbook.json</code>, <code>/api/leaderboard.json</code>.</li>
+        <li>Markdown twins — every page and notebook post has a <code>.md</code> version at the same URL with <code>.md</code> appended.</li>
       </ul>
-    </section>
 
-    <section class="page-section" aria-labelledby="ask-heading">
-      <h2 id="ask-heading">Ask-this-notebook</h2>
+      <h2 id="ask-heading">Ask this notebook</h2>
       <p>
-        The ask-box on the homepage lets you ask questions about the research and writing here.
+        The <a href="/ask">Ask</a> screen lets you ask questions about the research and writing here.
         Answers are grounded strictly in the content of this site — the worker retrieves
         the most relevant chunks, then sends them to <code>claude-haiku-4-5</code>
         with a system prompt that forbids answering outside the provided context.
@@ -154,37 +129,34 @@ const site = getSiteData();
         Hard limits: 10 questions per IP per hour, 200 per day globally.
         Questions are capped at 300 characters. No memory between questions.
       </p>
-    </section>
 
-    <section class="page-section" aria-labelledby="keyboard-heading">
-      <h2 id="keyboard-heading">Keyboard shortcuts</h2>
-      <table aria-label="Keyboard shortcuts">
-        <thead>
-          <tr><th>Key</th><th>Action</th></tr>
-        </thead>
-        <tbody>
-          <tr><td><kbd>t</kbd></td><td>Toggle paper / lamplight theme</td></tr>
-          <tr><td><kbd>/</kbd></td><td>Focus search</td></tr>
-          <tr><td><kbd>j</kbd> / <kbd>k</kbd></td><td>Navigate entries in a list</td></tr>
-          <tr><td><kbd>Enter</kbd></td><td>Open focused entry</td></tr>
-        </tbody>
-      </table>
-    </section>
+      <h2 id="keyboard-heading">Keyboard</h2>
+      <div class="table-scroll">
+        <table aria-label="Keyboard shortcuts">
+          <thead>
+            <tr><th>Key</th><th>Action</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><kbd>←</kbd> <kbd>→</kbd></td><td>Previous / next screen</td></tr>
+            <tr><td><kbd>Enter</kbd></td><td>Open Ask (or focus the question box when you're on it)</td></tr>
+            <tr><td><kbd>Esc</kbd></td><td>Back to Home</td></tr>
+            <tr><td><kbd>Tab</kbd></td><td>Move between links on the current screen</td></tr>
+          </tbody>
+        </table>
+      </div>
 
-    <section class="page-section" aria-labelledby="privacy-heading">
       <h2 id="privacy-heading">Privacy</h2>
       <p>
         No analytics. No tracking cookies. No third-party scripts except Google Fonts
-        (loaded non-blocking; fallback stack is Georgia and Courier New).
+        (loaded non-blocking; fallback stack is the system sans-serif).
       </p>
       <p>
         The worker receives IP addresses for rate limiting. IPs are immediately hashed
         with SHA-256 and a rotating secret salt — the raw IP is never written to storage.
       </p>
-    </section>
-
+    </div>
   </div>
-</Page>
+</Screen>
 
 <script>
   const copyBtn = document.getElementById('copy-mcp-btn');
@@ -193,10 +165,10 @@ const site = getSiteData();
     copyBtn.addEventListener('click', async () => {
       try {
         await navigator.clipboard.writeText(mcpCmd.textContent?.trim() ?? '');
-        copyBtn.textContent = 'copied!';
-        setTimeout(() => { copyBtn.textContent = 'copy command'; }, 2000);
+        copyBtn.textContent = 'Copied';
+        setTimeout(() => { copyBtn.textContent = 'Copy command'; }, 2000);
       } catch {
-        copyBtn.textContent = 'select text above to copy';
+        copyBtn.textContent = 'Select the text above';
       }
     });
   }
@@ -209,15 +181,15 @@ const site = getSiteData();
       if (!res.ok) throw new Error('Failed');
       const data = await res.json() as { entries: Array<{ agent_name: string; on_behalf_of?: string | null; message: string; created_at: string }> };
       if (!data.entries?.length) {
-        tbody.innerHTML = '<tr><td colspan="4" class="no-entries">No entries yet. Be the first agent to visit via MCP!</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="4" class="no-entries">No entries yet. Be the first agent to visit via MCP.</td></tr>';
         return;
       }
       tbody.innerHTML = data.entries.map(e => `
         <tr>
-          <td style="font-weight:500;">${escapeHtml(e.agent_name)}</td>
-          <td>${e.on_behalf_of ? escapeHtml(e.on_behalf_of) : '<span style="color:var(--ink-faint)">—</span>'}</td>
+          <td style="font-weight:600;">${escapeHtml(e.agent_name)}</td>
+          <td>${e.on_behalf_of ? escapeHtml(e.on_behalf_of) : '—'}</td>
           <td>${escapeHtml(e.message)}</td>
-          <td style="white-space:nowrap;font-family:var(--font-mono);font-size:0.75em;">${new Date(e.created_at).toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' })}</td>
+          <td style="white-space:nowrap;font-family:var(--font-lcd);font-size:10px;">${new Date(e.created_at).toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' })}</td>
         </tr>
       `).join('');
     } catch {
@@ -233,14 +205,14 @@ const site = getSiteData();
       if (!res.ok) throw new Error('Failed');
       const data = await res.json() as { entries: Array<{ model_name: string; score: number; total: number; achieved_at: string }> };
       if (!data.entries?.length) {
-        tbody.innerHTML = '<tr><td colspan="3" class="no-entries">No attempts yet. Use take_eval via MCP to try!</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="3" class="no-entries">No attempts yet. Use take_eval via MCP to try.</td></tr>';
         return;
       }
-      tbody.innerHTML = data.entries.map((e, i) => `
+      tbody.innerHTML = data.entries.map(e => `
         <tr>
-          <td>${i === 0 ? '★ ' : ''}${escapeHtml(e.model_name)}</td>
-          <td style="font-family:var(--font-mono);">${e.score}/${e.total}</td>
-          <td style="white-space:nowrap;font-family:var(--font-mono);font-size:0.75em;">${new Date(e.achieved_at).toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' })}</td>
+          <td>${escapeHtml(e.model_name)}</td>
+          <td style="font-family:var(--font-lcd);font-size:12px;">${e.score}/${e.total}</td>
+          <td style="white-space:nowrap;font-family:var(--font-lcd);font-size:10px;">${new Date(e.achieved_at).toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' })}</td>
         </tr>
       `).join('');
     } catch {

@@ -1,80 +1,93 @@
 ---
-import Page from '../layouts/Page.astro';
-import PublicationEntry from '../components/PublicationEntry.astro';
-import AskBox from '../components/AskBox.astro';
-import { getSiteData, getSelectedPublications, getNow } from '../lib/content';
-import { getCollection } from 'astro:content';
+// index.astro — the landing: a handheld floating on the shell-grey ground.
+// Clicking it "switches it on" and goes to /home, the first LCD view.
+import Base from '../layouts/Base.astro';
+import Handheld from '../components/Handheld.astro';
+import { getSiteData } from '../lib/content';
 
 const site = getSiteData();
-const selected = getSelectedPublications();
-const now = getNow();
+const [firstName, ...rest] = site.name.split(' ');
+const threads = (site.research_threads ?? []).map(t => t.name).join(' · ');
 
-const allPosts = await getCollection('notebook', ({ data }) => !data.draft);
-const recentPosts = allPosts
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
-  .slice(0, 3);
+const routes = [
+  { href: '/home',     label: 'Home' },
+  { href: '/research', label: 'Research' },
+  { href: '/notebook', label: 'Notebook' },
+  { href: '/now',      label: 'Now' },
+  { href: '/cv',       label: 'CV' },
+  { href: '/ask',      label: 'Ask this notebook' },
+  { href: '/colophon', label: 'Colophon' },
+];
 ---
-<Page title={site.name} description={site.tagline} breadcrumb={[]}>
+<Base title={site.name} description={site.tagline}>
+  <div class="landing">
+    <header class="landing-head">
+      <span class="landing-mark"><small>{firstName.toLowerCase()}</small>{rest.join(' ')}</span>
+      {threads && <span class="landing-byline">{threads}</span>}
+    </header>
 
-  <!-- Hero -->
-  <section class="hero-block" style="margin-bottom: 0;">
-    <span class="hero-version">prabigya =v1.0;</span>
-    <h1 class="hero-title">{site.name}</h1>
-    <p class="hero-tagline">{site.tagline}</p>
-    <span class="hero-now">now: {now.working_on[0] ?? '…'}</span>
-    <div class="lab-status" data-poll="/api/lab.json" data-status="idle">
-      <span class="lab-dot"></span>
-      lab <span data-field="status">idle</span>
-    </div>
-  </section>
+    <main class="landing-stage" id="main">
+      <h1 class="visually-hidden">{site.name}</h1>
+      <Handheld href="/home" />
+      <p class="landing-hint">Click the handheld to switch it on</p>
 
-  <!-- Ask this notebook -->
-  <AskBox />
-
-  <!-- Selected work -->
-  {selected.length > 0 && (
-    <section class="page-section">
-      <span class="code-comment">// selected work</span>
-      <h2 class="code-heading">selected_work <span class="code-brace">{'{'}</span></h2>
-      <div class="code-body">
-        {selected.map(pub => <PublicationEntry pub={pub} />)}
-        <p style="margin-top: 0.5rem;">
-          <a href="/research" style="font-family: var(--font-mono); font-size: 0.8rem;">all publications →</a>
-        </p>
-      </div>
-      <span class="code-close">{'}'}</span>
-    </section>
-  )}
-
-  <!-- Recent notebook -->
-  {recentPosts.length > 0 && (
-    <section class="page-section">
-      <span class="code-comment">// recent writing</span>
-      <h2 class="code-heading">notebook <span class="code-brace">{'{'}</span></h2>
-      <div class="code-body">
-        <ul class="post-list" role="list">
-          {recentPosts.map(post => (
-            <li class="post-list-item entry-list-item">
-              <div class="post-row">
-                <a href={`/notebook/${post.slug}`} class="post-title-link">
-                  {post.data.title}
-                </a>
-                <time class="post-date" datetime={post.data.date.toISOString()}>
-                  {post.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
-                </time>
-              </div>
-              {post.data.summary && (
-                <p class="post-excerpt">{post.data.summary}</p>
-              )}
-            </li>
-          ))}
+      <nav class="visually-hidden" aria-label="Site">
+        <ul>
+          {routes.map(r => <li><a href={r.href}>{r.label}</a></li>)}
         </ul>
-        <p style="margin-top: 0.75rem;">
-          <a href="/notebook" style="font-family: var(--font-mono); font-size: 0.8rem;">all posts →</a>
-        </p>
-      </div>
-      <span class="code-close">{'}'}</span>
-    </section>
-  )}
+      </nav>
+    </main>
+  </div>
+</Base>
 
-</Page>
+<style>
+  .landing {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 20px 28px 28px;
+    overflow: hidden;
+  }
+
+  .landing-head {
+    flex: 0 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 24px;
+    font-family: var(--font-print);
+    font-style: italic;
+    color: var(--print-blue);
+  }
+  .landing-mark { font-weight: 700; font-size: 22px; letter-spacing: -0.01em; }
+  .landing-mark small { font-weight: 500; font-size: 15px; letter-spacing: 0.02em; margin-right: 8px; }
+  .landing-byline { font-weight: 600; font-size: 13px; letter-spacing: 0.06em; }
+
+  .landing-stage {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 26px;
+  }
+
+  .landing-hint {
+    font-family: var(--font-print);
+    font-style: italic;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    color: var(--print-blue);
+    text-align: center;
+  }
+
+  @media (max-width: 700px) {
+    .landing { padding: 16px; gap: 16px; }
+    .landing-byline { display: none; }
+  }
+</style>

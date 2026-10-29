@@ -8,6 +8,20 @@ import { rehypeSidenotes } from './src/plugins/rehype-sidenotes.mjs';
 
 const workerUrl = process.env.WORKER_URL ?? 'http://localhost:8787';
 
+// The LCD is monochrome, so code is too: one ink colour, with weight and
+// italics carrying the syntax. Colours match --screen-ink in tokens.css.
+const lcdTheme = {
+  name: 'lcd',
+  type: 'light',
+  colors: { 'editor.background': '#00000000', 'editor.foreground': '#2f3317' },
+  tokenColors: [
+    { settings: { foreground: '#2f3317' } },
+    { scope: ['comment', 'punctuation.definition.comment'], settings: { fontStyle: 'italic' } },
+    { scope: ['keyword', 'storage', 'storage.type', 'keyword.control', 'keyword.operator.new'], settings: { fontStyle: 'bold' } },
+    { scope: ['entity.name.function', 'support.function', 'entity.name.type', 'entity.name.class'], settings: { fontStyle: 'underline' } },
+  ],
+};
+
 export default defineConfig({
   site: process.env.SITE_URL ?? 'https://prabigya.com.np',
   output: 'static',
@@ -37,10 +51,7 @@ export default defineConfig({
     remarkPlugins: [remarkMath, remarkGfm],
     rehypePlugins: [rehypeKatex, rehypeSidenotes],
     shikiConfig: {
-      themes: {
-        light: 'github-light',
-        dark: 'github-dark',
-      },
+      theme: lcdTheme,
       wrap: false,
     },
     syntaxHighlight: 'shiki',

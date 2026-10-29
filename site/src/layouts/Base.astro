@@ -1,6 +1,4 @@
 ---
-import Sidebar from '../components/Sidebar.astro';
-
 export interface Props {
   title: string;
   description?: string;
@@ -10,6 +8,7 @@ export interface Props {
 const { title, description, math = false } = Astro.props;
 const siteName = "Prabigya Acharya";
 const fullTitle = title === siteName ? title : `${title} — ${siteName}`;
+const fontsHref = 'https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Jost:ital,wght@0,500;0,700;1,600;1,700&family=Public+Sans:wght@400;500;600&display=swap';
 ---
 <!doctype html>
 <html lang="en">
@@ -17,34 +16,14 @@ const fullTitle = title === siteName ? title : `${title} — ${siteName}`;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#d3cfc7" />
     <title>{fullTitle}</title>
     {description && <meta name="description" content={description} />}
 
-    <!-- Pre-paint theme script: runs before CSS to prevent flash -->
-    <script is:inline>
-      (function() {
-        var t = localStorage.getItem('theme') || 'lamplight';
-        document.documentElement.setAttribute('data-theme', t);
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-          document.documentElement.setAttribute('data-reduced-motion', 'true');
-        }
-      })();
-    </script>
-
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap"
-      media="print"
-      onload="this.setAttribute('media','all')"
-    />
-    <noscript>
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap"
-      />
-    </noscript>
+    <link rel="stylesheet" href={fontsHref} media="print" onload="this.setAttribute('media','all')" />
+    <noscript><link rel="stylesheet" href={fontsHref} /></noscript>
 
     {math && (
       <link
@@ -59,92 +38,7 @@ const fullTitle = title === siteName ? title : `${title} — ${siteName}`;
   </head>
   <body>
     <a class="skip-link" href="#main">skip to content</a>
-
-    <Sidebar />
-
-    <main id="main">
-      <slot />
-    </main>
-
-    <slot name="footer" />
-
-    <!-- Keyboard navigation -->
-    <script>
-      document.addEventListener('keydown', (e) => {
-        if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
-
-        if (e.key === 't') {
-          const cur = document.documentElement.getAttribute('data-theme');
-          const next = cur === 'lamplight' ? 'paper' : 'lamplight';
-          document.documentElement.setAttribute('data-theme', next);
-          localStorage.setItem('theme', next);
-        }
-
-        if (e.key === '/') {
-          const searchInput = document.querySelector('#search input') as HTMLInputElement | null;
-          if (searchInput) {
-            e.preventDefault();
-            searchInput.focus();
-          }
-        }
-
-        const items = Array.from(document.querySelectorAll<HTMLElement>('.entry-list-item'));
-        if (items.length === 0) return;
-        const focused = items.findIndex(el => el.dataset.focused === 'true');
-
-        if (e.key === 'j') {
-          e.preventDefault();
-          const next = focused === -1 ? 0 : Math.min(focused + 1, items.length - 1);
-          items.forEach(el => delete el.dataset.focused);
-          items[next].dataset.focused = 'true';
-          items[next].scrollIntoView({ block: 'nearest' });
-        }
-
-        if (e.key === 'k') {
-          e.preventDefault();
-          if (focused <= 0) return;
-          items.forEach(el => delete el.dataset.focused);
-          items[focused - 1].dataset.focused = 'true';
-          items[focused - 1].scrollIntoView({ block: 'nearest' });
-        }
-
-        if (e.key === 'Enter' && focused !== -1) {
-          const link = items[focused].querySelector<HTMLAnchorElement>('a');
-          if (link) link.click();
-        }
-      });
-    </script>
-
-    <!-- Telemetry poller -->
-    <script>
-      (function() {
-        const strip = document.querySelector<HTMLElement>('[data-poll]');
-        if (!strip) return;
-        const endpoint = strip.dataset.poll;
-        if (!endpoint) return;
-
-        function updateStatus(data: {
-          status: string;
-          latest?: { run_name?: string; loss?: number; epoch?: number; total_epochs?: number } | null;
-        }) {
-          strip!.dataset.status = data.status;
-          const wordEl = strip!.querySelector<HTMLElement>('[data-field="status"]');
-          if (wordEl) wordEl.textContent = data.status === 'training' ? 'training' : 'idle';
-        }
-
-        async function poll() {
-          try {
-            const res = await fetch(endpoint!);
-            if (!res.ok) return;
-            const data = await res.json();
-            updateStatus(data as Parameters<typeof updateStatus>[0]);
-          } catch { /* non-critical */ }
-        }
-
-        poll();
-        setInterval(poll, 60_000);
-      })();
-    </script>
+    <slot />
   </body>
 </html>
 

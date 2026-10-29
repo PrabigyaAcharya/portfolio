@@ -1,41 +1,46 @@
 ---
-import Page from '../layouts/Page.astro';
+import Screen from '../layouts/Screen.astro';
 import PublicationEntry from '../components/PublicationEntry.astro';
 import { getSiteData, getPublicationsByYear } from '../lib/content';
 
 const site = getSiteData();
 const byYear = getPublicationsByYear();
 const years = [...byYear.keys()];
-
 const threads = site.research_threads ?? [];
 ---
-<Page title="Research" description={`Research and publications by ${site.name}`}>
-  <section class="page-intro">
-    <h1>Research</h1>
-    <p class="page-lede">
+<Screen title="Research" description={`Research and publications by ${site.name}`} active="research">
+  <div class="view">
+    <h1>Selected work</h1>
+    <p class="lcd-small">
       I work on privacy-preserving NLP and 3D computer vision — from lightweight models
       for PII masking in conversational text, to Gaussian splatting pipelines for
       digitising cultural heritage.
     </p>
-  </section>
 
-  {threads.length > 0 && (
-    <div class="filter-row">
-      <span style="color: var(--ink-faint);">threads:</span>
-      {threads.map(t => (
-        <span style="color: var(--ink-soft);">{t.name}</span>
-      ))}
-    </div>
-  )}
-
-  <div>
-    {years.map(year => (
-      <div style="margin-bottom: 2rem;">
-        <span class="code-comment">// {year}</span>
-        {byYear.get(year)!.map(pub => (
-          <PublicationEntry pub={pub} />
+    {threads.length > 0 && (
+      <ul class="ink-list threads">
+        {threads.map(t => (
+          <li><span class="lcd-label">{t.name}</span><br /><span class="lcd-small">{t.blurb}</span></li>
         ))}
-      </div>
+      </ul>
+    )}
+
+    {years.map(year => (
+      <section class="section year" aria-label={String(year)}>
+        <h2 class="lcd-label year-label">{year}</h2>
+        {byYear.get(year)!.map(pub => <PublicationEntry pub={pub} />)}
+      </section>
     ))}
+
+    <div class="btn-row">
+      <a class="lcd-btn" href={site.links.scholar}>All publications</a>
+      <a class="lcd-btn" href="/research.md">Markdown</a>
+    </div>
   </div>
-</Page>
+</Screen>
+
+<style>
+  .threads { margin-bottom: 8px; }
+  .year { margin-top: 8px; }
+  .year-label { font-size: 12px !important; }
+</style>

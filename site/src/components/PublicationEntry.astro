@@ -18,63 +18,68 @@ export interface Props {
     bibtex?: string;
     selected?: boolean;
   };
-  authorName?: string;
 }
 
-const { pub, authorName = "P. Acharya" } = Astro.props;
+const { pub } = Astro.props;
 const bibtexJson = pub.bibtex ? JSON.stringify(pub.bibtex) : 'null';
+
+const links = [
+  { label: 'PDF',    href: pub.links?.pdf },
+  { label: 'arXiv',  href: pub.links?.arxiv },
+  { label: 'Code',   href: pub.links?.code },
+  { label: 'Poster', href: pub.links?.poster },
+].filter((l): l is { label: string; href: string } => !!l.href && l.href.length > 0);
 ---
 
-<article class="pub-entry entry-list-item" id={pub.id}>
-  <p class="pub-authors">
-    {pub.authors.map((author, i) => (
-      <>
-        {i > 0 && ', '}
-        <span class={author === authorName ? 'pub-authors-me' : ''}>{author}</span>
-      </>
-    ))}
+<article class="pub" id={pub.id}>
+  <h3 class="pub-title">{pub.title}</h3>
+  <p class="pub-meta">
+    <span>{pub.authors.join(', ')}</span>
+    <span>{pub.venue}, {pub.year}</span>
   </p>
-  <p class="pub-title">{pub.title}</p>
-  <p class="pub-venue">{pub.venue} &middot; {pub.year}</p>
+  {pub.backstory && <p class="lcd-small">{pub.backstory}</p>}
 
-  <div class="pub-actions">
-    {pub.links?.pdf && pub.links.pdf.length > 0 && (
-      <a href={pub.links.pdf} target="_blank" rel="noopener noreferrer">[pdf]</a>
-    )}
-    {pub.links?.arxiv && pub.links.arxiv.length > 0 && (
-      <a href={pub.links.arxiv} target="_blank" rel="noopener noreferrer">[arXiv]</a>
-    )}
-    {pub.links?.code && pub.links.code.length > 0 && (
-      <a href={pub.links.code} target="_blank" rel="noopener noreferrer">[code]</a>
-    )}
-    {pub.links?.poster && pub.links.poster.length > 0 && (
-      <a href={pub.links.poster} target="_blank" rel="noopener noreferrer">[poster]</a>
-    )}
+  <div class="btn-row pub-actions">
     {pub.abstract && (
-      <details class="pub-abstract">
-        <summary><span class="visually-hidden">toggle abstract</span></summary>
-        <div class="abstract-body">{pub.abstract}</div>
+      <details class="pub-details">
+        <summary class="lcd-btn">Abstract</summary>
+        <p class="pub-panel ink-rule">{pub.abstract}</p>
       </details>
     )}
     {pub.bibtex && (
-      <details class="pub-bibtex">
-        <summary><span class="visually-hidden">toggle bibtex</span></summary>
-        <div style="margin-top: 0.5rem;">
+      <details class="pub-details">
+        <summary class="lcd-btn">BibTeX</summary>
+        <div class="pub-panel">
           <pre><code>{pub.bibtex}</code></pre>
-          <button type="button" class="copy-bibtex-btn pub-bibtex-copy" data-bibtex={bibtexJson}>[copy]</button>
+          <button type="button" class="lcd-btn copy-bibtex-btn" data-bibtex={bibtexJson}>Copy</button>
         </div>
       </details>
     )}
+    {links.map(l => (
+      <a class="lcd-btn" href={l.href} target="_blank" rel="noopener noreferrer">{l.label}</a>
+    ))}
   </div>
 </article>
+
+<style>
+  .pub { display: flex; flex-direction: column; gap: 12px; }
+  .pub-title { font-size: clamp(20px, 2vw, 26px) !important; line-height: 1.25; max-width: 44ch; text-wrap: balance; }
+  .pub-meta { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 15px; }
+
+  /* An open panel takes its own full-width line after the closed buttons. */
+  .pub-actions { align-items: flex-start; }
+  .pub-details[open] { order: 10; flex: 1 0 100%; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+  .pub-panel { margin: 0; max-width: 68ch; font-size: 15px; line-height: 1.6; }
+  .pub-panel pre { margin: 0 0 8px; font-size: 13px; white-space: pre-wrap; word-break: break-word; }
+</style>
 
 <script>
   document.querySelectorAll<HTMLButtonElement>('.copy-bibtex-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const bibtex = btn.dataset.bibtex ? JSON.parse(btn.dataset.bibtex) as string : '';
       navigator.clipboard?.writeText(bibtex).then(() => {
-        btn.textContent = 'copied';
-        setTimeout(() => { btn.textContent = '[copy]'; }, 1500);
+        btn.textContent = 'Copied';
+        setTimeout(() => { btn.textContent = 'Copy'; }, 1500);
       });
     });
   });

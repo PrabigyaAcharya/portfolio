@@ -1,5 +1,5 @@
 ---
-import Page from '../../layouts/Page.astro';
+import Screen from '../../layouts/Screen.astro';
 import { getCollection } from 'astro:content';
 import { getSiteData } from '../../lib/content';
 
@@ -9,66 +9,50 @@ const allPosts = await getCollection('notebook', ({ data }) => !data.draft);
 const posts = allPosts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
 const allTags = [...new Set(posts.flatMap(p => p.data.tags))].sort();
+const fmt = (d: Date) => d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 ---
-<Page title="Notebook" description={`Research notes and writings by ${site.name}`}>
-  <section class="page-intro">
+<Screen title="Notebook" description={`Research notes and writings by ${site.name}`} active="notebook">
+  <div class="view">
     <h1>Notebook</h1>
-    <p class="page-lede">Notes on research, experiments, and adjacent things.</p>
-  </section>
+    <p class="lcd-small">Notes on research, experiments, and adjacent things.</p>
 
-  {allTags.length > 0 && (
-    <div class="filter-row">
-      <span>filter:</span>
-      <a href="#" class="tag" id="tag-all">all</a>
-      {allTags.map(tag => (
-        <a href={`#tag-${tag}`} class="tag">{tag}</a>
-      ))}
-    </div>
-  )}
+    {allTags.length > 0 && (
+      <nav class="filter-row" aria-label="Filter by tag">
+        <a href="#" class="tag" data-tag="">All</a>
+        {allTags.map(tag => <a href={`#tag-${tag}`} class="tag" data-tag={tag}>{tag}</a>)}
+      </nav>
+    )}
 
-  <ul class="post-list" role="list" id="post-list">
-    {posts.map(post => (
-      <li class="post-list-item entry-list-item" data-tags={post.data.tags.join(',')}>
-        <div class="post-row">
-          <a href={`/notebook/${post.slug}`} class="post-title-link">
-            {post.data.title}
+    <ul class="lcd-rows" id="post-list">
+      {posts.map(post => (
+        <li data-tags={post.data.tags.join(',')}>
+          <a class="lcd-row" href={`/notebook/${post.slug}`}>
+            <span class="row-main">
+              <span class="row-title">{post.data.title}</span>
+              {post.data.summary && <span class="row-sub">{post.data.summary}</span>}
+            </span>
+            <time class="row-meta" datetime={post.data.date.toISOString()}>{fmt(post.data.date)}</time>
           </a>
-          <time class="post-date" datetime={post.data.date.toISOString()}>
-            {post.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
-          </time>
-        </div>
-        {post.data.summary && (
-          <p class="post-excerpt">{post.data.summary}</p>
-        )}
-        {post.data.tags.length > 0 && (
-          <div class="post-tags" style="margin-top: 0.35rem;">
-            {post.data.tags.map(tag => (
-              <a href={`#tag-${tag}`} class="tag">{tag}</a>
-            ))}
-          </div>
-        )}
-      </li>
-    ))}
-  </ul>
+        </li>
+      ))}
+    </ul>
 
-  <p style="margin-top: 1.5rem; font-family: var(--font-mono); font-size: 0.72rem; color: var(--ink-faint);">
-    <a href="/notebook/rss.xml" style="color: var(--ink-faint);">subscribe via RSS</a>
-  </p>
-</Page>
+    <div class="btn-row">
+      <a class="lcd-btn" href="/notebook/rss.xml">RSS</a>
+    </div>
+  </div>
+</Screen>
 
 <script>
   function applyFilter() {
-    const hash = window.location.hash;
-    const tagMatch = hash.match(/^#tag-(.+)$/);
-    const tag = tagMatch ? decodeURIComponent(tagMatch[1]) : null;
-    const items = document.querySelectorAll<HTMLElement>('[data-tags]');
-    items.forEach(item => {
-      if (!tag) {
-        item.style.display = '';
-      } else {
-        const tags = item.dataset.tags?.split(',') ?? [];
-        item.style.display = tags.includes(tag) ? '' : 'none';
-      }
+    const match = window.location.hash.match(/^#tag-(.+)$/);
+    const tag = match ? decodeURIComponent(match[1]) : '';
+    document.querySelectorAll<HTMLElement>('[data-tags]').forEach(item => {
+      const tags = item.dataset.tags?.split(',') ?? [];
+      item.hidden = !!tag && !tags.includes(tag);
+    });
+    document.querySelectorAll<HTMLElement>('.filter-row .tag').forEach(el => {
+      el.setAttribute('aria-current', String(el.dataset.tag === tag));
     });
   }
 

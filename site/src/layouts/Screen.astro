@@ -1,0 +1,126 @@
+---
+// Screen.astro — every inside page: lilac bezel framing the LCD, tab strip,
+// key hints, "switch off". Each tab is a real route, so this works without JS;
+// the script below only adds ← → / Enter / Esc and live lab status.
+import Base from './Base.astro';
+import { getSiteData, getNow } from '../lib/content';
+
+export type Tab = 'home' | 'research' | 'notebook' | 'now' | 'cv' | 'ask';
+
+export interface Props {
+  title: string;
+  description?: string;
+  math?: boolean;
+  /** Which tab is lit. Omit for pages outside the tab set (404). */
+  active?: Tab;
+}
+
+const { title, description, math = false, active } = Astro.props;
+const site = getSiteData();
+const now = getNow();
+
+const tabs: Array<{ id: Tab; href: string; label: string }> = [
+  { id: 'home',     href: '/home',     label: 'Home' },
+  { id: 'research', href: '/research', label: 'Research' },
+  { id: 'notebook', href: '/notebook', label: 'Notebook' },
+  { id: 'now',      href: '/now',      label: 'Now' },
+  { id: 'cv',       href: '/cv',       label: 'CV' },
+  { id: 'ask',      href: '/ask',      label: 'Ask' },
+];
+
+const [firstName, ...rest] = site.name.split(' ');
+---
+<Base title={title} description={description} math={math}>
+  <div class="screen-wrap">
+    <section class="bezel" aria-label="Display">
+
+      <div class="bezel-bar">
+        <div class="bezel-status lab-status" data-poll="/api/lab.json" data-status="idle">
+          <span class="led" aria-hidden="true"></span>
+          <span>{now.working_on[0] ?? site.tagline}</span>
+          <span aria-live="polite">· lab <span class="lab-word" data-field="status">idle</span></span>
+        </div>
+        <span class="pinstripe" aria-hidden="true"></span>
+        <a class="wordmark" href="/home"><small>{firstName.toLowerCase()}</small>{rest.join(' ')}</a>
+      </div>
+
+      <main class="lcd" id="main">
+        <nav class="tabs" aria-label="Screen">
+          {tabs.map(t => (
+            <a class="tab" href={t.href} data-tab={t.id} aria-current={t.id === active ? 'page' : undefined}>{t.label}</a>
+          ))}
+        </nav>
+        <slot />
+      </main>
+
+      <div class="bezel-foot">
+        <ul class="key-hints" aria-label="Keyboard shortcuts">
+          <li><span class="key" aria-hidden="true">←</span><span class="key" aria-hidden="true">→</span><span>Browse</span></li>
+          <li><span class="key" aria-hidden="true">Enter</span><span>Ask</span></li>
+          <li><span class="key" aria-hidden="true">Esc</span><span>Back</span></li>
+        </ul>
+        <a class="off" href="/">Switch off</a>
+      </div>
+
+    </section>
+  </div>
+</Base>
+
+<script>
+  // ── Keyboard: ← → step through tabs, Enter opens Ask, Esc goes Home ───────
+  const tabLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('.tabs .tab'));
+  const activeIdx = tabLinks.findIndex(a => a.getAttribute('aria-current') === 'page');
+
+  document.addEventListener('keydown', (e) => {
+    if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+    const t = e.target;
+    const typing = t instanceof HTMLInputElement || t instanceof HTMLTextAreaElement || t instanceof HTMLSelectElement
+      || (t instanceof HTMLElement && t.isContentEditable);
+    if (typing) return;
+
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+      // Let wide code blocks and tables keep native horizontal scrolling.
+      if (t instanceof HTMLElement && t.closest('pre, .table-scroll, .katex-display')) return;
+      const from = activeIdx === -1 ? 0 : activeIdx;
+      const step = e.key === 'ArrowRight' ? 1 : -1;
+      const next = tabLinks[(from + step + tabLinks.length) % tabLinks.length];
+      if (next) { e.preventDefault(); window.location.href = next.href; }
+      return;
+    }
+
+    if (e.key === 'Escape') {
+      if (window.location.pathname !== '/home') window.location.href = '/home';
+      return;
+    }
+
+    if (e.key === 'Enter') {
+      // Native Enter on links, buttons and summaries wins.
+      if (t instanceof HTMLElement && t.closest('a, button, summary')) return;
+      const ask = document.getElementById('ask-input') as HTMLInputElement | null;
+      if (ask) { ask.focus(); return; }
+      window.location.href = '/ask';
+    }
+  });
+
+  // ── Lab telemetry: LED in the bezel follows /api/lab.json ─────────────────
+  (function () {
+    const strip = document.querySelector<HTMLElement>('[data-poll]');
+    const endpoint = strip?.dataset.poll;
+    if (!strip || !endpoint) return;
+
+    async function poll() {
+      try {
+        const res = await fetch(endpoint!);
+        if (!res.ok) return;
+        const data = await res.json() as { status?: string };
+        const status = data.status === 'training' ? 'training' : 'idle';
+        strip!.dataset.status = status;
+        const word = strip!.querySelector<HTMLElement>('[data-field="status"]');
+        if (word) word.textContent = status;
+      } catch { /* non-critical */ }
+    }
+
+    poll();
+    setInterval(poll, 60_000);
+  })();
+</script>
