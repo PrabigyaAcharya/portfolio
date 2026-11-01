@@ -68,7 +68,7 @@ Body conventions: footnotes `[^n]` become margin sidenotes (design skill owns th
 
 `now.yaml`: `updated:` date plus short lists (`working_on`, `reading`, `open_to`), each item one line. Renders the `/now` page, the mono "now:" line on the homepage, and the MCP `get_now` tool.
 
-`cv.yaml`: sections (`education`, `positions`, `publications: from-publications-yaml`, `skills`, `service`, `awards`) with `org / role / start / end / details[]` entries. `cv.yaml` renders the `/cv` page. For now the CV PDF is a hand-made file committed at `content/Prabigya_Acharya_CV.pdf` and served from GitHub raw via `site.yaml` `links.cv_pdf`; the planned Typst build (`scripts/build-cv.ts`) is not wired up yet.
+`cv.yaml` mirrors the PDF CV, section for section: `summary` (one paragraph), entry sections `education`, `positions`, `grants`, `supervision`, `teaching` with `org / role / start / end / note? / details[]` entries (`note` is the italic line under the role: place, supervisor, award; `start == end` renders as a single year), `skills` (strings, `"Group — items"`), `certifications` (`title / detail? / link?`), and the legacy `service` / `awards` string lists (default `[]`, render only when non-empty). Publications come from `publications.yaml`, never from `cv.yaml`. `projects` is not on the PDF and only feeds the ask-box. `cv.yaml` renders the `/cv` page. For now the CV PDF is a hand-made file committed at `content/Prabigya_Acharya_CV.pdf` and served from GitHub raw via `site.yaml` `links.cv_pdf`; the planned Typst build (`scripts/build-cv.ts`) is not wired up yet.
 
 ## `content/eval/questions.yaml`
 

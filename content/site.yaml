@@ -16,8 +16,13 @@ research_threads:
     name: "Privacy-preserving NLP"
     blurb: "Lightweight language models for PII masking in conversational text — accuracy and deployment at the edge."
   - id: thread-2
-    name: "3D Vision & Reconstruction"
-    blurb: "Neural radiance fields and Gaussian splatting for digitizing cultural heritage sites."
+    name: "3D Vision & Scene Understanding"
+    # TODO(prabigya): check this blurb reads in your voice (drafted from the CV).
+    blurb: "Gaussian splatting for digitizing cultural heritage sites, and hierarchical benchmarks for vision-language understanding of 3D scenes."
   - id: thread-3
     name: "NLP for Education"
     blurb: "Curriculum-grounded question generation in Nepali, organised by Bloom's taxonomy."
+  - id: thread-4
+    name: "Supervised student research"
+    # TODO(prabigya): check this blurb reads in your voice (drafted from the CV).
+    blurb: "Papers co-authored with the undergraduates I supervise at Sunway College Kathmandu, presented at the 2nd MVIC National Conference."

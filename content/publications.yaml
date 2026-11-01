@@ -23,7 +23,7 @@
 - id: acharya2026generating
   title: "Generating Curriculum Grounded Nepali Questions Based On Bloom’s Taxonomy"
   authors: ["Prabigya Acharya"]
-  venue: "5th Workshop on NLP for Positive Impact"
+  venue: "Proceedings of the 5th Workshop on NLP for Positive Impact (NLP4PI) at EMNLP 2026 (accepted)"
   year: 2026
   thread: thread-3
   summary: "TODO(prabigya): One plain-language sentence describing what this paper does."
@@ -44,15 +44,16 @@
 - id: piimasking-preprint-2024
   title: "A Comparative Study of Light-weight Language Models for PII Masking and their Deployment for Real Conversational Texts"
   authors: ["Prabigya Acharya", "Liza Shrestha"]
-  venue: "arXiv preprint"
-  year: 2024
+  venue: "arXiv:2512.18608"
+  year: 2025
   thread: thread-1
   summary: "We present a comparative study of light-weight language models for Personally Identifiable Information (PII) masking in real conversational texts. Our research evaluates the performance of various models in accurately identifying and masking PII, ensuring data privacy while maintaining the integrity of the original text. We also discuss the deployment challenges and solutions for integrating these models into real-world applications."
   abstract: |
     Automated masking of Personally Identifiable Information (PII) is critical for privacy-preserving conversational systems. While current frontier large language models demonstrate strong PII masking capabilities, concerns about data handling and computational costs motivate exploration of whether lightweight models can achieve comparable performance. We compare encoder-decoder and decoder-only architectures by fine-tuning T5-small and Mistral-Instruct-v0.3 on English datasets constructed from the AI4Privacy benchmark. We create different dataset variants to study label standardization and PII representation, covering 24 standardized PII categories and higher-granularity settings. Evaluation using entity-level and character-level metrics, type accuracy, and exact match shows that both lightweight models achieve performance comparable to frontier LLMs for PII masking tasks. Label normalization consistently improves performance across architectures. Mistral achieves higher F1 and recall with greater robustness across PII types but incurs significantly higher generation latency. T5, while less robust in conversational text, offers more controllable structured outputs and lower inference cost, motivating its use in a real-time Discord bot for real-world PII redaction. Evaluation on live messages reveals performance degradation under informal inputs. These results clarify trade-offs between accuracy, robustness, and computational efficiency, demonstrating that lightweight models can provide effective PII masking while addressing data handling concerns associated with frontier LLMs.
-  links: {}
+  links:
+    arxiv: "https://arxiv.org/abs/2512.18608"
   bibtex: |
-    @misc{acharya2025comparativestudylightweightlanguage,
+    @misc{piimasking-preprint-2024,
       title={A Comparative Study of Light-weight Language Models for PII Masking and their Deployment for Real Conversational Texts}, 
       author={Prabigya Acharya and Liza Shrestha},
       year={2025},
@@ -62,3 +63,107 @@
       url={https://arxiv.org/abs/2512.18608}, 
     }
   selected: true
+
+- id: khanal2026scenebench
+  title: "SceneBench: A Hierarchical Benchmark for Vision-Language Understanding of 3D Scenes"
+  authors: ["Anubhav Khanal", "Prabigya Acharya", "Roshni Poudel", "Sujan Kapali", "Bigyan Bhatta", "Pramish Paudel", "François Rameau", "Danda Pani Paudel"]
+  venue: "Under review at the International Conference on 3D Vision (3DV) 2027"
+  year: 2026
+  thread: thread-2
+  summary: "TODO(prabigya): One plain-language sentence describing what this paper does."
+  abstract: |
+    TODO(prabigya): Full abstract text goes here.
+  backstory: "Designed and built the agentic annotation pipeline and the human-in-the-loop validation workflow."
+  links: {}
+  bibtex: |
+    @unpublished{khanal2026scenebench,
+      title  = {SceneBench: A Hierarchical Benchmark for Vision-Language Understanding of 3D Scenes},
+      author = {Khanal, Anubhav and Acharya, Prabigya and Poudel, Roshni and Kapali, Sujan and Bhatta, Bigyan and Paudel, Pramish and Rameau, Fran{\c{c}}ois and Paudel, Danda Pani},
+      note   = {Under review at the International Conference on 3D Vision (3DV) 2027},
+      year   = {2026},
+    }
+  selected: true
+
+- id: upadhyay2026recursive
+  title: "To What Extent Do LLMs Exhibit Behavioral Patterns That Correlate with Human Decision-Making in Recursive Strategic Prediction Scenarios?"
+  authors: ["Rajat Upadhyay", "Prabigya Acharya", "Supriya Khadka"]
+  venue: "2nd MVIC National Conference, Kathmandu, September 2026; in press, MVIC Journal of Management and Information Technology, 2(1)"
+  year: 2026
+  thread: thread-4
+  summary: "TODO(prabigya): One plain-language sentence describing what this paper does."
+  abstract: |
+    TODO(prabigya): Full abstract text goes here.
+  backstory: "Co-authored with supervised undergraduates."
+  links: {}
+  bibtex: |
+    @inproceedings{upadhyay2026recursive,
+      title     = {To What Extent Do LLMs Exhibit Behavioral Patterns That Correlate with Human Decision-Making in Recursive Strategic Prediction Scenarios?},
+      author    = {Upadhyay, Rajat and Acharya, Prabigya and Khadka, Supriya},
+      booktitle = {2nd MVIC National Conference},
+      address   = {Kathmandu, Nepal},
+      note      = {In press, MVIC Journal of Management and Information Technology, 2(1)},
+      year      = {2026},
+    }
+
+- id: luitel2026ridehailing
+  title: "Convenience for Whom? A Two-Sided Study of Ride-Hailing in Nepal"
+  authors: ["Swikriti Luitel", "Rajat Upadhyay", "Melina Neupane", "Prabigya Acharya"]
+  venue: "2nd MVIC National Conference, Kathmandu, September 2026; in press, MVIC Journal of Management and Information Technology, 2(1)"
+  year: 2026
+  thread: thread-4
+  summary: "TODO(prabigya): One plain-language sentence describing what this paper does."
+  abstract: |
+    TODO(prabigya): Full abstract text goes here.
+  backstory: "Co-authored with supervised undergraduates."
+  links: {}
+  bibtex: |
+    @inproceedings{luitel2026ridehailing,
+      title     = {Convenience for Whom? A Two-Sided Study of Ride-Hailing in Nepal},
+      author    = {Luitel, Swikriti and Upadhyay, Rajat and Neupane, Melina and Acharya, Prabigya},
+      booktitle = {2nd MVIC National Conference},
+      address   = {Kathmandu, Nepal},
+      note      = {In press, MVIC Journal of Management and Information Technology, 2(1)},
+      year      = {2026},
+    }
+
+- id: regmi2026nigrani
+  title: "Nigrani: A Multi-Framework Machine Learning System for Fraud Detection"
+  authors: ["Raunak Regmi", "Prabigya Acharya"]
+  venue: "2nd MVIC National Conference, Kathmandu, September 2026; in press, MVIC Journal of Management and Information Technology, 2(1)"
+  year: 2026
+  thread: thread-4
+  summary: "TODO(prabigya): One plain-language sentence describing what this paper does."
+  abstract: |
+    TODO(prabigya): Full abstract text goes here.
+  backstory: "Co-authored with supervised undergraduates."
+  links: {}
+  bibtex: |
+    @inproceedings{regmi2026nigrani,
+      title     = {Nigrani: A Multi-Framework Machine Learning System for Fraud Detection},
+      author    = {Regmi, Raunak and Acharya, Prabigya},
+      booktitle = {2nd MVIC National Conference},
+      address   = {Kathmandu, Nepal},
+      note      = {In press, MVIC Journal of Management and Information Technology, 2(1)},
+      year      = {2026},
+    }
+
+- id: adhikari2026fairfares
+  title: "Towards Fair Fares: Designing a Resilient Contactless Payment Ecosystem for Public Transit in Nepal"
+  authors: ["Prashant Adhikari", "Supriya Khadka", "Prabigya Acharya"]
+  venue: "2nd MVIC National Conference, Kathmandu, September 2026; in press, MVIC Journal of Management and Information Technology, 2(1)"
+  year: 2026
+  thread: thread-4
+  summary: "TODO(prabigya): One plain-language sentence describing what this paper does."
+  abstract: |
+    TODO(prabigya): Full abstract text goes here.
+  backstory: "Co-authored with supervised undergraduates."
+  links: {}
+  bibtex: |
+    @inproceedings{adhikari2026fairfares,
+      title     = {Towards Fair Fares: Designing a Resilient Contactless Payment Ecosystem for Public Transit in Nepal},
+      author    = {Adhikari, Prashant and Khadka, Supriya and Acharya, Prabigya},
+      booktitle = {2nd MVIC National Conference},
+      address   = {Kathmandu, Nepal},
+      note      = {In press, MVIC Journal of Management and Information Technology, 2(1)},
+      year      = {2026},
+    }

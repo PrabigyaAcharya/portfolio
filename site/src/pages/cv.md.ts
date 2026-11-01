@@ -2,7 +2,7 @@
 export const prerender = true;
 
 import type { APIRoute } from 'astro';
-import { getCV, getSiteData, getPublications } from '../lib/content';
+import { getCV, getSiteData, getPublications, type CVEntry } from '../lib/content';
 
 export const GET: APIRoute = (context) => {
   const base = context.site?.href.replace(/\/$/, '') ?? 'https://prabigya.com.np';
@@ -15,30 +15,32 @@ export const GET: APIRoute = (context) => {
     `canonical: ${base}/cv`,
     ...(site.links.cv_pdf ? [`pdf: ${site.links.cv_pdf}`] : []),
     '',
-    `## Education`,
-    '',
+    ...(cv.summary ? [cv.summary, ''] : []),
   ];
 
-  for (const entry of cv.education) {
-    lines.push(`### ${entry.org}`);
-    lines.push(`**${entry.role}** · ${entry.start}–${entry.end}`);
-    if (entry.details?.length) {
+  const entries = (title: string, list: CVEntry[]) => {
+    if (list.length === 0) return;
+    lines.push(`## ${title}`, '');
+    for (const entry of list) {
+      lines.push(`### ${entry.role}`);
+      lines.push(`**${entry.org}** · ${entry.start === entry.end ? entry.start : `${entry.start}–${entry.end}`}`);
+      if (entry.note) lines.push(`_${entry.note}_`);
+      if (entry.details?.length) {
+        lines.push('');
+        for (const d of entry.details) lines.push(`- ${d}`);
+      }
       lines.push('');
-      for (const d of entry.details) lines.push(`- ${d}`);
     }
+  };
+  const bullets = (title: string, list: string[]) => {
+    if (list.length === 0) return;
+    lines.push(`## ${title}`, '');
+    for (const item of list) lines.push(`- ${item}`);
     lines.push('');
-  }
+  };
 
-  lines.push(`## Positions`, '');
-  for (const entry of cv.positions) {
-    lines.push(`### ${entry.org}`);
-    lines.push(`**${entry.role}** · ${entry.start}–${entry.end}`);
-    if (entry.details?.length) {
-      lines.push('');
-      for (const d of entry.details) lines.push(`- ${d}`);
-    }
-    lines.push('');
-  }
+  entries('Education', cv.education);
+  entries('Research and work experience', cv.positions);
 
   lines.push(`## Publications`, '');
   for (const pub of publications) {
@@ -46,17 +48,14 @@ export const GET: APIRoute = (context) => {
   }
   lines.push('');
 
-  lines.push(`## Skills`, '');
-  for (const skill of cv.skills) lines.push(`- ${skill}`);
-  lines.push('');
-
-  lines.push(`## Service`, '');
-  for (const item of cv.service) lines.push(`- ${item}`);
-  lines.push('');
-
-  lines.push(`## Awards`, '');
-  for (const item of cv.awards) lines.push(`- ${item}`);
-  lines.push('');
+  entries('Grants and funded research', cv.grants);
+  entries('Research supervision and mentorship', cv.supervision);
+  bullets('Technical skills', cv.skills);
+  bullets('Certifications and programs', cv.certifications.map(c =>
+    [`**${c.title}.**`, c.detail, c.link && `<${c.link}>`].filter(Boolean).join(' ')));
+  entries('Teaching, volunteering and leadership', cv.teaching);
+  bullets('Service', cv.service);
+  bullets('Awards', cv.awards);
 
   return new Response(lines.join('\n'), {
     status: 200,

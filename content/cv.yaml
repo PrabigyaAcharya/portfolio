@@ -1,42 +1,123 @@
+summary: "Computer engineer working on NLP and agentic systems for education, with research experience in 3D scene understanding and deployed language-model systems, and a record of research supervision and teaching."
+
 education:
   - org: "IOE, Pulchowk Campus, Tribhuvan University"
-    role: "Bachelor of Computer Engineering"
+    role: "Bachelor’s in Computer Engineering"
     start: "2019"
     end: "2024"
+    note: "GPA: 81.02 / 100 (Distinction)"
     details:
-      - "Graduated with distinction — 81.02/100 (Top 15% of class 14/96)"
-      - "Curriculum spanning AI, NLP, computer vision, distributed systems, computer networks, and software engineering"
-      - "Final year project: 3D Exhibition Environment using Gaussian Splatting for Nepalese heritage sites"
+      - "Ranked 254th of roughly 16,000 applicants in the IOE entrance examination; graduated 14th of 96 in the class."
+      - "Merit scholarship for 7 of 8 semesters."
+      - "Final-year project: a 3D exhibition environment built on 3D Gaussian Splatting, a reconstruction pipeline for heritage sites with an interactive web-based viewer and editor. Supervised by Dr. Jyoti Tandukar (major project) and Dr. Subarna Shakya (minor project)."
 
 positions:
   - org: "Sunway College Kathmandu"
     role: "Undergraduate Research Coordinator"
-    start: "May 2025"
+    start: "Apr 2026"
     end: "Present"
+    note: "Kathmandu, Nepal (On-site)"
     details:
-      - "Design Proposal and get students involved in industry related research projects"
-      - "Guide students in research methodologies and project execution"
-      - "Organize workshops and seminars to enhance research skills and knowledge sharing"
-  - org: "NAAMII"
+      - "Lead the college’s research division, guiding around 20 students across student-led and faculty-led projects in several disciplines."
+      - "Supervised and co-authored four student research papers, all accepted and presented at the 2nd MVIC National Conference, Nepal, and in press in its journal."
+      - "Secured NPR 200,000 in competitive funding from NPIX for a research project on internet localisation."
+      - "Established research groups in NLP, computer vision and reinforcement learning, and the Sunway Research Ethics Committee, the college’s first ethics body for research involving human participants and data."
+      - "Run the AI and BI workshop series, which has reached around 200 high-school students."
+  - org: "Cyberensic"
+    role: "AI Engineer"
+    start: "Jun 2026"
+    end: "Present"
+    note: "Australia (Remote)"
+    details:
+      - "Lead the AI division and designed the company’s RAG-based AI architecture."
+      - "Migrate manual processes to automated workflows built on Claude agents."
+      - "Automated compliance checks for standards workflows, replacing manual review with evidence-based assessment."
+  - org: "AsterGaze Technologies"
+    role: "AI Engineer"
+    start: "Aug 2026"
+    end: "Oct 2026"
+    note: "Remote (Contract)"
+    details:
+      - "Designed and built, end to end, an AI mock-interview system that simulates visa interviews for study-abroad students: real-time voice interaction, LLM-generated questions with model answers and rubrics, rubric-based scoring and feedback, and a PostgreSQL backend."
+      - "Adopted by education consultancies in Nepal for more than 1,000 mock-interview sessions."
+  - org: "NAAMII (Nepal Applied Mathematics and Informatics Institute for Research)"
     role: "Research Assistant"
-    start: "June 2025"
-    end: "Present"
+    start: "Jun 2025"
+    end: "Mar 2026"
+    note: "Supervisor: Dr. Danda Pani Paudel"
     details:
-      - "Will update soon!"
+      - "Developed a hierarchical 3D scene description framework for Gaussian Splatting scenes (SceneBench, under review at 3DV 2027)."
+      - "Designed and built the LangGraph-based agentic pipeline that generates hierarchical scene descriptions from 3D scenes and object labels, and the human-in-the-loop validation workflow around it."
+      - "Curated a dataset of 966 3D Gaussian Splatting scenes with hierarchical descriptions, 3D bounding boxes and scene question–answer pairs."
+      - "Tools: Python, PyTorch, LangChain, LangGraph."
   - org: "NAAMII"
     role: "Research Intern"
-    start: "November 2024"
-    end: "April 2025"
+    start: "Nov 2024"
+    end: "Apr 2025"
+    note: "Supervisor: Dr. Ajad Chhatkuli"
     details:
-      - "Learned about research methodologies and creating 3D Vision data pipelines"
+      - "Developed a generative approach using Stable Diffusion to synthesise warped 3D views from single 2D images."
+      - "Built a pipeline to extract frames from YouTube videos and derive depth and normal maps."
+      - "Curated a dataset of 2D images paired with depth and normal maps from RealEstate10K for model training and evaluation."
   - org: "Growthzilla"
     role: "Software Engineer"
-    start: "April 2024"
-    end: "November 2024"
+    start: "Apr 2024"
+    end: "Nov 2024"
+    note: "Remote"
     details:
-      - "Developed and managed the payment system using propay API"
-      - "Crerated a transaction reconciliation and reporting system"
+      - "Designed and implemented an online payment integration using the Propay API."
+      - "Built an automated reconciliation and reporting system, reducing manual work by 60% and improving transaction traceability."
+      - "Worked independently in a distributed team across three countries, with technical reviews and deployment handled directly with the CTO (Dr. Bipul Khanal)."
+      - "Tools: Node.js, React, Postman, HTML, CSS."
 
+grants:
+  - org: "Internet Localisation Research"
+    role: "Principal Investigator"
+    start: "2026"
+    end: "2026"
+    note: "Funded by NPIX · Award: NPR 200,000 (competitive)"
+    details:
+      - "Competitive funding for a research project on internet localisation, conducted through the research division at Sunway College Kathmandu."
+
+supervision:
+  - org: "Sunway College Kathmandu"
+    role: "Research Supervisor"
+    start: "2026"
+    end: "Present"
+    details:
+      - "Supervised four undergraduate research papers from conception to camera-ready submission, all accepted and presented at the 2nd MVIC National Conference."
+      - "Coordinate around 20 student researchers across the NLP, computer vision and reinforcement learning groups."
+      - "Teach the Research and Academic Writing course and the NLP and CV Project courses; started a reading group on foundational papers that students now run themselves."
+
+teaching:
+  - org: "Nepal Bar Council"
+    role: "AI Trainer"
+    start: "May 2026"
+    end: "Jul 2026"
+    details:
+      - "Led the two-day “Legal Professionals and AI” training for 200 legal practitioners in Kathmandu and Butwal."
+      - "Gave a talk on “AI Ethics and Usage in the Legal Profession” at the Nepal Bar Council graduation ceremony, to 800 new law graduates."
+  - org: "6th Nepal AI School, NAAMII"
+    role: "Teaching Assistant"
+    start: "2025"
+    end: "2025"
+    details:
+      - "Assisted in a ten-day international AI school with over 100 participants from Nepal and abroad."
+      - "Supported lectures, workshops and project sessions led by researchers from Oxford, ETH Zürich, IIT and other institutions, and coordinated between instructors and participants."
+  - org: "LOCUS, Pulchowk Campus"
+    role: "Instructor, Software Fellowship"
+    start: "2023"
+    end: "2023"
+    details:
+      - "Taught data structures and algorithms in Python to a class of 50 first-year students for four of the seven fellowship days."
+  - org: "LOCUS, Pulchowk Campus"
+    role: "Volunteer, Children in Technology"
+    start: "2023"
+    end: "2023"
+    details:
+      - "Delivered introductory computer literacy workshops to over 40 children from local schools, covering computer basics, internet use and responsible online behaviour."
+
+# Not on the PDF CV; kept for the ask-box context.
 projects:
   - title: "3D Exhibition Environment using 3D Gaussian Splatting"
     description: "Full pipeline for 3D reconstruction and interactive visualization of Nepalese heritage sites using NeRF and Gaussian Splatting. Digitized 3 temples in Patan with occlusion masking; integrated into a Three.js exhibition platform."
@@ -60,15 +141,20 @@ projects:
     link: "https://github.com/PrabigyaAcharya/Avritti"
 
 skills:
-  - "Machine Learning & Deep Learning — PyTorch, TensorFlow, Hugging Face"
-  - "Natural Language Processing — T5, Mistral, QLoRA, fine-tuning"
-  - "Computer Vision — PoseNet, OpenCV, NeRF, Gaussian Splatting"
-  - "3D Visualization — Blender, Three.js"
-  - "Backend — Python, FastAPI, Flask, AWS SageMaker"
-  - "Frontend — Vue.js, JavaScript"
+  - "Programming & Frameworks — Python, Node.js, React, Flask, PyTorch, TensorFlow, LangChain, LangGraph"
+  - "Machine Learning & AI — Neural networks, computer vision, transformers, Gaussian splatting, agentic AI, RAG"
+  - "Web & Application Development — HTML, CSS, JavaScript, Three.js, Postman"
 
-service:
-  - "Provided Legal Professional and AI training to Lawyers at Bar Council as well as 800 graduates of Bar Council"
-
-awards:
-  - "Merit-Based Scholarship, Pulchowk Campus (2019–2024) — awarded for academic excellence; covered tuition fees for 7 semesters"
+certifications:
+  - title: "IELTS Academic (27 February 2025)"
+    detail: "Overall 8.0 (Listening 9.0, Reading 8.5, Writing 7.0, Speaking 7.5); Valid until February 2027."
+  - title: "Engineering License, Nepal Engineering Council"
+    detail: "Licensed computer engineer, registration number 87259."
+  - title: "4th NAAMII AI School (2024)"
+    detail: "Ten-day AI school with 55 hours of lectures, 18 hours of labs and 14 hours of projects, taught by researchers from ETH Zürich, NUS and other institutions; covered ML, NLP, transformers, GNNs and responsible AI."
+  - title: "Harvard CS50AI (edX)"
+    detail: "Harvard’s introduction to AI, covering search, optimisation, machine learning and game theory."
+    link: "https://courses.edx.org/certificates/f8d73a1d7d6e4763bb94f41f55328faa"
+  - title: "Algorithmic Toolbox, UC San Diego (Coursera)"
+    detail: "40-hour course on implementing efficient algorithms."
+    link: "https://coursera.org/account/accomplishments/verify/7CIRX4N3WPZT"

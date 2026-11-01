@@ -70,7 +70,14 @@ const CVEntrySchema = z.object({
   role: z.string(),
   start: z.string(),
   end: z.string(),
+  note: z.string().optional(),   // italic line under the role: place, supervisor, award
   details: z.array(z.string()).optional(),
+});
+
+const CVCertificationSchema = z.object({
+  title: z.string(),
+  detail: z.string().optional(),
+  link: z.string().optional(),
 });
 
 const CVProjectSchema = z.object({
@@ -81,12 +88,17 @@ const CVProjectSchema = z.object({
 });
 
 const CVSchema = z.object({
+  summary: z.string().optional(),
   education: z.array(CVEntrySchema),
   positions: z.array(CVEntrySchema),
+  grants: z.array(CVEntrySchema).default([]),
+  supervision: z.array(CVEntrySchema).default([]),
+  teaching: z.array(CVEntrySchema).default([]),
   projects: z.array(CVProjectSchema).optional(),
   skills: z.array(z.string()),
-  service: z.array(z.string()),
-  awards: z.array(z.string()),
+  certifications: z.array(CVCertificationSchema).default([]),
+  service: z.array(z.string()).default([]),
+  awards: z.array(z.string()).default([]),
 });
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -96,6 +108,7 @@ export type Publication = z.infer<typeof PublicationSchema>;
 export type Now = z.infer<typeof NowSchema>;
 export type CV = z.infer<typeof CVSchema>;
 export type CVEntry = z.infer<typeof CVEntrySchema>;
+export type CVCertification = z.infer<typeof CVCertificationSchema>;
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 

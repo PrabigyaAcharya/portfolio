@@ -43,12 +43,15 @@ function buildBioContext(siteUrl: string): string {
   return `[site.yaml + cv.yaml + now.yaml]
 Name: ${site.name}
 Tagline: ${site.tagline}
+Summary: ${cv.summary ?? ''}
 Location: ${site.location}
 Email: ${site.links.email}
 GitHub: ${site.links.github}
 Research threads: ${threads}
 Education: ${cv.education.map(e => `${e.role} at ${e.org} (${e.start}–${e.end})`).join('; ')}
 Experience: ${positions}
+Grants: ${cv.grants.map(g => `${g.role}, ${g.org} (${g.note ?? g.start})`).join('; ')}
+Teaching: ${cv.teaching.map(t => `${t.role}, ${t.org} (${t.start})`).join('; ')}
 Projects: ${projects}
 Skills: ${cv.skills.join(', ')}
 Currently working on: ${workingOn}

@@ -1,5 +1,5 @@
 // AUTO-GENERATED — do not edit by hand; run `npm run bundle-content`
-// Generated at: 2026-10-29T16:31:47.430Z
+// Generated at: 2026-11-01T06:57:06.923Z
 
 export interface ResearchThread {
   id: string;
@@ -118,13 +118,18 @@ export const site: SiteConfig = {
     },
     {
       "id": "thread-2",
-      "name": "3D Vision & Reconstruction",
-      "blurb": "Neural radiance fields and Gaussian splatting for digitizing cultural heritage sites."
+      "name": "3D Vision & Scene Understanding",
+      "blurb": "Gaussian splatting for digitizing cultural heritage sites, and hierarchical benchmarks for vision-language understanding of 3D scenes."
     },
     {
       "id": "thread-3",
       "name": "NLP for Education",
       "blurb": "Curriculum-grounded question generation in Nepali, organised by Bloom's taxonomy."
+    },
+    {
+      "id": "thread-4",
+      "name": "Supervised student research",
+      "blurb": "Papers co-authored with the undergraduates I supervise at Sunway College Kathmandu, presented at the 2nd MVIC National Conference."
     }
   ]
 };
@@ -136,7 +141,7 @@ export const publications: Publication[] = [
     "authors": [
       "Prabigya Acharya"
     ],
-    "venue": "5th Workshop on NLP for Positive Impact",
+    "venue": "Proceedings of the 5th Workshop on NLP for Positive Impact (NLP4PI) at EMNLP 2026 (accepted)",
     "year": 2026,
     "thread": "thread-3",
     "summary": "TODO(prabigya): One plain-language sentence describing what this paper does.",
@@ -154,23 +159,119 @@ export const publications: Publication[] = [
       "Prabigya Acharya",
       "Liza Shrestha"
     ],
-    "venue": "arXiv preprint",
-    "year": 2024,
+    "venue": "arXiv:2512.18608",
+    "year": 2025,
     "thread": "thread-1",
     "summary": "We present a comparative study of light-weight language models for Personally Identifiable Information (PII) masking in real conversational texts. Our research evaluates the performance of various models in accurately identifying and masking PII, ensuring data privacy while maintaining the integrity of the original text. We also discuss the deployment challenges and solutions for integrating these models into real-world applications.",
     "abstract": "Automated masking of Personally Identifiable Information (PII) is critical for privacy-preserving conversational systems. While current frontier large language models demonstrate strong PII masking capabilities, concerns about data handling and computational costs motivate exploration of whether lightweight models can achieve comparable performance. We compare encoder-decoder and decoder-only architectures by fine-tuning T5-small and Mistral-Instruct-v0.3 on English datasets constructed from the AI4Privacy benchmark. We create different dataset variants to study label standardization and PII representation, covering 24 standardized PII categories and higher-granularity settings. Evaluation using entity-level and character-level metrics, type accuracy, and exact match shows that both lightweight models achieve performance comparable to frontier LLMs for PII masking tasks. Label normalization consistently improves performance across architectures. Mistral achieves higher F1 and recall with greater robustness across PII types but incurs significantly higher generation latency. T5, while less robust in conversational text, offers more controllable structured outputs and lower inference cost, motivating its use in a real-time Discord bot for real-world PII redaction. Evaluation on live messages reveals performance degradation under informal inputs. These results clarify trade-offs between accuracy, robustness, and computational efficiency, demonstrating that lightweight models can provide effective PII masking while addressing data handling concerns associated with frontier LLMs.\n",
-    "links": {},
-    "bibtex": "@misc{acharya2025comparativestudylightweightlanguage,\n  title={A Comparative Study of Light-weight Language Models for PII Masking and their Deployment for Real Conversational Texts}, \n  author={Prabigya Acharya and Liza Shrestha},\n  year={2025},\n  eprint={2512.18608},\n  archivePrefix={arXiv},\n  primaryClass={cs.CL},\n  url={https://arxiv.org/abs/2512.18608}, \n}\n",
+    "links": {
+      "arxiv": "https://arxiv.org/abs/2512.18608"
+    },
+    "bibtex": "@misc{piimasking-preprint-2024,\n  title={A Comparative Study of Light-weight Language Models for PII Masking and their Deployment for Real Conversational Texts}, \n  author={Prabigya Acharya and Liza Shrestha},\n  year={2025},\n  eprint={2512.18608},\n  archivePrefix={arXiv},\n  primaryClass={cs.CL},\n  url={https://arxiv.org/abs/2512.18608}, \n}\n",
     "selected": true
+  },
+  {
+    "id": "khanal2026scenebench",
+    "title": "SceneBench: A Hierarchical Benchmark for Vision-Language Understanding of 3D Scenes",
+    "authors": [
+      "Anubhav Khanal",
+      "Prabigya Acharya",
+      "Roshni Poudel",
+      "Sujan Kapali",
+      "Bigyan Bhatta",
+      "Pramish Paudel",
+      "François Rameau",
+      "Danda Pani Paudel"
+    ],
+    "venue": "Under review at the International Conference on 3D Vision (3DV) 2027",
+    "year": 2026,
+    "thread": "thread-2",
+    "summary": "TODO(prabigya): One plain-language sentence describing what this paper does.",
+    "abstract": "TODO(prabigya): Full abstract text goes here.\n",
+    "backstory": "Designed and built the agentic annotation pipeline and the human-in-the-loop validation workflow.",
+    "links": {},
+    "bibtex": "@unpublished{khanal2026scenebench,\n  title  = {SceneBench: A Hierarchical Benchmark for Vision-Language Understanding of 3D Scenes},\n  author = {Khanal, Anubhav and Acharya, Prabigya and Poudel, Roshni and Kapali, Sujan and Bhatta, Bigyan and Paudel, Pramish and Rameau, Fran{\\c{c}}ois and Paudel, Danda Pani},\n  note   = {Under review at the International Conference on 3D Vision (3DV) 2027},\n  year   = {2026},\n}\n",
+    "selected": true
+  },
+  {
+    "id": "upadhyay2026recursive",
+    "title": "To What Extent Do LLMs Exhibit Behavioral Patterns That Correlate with Human Decision-Making in Recursive Strategic Prediction Scenarios?",
+    "authors": [
+      "Rajat Upadhyay",
+      "Prabigya Acharya",
+      "Supriya Khadka"
+    ],
+    "venue": "2nd MVIC National Conference, Kathmandu, September 2026; in press, MVIC Journal of Management and Information Technology, 2(1)",
+    "year": 2026,
+    "thread": "thread-4",
+    "summary": "TODO(prabigya): One plain-language sentence describing what this paper does.",
+    "abstract": "TODO(prabigya): Full abstract text goes here.\n",
+    "backstory": "Co-authored with supervised undergraduates.",
+    "links": {},
+    "bibtex": "@inproceedings{upadhyay2026recursive,\n  title     = {To What Extent Do LLMs Exhibit Behavioral Patterns That Correlate with Human Decision-Making in Recursive Strategic Prediction Scenarios?},\n  author    = {Upadhyay, Rajat and Acharya, Prabigya and Khadka, Supriya},\n  booktitle = {2nd MVIC National Conference},\n  address   = {Kathmandu, Nepal},\n  note      = {In press, MVIC Journal of Management and Information Technology, 2(1)},\n  year      = {2026},\n}\n",
+    "selected": false
+  },
+  {
+    "id": "luitel2026ridehailing",
+    "title": "Convenience for Whom? A Two-Sided Study of Ride-Hailing in Nepal",
+    "authors": [
+      "Swikriti Luitel",
+      "Rajat Upadhyay",
+      "Melina Neupane",
+      "Prabigya Acharya"
+    ],
+    "venue": "2nd MVIC National Conference, Kathmandu, September 2026; in press, MVIC Journal of Management and Information Technology, 2(1)",
+    "year": 2026,
+    "thread": "thread-4",
+    "summary": "TODO(prabigya): One plain-language sentence describing what this paper does.",
+    "abstract": "TODO(prabigya): Full abstract text goes here.\n",
+    "backstory": "Co-authored with supervised undergraduates.",
+    "links": {},
+    "bibtex": "@inproceedings{luitel2026ridehailing,\n  title     = {Convenience for Whom? A Two-Sided Study of Ride-Hailing in Nepal},\n  author    = {Luitel, Swikriti and Upadhyay, Rajat and Neupane, Melina and Acharya, Prabigya},\n  booktitle = {2nd MVIC National Conference},\n  address   = {Kathmandu, Nepal},\n  note      = {In press, MVIC Journal of Management and Information Technology, 2(1)},\n  year      = {2026},\n}\n",
+    "selected": false
+  },
+  {
+    "id": "regmi2026nigrani",
+    "title": "Nigrani: A Multi-Framework Machine Learning System for Fraud Detection",
+    "authors": [
+      "Raunak Regmi",
+      "Prabigya Acharya"
+    ],
+    "venue": "2nd MVIC National Conference, Kathmandu, September 2026; in press, MVIC Journal of Management and Information Technology, 2(1)",
+    "year": 2026,
+    "thread": "thread-4",
+    "summary": "TODO(prabigya): One plain-language sentence describing what this paper does.",
+    "abstract": "TODO(prabigya): Full abstract text goes here.\n",
+    "backstory": "Co-authored with supervised undergraduates.",
+    "links": {},
+    "bibtex": "@inproceedings{regmi2026nigrani,\n  title     = {Nigrani: A Multi-Framework Machine Learning System for Fraud Detection},\n  author    = {Regmi, Raunak and Acharya, Prabigya},\n  booktitle = {2nd MVIC National Conference},\n  address   = {Kathmandu, Nepal},\n  note      = {In press, MVIC Journal of Management and Information Technology, 2(1)},\n  year      = {2026},\n}\n",
+    "selected": false
+  },
+  {
+    "id": "adhikari2026fairfares",
+    "title": "Towards Fair Fares: Designing a Resilient Contactless Payment Ecosystem for Public Transit in Nepal",
+    "authors": [
+      "Prashant Adhikari",
+      "Supriya Khadka",
+      "Prabigya Acharya"
+    ],
+    "venue": "2nd MVIC National Conference, Kathmandu, September 2026; in press, MVIC Journal of Management and Information Technology, 2(1)",
+    "year": 2026,
+    "thread": "thread-4",
+    "summary": "TODO(prabigya): One plain-language sentence describing what this paper does.",
+    "abstract": "TODO(prabigya): Full abstract text goes here.\n",
+    "backstory": "Co-authored with supervised undergraduates.",
+    "links": {},
+    "bibtex": "@inproceedings{adhikari2026fairfares,\n  title     = {Towards Fair Fares: Designing a Resilient Contactless Payment Ecosystem for Public Transit in Nepal},\n  author    = {Adhikari, Prashant and Khadka, Supriya and Acharya, Prabigya},\n  booktitle = {2nd MVIC National Conference},\n  address   = {Kathmandu, Nepal},\n  note      = {In press, MVIC Journal of Management and Information Technology, 2(1)},\n  year      = {2026},\n}\n",
+    "selected": false
   }
 ];
 
 export const now: NowData = {
-  "updated": "2026-10-29",
+  "updated": "2026-11-01",
   "working_on": [
     "Building agents at Cyberensic",
-    "Research coordinator at Sunway",
-    "Building AI interview at Astergaze"
+    "Research coordinator at Sunway"
   ],
   "reading": [
     "Illiad by Homer",
@@ -182,16 +283,18 @@ export const now: NowData = {
 };
 
 export const cv: CvData = {
+  "summary": "Computer engineer working on NLP and agentic systems for education, with research experience in 3D scene understanding and deployed language-model systems, and a record of research supervision and teaching.",
   "education": [
     {
       "org": "IOE, Pulchowk Campus, Tribhuvan University",
-      "role": "Bachelor of Computer Engineering",
+      "role": "Bachelor’s in Computer Engineering",
       "start": "2019",
       "end": "2024",
+      "note": "GPA: 81.02 / 100 (Distinction)",
       "details": [
-        "Graduated with distinction — 81.02/100 (Top 15% of class 14/96)",
-        "Curriculum spanning AI, NLP, computer vision, distributed systems, computer networks, and software engineering",
-        "Final year project: 3D Exhibition Environment using Gaussian Splatting for Nepalese heritage sites"
+        "Ranked 254th of roughly 16,000 applicants in the IOE entrance examination; graduated 14th of 96 in the class.",
+        "Merit scholarship for 7 of 8 semesters.",
+        "Final-year project: a 3D exhibition environment built on 3D Gaussian Splatting, a reconstruction pipeline for heritage sites with an interactive web-based viewer and editor. Supervised by Dr. Jyoti Tandukar (major project) and Dr. Subarna Shakya (minor project)."
       ]
     }
   ],
@@ -199,40 +302,141 @@ export const cv: CvData = {
     {
       "org": "Sunway College Kathmandu",
       "role": "Undergraduate Research Coordinator",
-      "start": "May 2025",
+      "start": "Apr 2026",
       "end": "Present",
+      "note": "Kathmandu, Nepal (On-site)",
       "details": [
-        "Design Proposal and get students involved in industry related research projects",
-        "Guide students in research methodologies and project execution",
-        "Organize workshops and seminars to enhance research skills and knowledge sharing"
+        "Lead the college’s research division, guiding around 20 students across student-led and faculty-led projects in several disciplines.",
+        "Supervised and co-authored four student research papers, all accepted and presented at the 2nd MVIC National Conference, Nepal, and in press in its journal.",
+        "Secured NPR 200,000 in competitive funding from NPIX for a research project on internet localisation.",
+        "Established research groups in NLP, computer vision and reinforcement learning, and the Sunway Research Ethics Committee, the college’s first ethics body for research involving human participants and data.",
+        "Run the AI and BI workshop series, which has reached around 200 high-school students."
       ]
     },
     {
-      "org": "NAAMII",
-      "role": "Research Assistant",
-      "start": "June 2025",
+      "org": "Cyberensic",
+      "role": "AI Engineer",
+      "start": "Jun 2026",
       "end": "Present",
+      "note": "Australia (Remote)",
       "details": [
-        "Will update soon!"
+        "Lead the AI division and designed the company’s RAG-based AI architecture.",
+        "Migrate manual processes to automated workflows built on Claude agents.",
+        "Automated compliance checks for standards workflows, replacing manual review with evidence-based assessment."
+      ]
+    },
+    {
+      "org": "AsterGaze Technologies",
+      "role": "AI Engineer",
+      "start": "Aug 2026",
+      "end": "Oct 2026",
+      "note": "Remote (Contract)",
+      "details": [
+        "Designed and built, end to end, an AI mock-interview system that simulates visa interviews for study-abroad students: real-time voice interaction, LLM-generated questions with model answers and rubrics, rubric-based scoring and feedback, and a PostgreSQL backend.",
+        "Adopted by education consultancies in Nepal for more than 1,000 mock-interview sessions."
+      ]
+    },
+    {
+      "org": "NAAMII (Nepal Applied Mathematics and Informatics Institute for Research)",
+      "role": "Research Assistant",
+      "start": "Jun 2025",
+      "end": "Mar 2026",
+      "note": "Supervisor: Dr. Danda Pani Paudel",
+      "details": [
+        "Developed a hierarchical 3D scene description framework for Gaussian Splatting scenes (SceneBench, under review at 3DV 2027).",
+        "Designed and built the LangGraph-based agentic pipeline that generates hierarchical scene descriptions from 3D scenes and object labels, and the human-in-the-loop validation workflow around it.",
+        "Curated a dataset of 966 3D Gaussian Splatting scenes with hierarchical descriptions, 3D bounding boxes and scene question–answer pairs.",
+        "Tools: Python, PyTorch, LangChain, LangGraph."
       ]
     },
     {
       "org": "NAAMII",
       "role": "Research Intern",
-      "start": "November 2024",
-      "end": "April 2025",
+      "start": "Nov 2024",
+      "end": "Apr 2025",
+      "note": "Supervisor: Dr. Ajad Chhatkuli",
       "details": [
-        "Learned about research methodologies and creating 3D Vision data pipelines"
+        "Developed a generative approach using Stable Diffusion to synthesise warped 3D views from single 2D images.",
+        "Built a pipeline to extract frames from YouTube videos and derive depth and normal maps.",
+        "Curated a dataset of 2D images paired with depth and normal maps from RealEstate10K for model training and evaluation."
       ]
     },
     {
       "org": "Growthzilla",
       "role": "Software Engineer",
-      "start": "April 2024",
-      "end": "November 2024",
+      "start": "Apr 2024",
+      "end": "Nov 2024",
+      "note": "Remote",
       "details": [
-        "Developed and managed the payment system using propay API",
-        "Crerated a transaction reconciliation and reporting system"
+        "Designed and implemented an online payment integration using the Propay API.",
+        "Built an automated reconciliation and reporting system, reducing manual work by 60% and improving transaction traceability.",
+        "Worked independently in a distributed team across three countries, with technical reviews and deployment handled directly with the CTO (Dr. Bipul Khanal).",
+        "Tools: Node.js, React, Postman, HTML, CSS."
+      ]
+    }
+  ],
+  "grants": [
+    {
+      "org": "Internet Localisation Research",
+      "role": "Principal Investigator",
+      "start": "2026",
+      "end": "2026",
+      "note": "Funded by NPIX · Award: NPR 200,000 (competitive)",
+      "details": [
+        "Competitive funding for a research project on internet localisation, conducted through the research division at Sunway College Kathmandu."
+      ]
+    }
+  ],
+  "supervision": [
+    {
+      "org": "Sunway College Kathmandu",
+      "role": "Research Supervisor",
+      "start": "2026",
+      "end": "Present",
+      "details": [
+        "Supervised four undergraduate research papers from conception to camera-ready submission, all accepted and presented at the 2nd MVIC National Conference.",
+        "Coordinate around 20 student researchers across the NLP, computer vision and reinforcement learning groups.",
+        "Teach the Research and Academic Writing course and the NLP and CV Project courses; started a reading group on foundational papers that students now run themselves."
+      ]
+    }
+  ],
+  "teaching": [
+    {
+      "org": "Nepal Bar Council",
+      "role": "AI Trainer",
+      "start": "May 2026",
+      "end": "Jul 2026",
+      "details": [
+        "Led the two-day “Legal Professionals and AI” training for 200 legal practitioners in Kathmandu and Butwal.",
+        "Gave a talk on “AI Ethics and Usage in the Legal Profession” at the Nepal Bar Council graduation ceremony, to 800 new law graduates."
+      ]
+    },
+    {
+      "org": "6th Nepal AI School, NAAMII",
+      "role": "Teaching Assistant",
+      "start": "2025",
+      "end": "2025",
+      "details": [
+        "Assisted in a ten-day international AI school with over 100 participants from Nepal and abroad.",
+        "Supported lectures, workshops and project sessions led by researchers from Oxford, ETH Zürich, IIT and other institutions, and coordinated between instructors and participants."
+      ]
+    },
+    {
+      "org": "LOCUS, Pulchowk Campus",
+      "role": "Instructor, Software Fellowship",
+      "start": "2023",
+      "end": "2023",
+      "details": [
+        "Taught data structures and algorithms in Python to a class of 50 first-year students for four of the seven fellowship days."
+      ]
+    },
+    {
+      "org": "LOCUS, Pulchowk Campus",
+      "role": "Volunteer, Children in Technology",
+      "start": "2023",
+      "end": "2023",
+      "details": [
+        "Delivered introductory computer literacy workshops to over 40 children from local schools, covering computer basics, internet use and responsible online behaviour."
       ]
     }
   ],
@@ -297,19 +501,36 @@ export const cv: CvData = {
     }
   ],
   "skills": [
-    "Machine Learning & Deep Learning — PyTorch, TensorFlow, Hugging Face",
-    "Natural Language Processing — T5, Mistral, QLoRA, fine-tuning",
-    "Computer Vision — PoseNet, OpenCV, NeRF, Gaussian Splatting",
-    "3D Visualization — Blender, Three.js",
-    "Backend — Python, FastAPI, Flask, AWS SageMaker",
-    "Frontend — Vue.js, JavaScript"
+    "Programming & Frameworks — Python, Node.js, React, Flask, PyTorch, TensorFlow, LangChain, LangGraph",
+    "Machine Learning & AI — Neural networks, computer vision, transformers, Gaussian splatting, agentic AI, RAG",
+    "Web & Application Development — HTML, CSS, JavaScript, Three.js, Postman"
   ],
-  "service": [
-    "Provided Legal Professional and AI training to Lawyers at Bar Council as well as 800 graduates of Bar Council"
+  "certifications": [
+    {
+      "title": "IELTS Academic (27 February 2025)",
+      "detail": "Overall 8.0 (Listening 9.0, Reading 8.5, Writing 7.0, Speaking 7.5); Valid until February 2027."
+    },
+    {
+      "title": "Engineering License, Nepal Engineering Council",
+      "detail": "Licensed computer engineer, registration number 87259."
+    },
+    {
+      "title": "4th NAAMII AI School (2024)",
+      "detail": "Ten-day AI school with 55 hours of lectures, 18 hours of labs and 14 hours of projects, taught by researchers from ETH Zürich, NUS and other institutions; covered ML, NLP, transformers, GNNs and responsible AI."
+    },
+    {
+      "title": "Harvard CS50AI (edX)",
+      "detail": "Harvard’s introduction to AI, covering search, optimisation, machine learning and game theory.",
+      "link": "https://courses.edx.org/certificates/f8d73a1d7d6e4763bb94f41f55328faa"
+    },
+    {
+      "title": "Algorithmic Toolbox, UC San Diego (Coursera)",
+      "detail": "40-hour course on implementing efficient algorithms.",
+      "link": "https://coursera.org/account/accomplishments/verify/7CIRX4N3WPZT"
+    }
   ],
-  "awards": [
-    "Merit-Based Scholarship, Pulchowk Campus (2019–2024) — awarded for academic excellence; covered tuition fees for 7 semesters"
-  ]
+  "service": [],
+  "awards": []
 };
 
 export const evalQuestions: EvalQuestion[] = [

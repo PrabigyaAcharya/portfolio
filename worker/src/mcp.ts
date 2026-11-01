@@ -248,7 +248,7 @@ export function buildMcpServer(env: Env): McpServer {
   // ── get_cv ─────────────────────────────────────────────────────────────────
   server.tool(
     'get_cv',
-    'Get the full CV data including education, positions, publications, skills, service, and awards.',
+    'Get the full CV data: summary, education, positions, grants, supervision, teaching, skills, certifications, plus a publications count (use list_publications for the papers).',
     {},
     () => {
       return {
