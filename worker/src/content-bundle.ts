@@ -1,5 +1,5 @@
 // AUTO-GENERATED — do not edit by hand; run `npm run bundle-content`
-// Generated at: 2026-11-01T08:41:07.672Z
+// Generated at: 2026-11-01T12:29:25.677Z
 
 export interface ResearchThread {
   id: string;
@@ -185,29 +185,6 @@ export const publications: Publication[] = [
       "arxiv": "https://arxiv.org/abs/2512.18608"
     },
     "bibtex": "@misc{piimasking-preprint-2024,\n  title={A Comparative Study of Light-weight Language Models for PII Masking and their Deployment for Real Conversational Texts}, \n  author={Prabigya Acharya and Liza Shrestha},\n  year={2025},\n  eprint={2512.18608},\n  archivePrefix={arXiv},\n  primaryClass={cs.CL},\n  url={https://arxiv.org/abs/2512.18608}, \n}\n",
-    "selected": true
-  },
-  {
-    "id": "khanal2026scenebench",
-    "title": "SceneBench: A Hierarchical Benchmark for Vision-Language Understanding of 3D Scenes",
-    "authors": [
-      "Anubhav Khanal",
-      "Prabigya Acharya",
-      "Roshni Poudel",
-      "Sujan Kapali",
-      "Bigyan Bhatta",
-      "Pramish Paudel",
-      "François Rameau",
-      "Danda Pani Paudel"
-    ],
-    "venue": "Under review at the International Conference on 3D Vision (3DV) 2027",
-    "year": 2026,
-    "thread": "thread-2",
-    "summary": "TODO(prabigya): One plain-language sentence describing what this paper does.",
-    "abstract": "TODO(prabigya): Full abstract text goes here.\n",
-    "backstory": "Designed and built the agentic annotation pipeline and the human-in-the-loop validation workflow.",
-    "links": {},
-    "bibtex": "@unpublished{khanal2026scenebench,\n  title  = {SceneBench: A Hierarchical Benchmark for Vision-Language Understanding of 3D Scenes},\n  author = {Khanal, Anubhav and Acharya, Prabigya and Poudel, Roshni and Kapali, Sujan and Bhatta, Bigyan and Paudel, Pramish and Rameau, Fran{\\c{c}}ois and Paudel, Danda Pani},\n  note   = {Under review at the International Conference on 3D Vision (3DV) 2027},\n  year   = {2026},\n}\n",
     "selected": true
   },
   {
