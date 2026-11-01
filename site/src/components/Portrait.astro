@@ -1,8 +1,8 @@
 ---
 // Portrait.astro — the pixel portrait on the LCD: the ink mask that
 // scripts/build-portrait.ts builds from the hand-drawn sprite, painted in
-// --screen-ink. Sizes should divide the stored 192px evenly (192, 96) so the
-// pixels stay square and sharp. Without a sprite it renders a loud TODO frame.
+// --screen-ink. Sizes must be whole multiples of the sprite side (64 → 128,
+// 192) so the pixels stay square and sharp. Without a sprite it renders a loud TODO frame.
 import { getPortrait } from '../lib/content';
 
 export interface Props {

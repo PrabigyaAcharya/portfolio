@@ -93,7 +93,7 @@ Use these before inventing anything:
 
 ## Portrait
 
-- `Portrait.astro`: a hand-drawn 32×32 cartoon sprite (`content/portrait.txt`, four ink levels), turned into an ink alpha mask by `scripts/build-portrait.ts` and painted with `mask-image` over `var(--screen-ink)`. Use only sizes that divide the stored 192px evenly (192 on `/home`, 96 on the landing title screen and on phones: 6 and 3 screen pixels per sprite pixel) so pixels stay square. Without a mask it renders a dotted-ink `TODO(prabigya)` frame.
+- `Portrait.astro`: a hand-drawn 64×64 cartoon sprite (`content/portrait.txt`, four ink levels), turned into an ink alpha mask by `scripts/build-portrait.ts` and painted with `mask-image` over `var(--screen-ink)`. Use only whole multiples of the sprite side (192 on `/home`, 128 on the landing title screen and on phones: 3 and 2 screen pixels per sprite pixel) so pixels stay square. Without a mask it renders a dotted-ink `TODO(prabigya)` frame.
 - Focus: 3px `--print-blue` outline on the shell, 3px ink outline inside the LCD; LCD controls show focus by inverting.
 
 ## Keep out

@@ -5,8 +5,9 @@
 //
 // The sprite is a square text grid, one character per LCD pixel:
 //   .  bare screen     -  light ink     +  mid ink     #  full ink
-// The output is an alpha mask, not a picture, stored at 192 px with each
-// sprite pixel a whole block, so it stays crisp at 1× and ½×. Pages paint it
+// The output is an alpha mask, not a picture, stored at 12 px per sprite
+// pixel, so any display size that is a whole multiple of the sprite side
+// (64 → 128, 192) stays crisp on 1× and 2× screens. Pages paint it
 // with `mask-image` over `var(--screen-ink)`, so its colour always comes from
 // the tokens.
 //
@@ -20,7 +21,7 @@ import sharp from 'sharp';
 const root = resolve(dirname(new URL(import.meta.url).pathname), '..');
 const out = resolve(root, 'site', 'public', 'images', 'portrait-mask.png');
 
-const OUT = 192;   // stored side in px; Portrait.astro shows it at 192 and 96
+const UP = 12;    // stored px per sprite pixel
 const INK: Record<string, number> = { '.': 0, '-': 1, '+': 2, '#': 3 };
 
 const site = yaml.load(readFileSync(resolve(root, 'content', 'site.yaml'), 'utf-8')) as { portrait?: { src: string } };
@@ -34,18 +35,17 @@ function fail(msg: string): never {
 async function main(src: string) {
   const rows = readFileSync(src, 'utf-8').split('\n').map(r => r.trimEnd()).filter(Boolean);
   const n = rows.length;
-  if (OUT % n !== 0) fail(`${n} rows; the side must divide ${OUT} (try 32 or 48)`);
   rows.forEach((r, y) => {
     if (r.length !== n) fail(`row ${y + 1} is ${r.length} wide, expected ${n}`);
     const bad = [...r].find(c => !(c in INK));
     if (bad) fail(`row ${y + 1} has "${bad}"; use only . - + #`);
   });
 
-  const up = OUT / n;
+  const OUT = n * UP;
   const rgba = Buffer.alloc(OUT * OUT * 4);
   for (let y = 0; y < OUT; y++) {
     for (let x = 0; x < OUT; x++) {
-      const level = INK[rows[Math.floor(y / up)][Math.floor(x / up)]];
+      const level = INK[rows[Math.floor(y / UP)][Math.floor(x / UP)]];
       rgba[(y * OUT + x) * 4 + 3] = Math.round((level / 3) * 255);
     }
   }

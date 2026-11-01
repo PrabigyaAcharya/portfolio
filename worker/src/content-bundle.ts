@@ -1,5 +1,5 @@
 // AUTO-GENERATED — do not edit by hand; run `npm run bundle-content`
-// Generated at: 2026-11-01T08:28:24.129Z
+// Generated at: 2026-11-01T08:41:07.672Z
 
 export interface ResearchThread {
   id: string;
@@ -147,7 +147,7 @@ export const site: SiteConfig = {
   ],
   "portrait": {
     "src": "portrait.txt",
-    "alt": "Pixel-art cartoon of Prabigya Acharya: swept hair, round glasses, a wide grin"
+    "alt": "Pixel-art cartoon of Prabigya Acharya: swept hair, round glasses, a wide grin, an open jacket"
   }
 };
 

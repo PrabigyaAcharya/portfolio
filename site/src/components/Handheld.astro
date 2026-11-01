@@ -65,7 +65,7 @@ const sections = [
           </span>
           <span class="dev-lcd">
             <span class="dev-panel dev-home" data-panel="home">
-              <Portrait size={96} />
+              <Portrait size={128} />
               <span class="dev-id">
                 <span class="dev-name">{site.name}</span>
                 <span class="dev-tagline">{site.tagline}</span>
@@ -317,7 +317,7 @@ const sections = [
   /* Title screen: the pixel portrait beside the name. */
   .dev-panel.dev-home { flex-direction: row; align-items: center; gap: 12px; }
   .dev-id { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
-  .dev-home .dev-name { font-size: 22px; }
+  .dev-home .dev-name { font-size: 16px; }   /* fits beside the 128px portrait */
 
   /* One panel on screen at a time: the title screen, or a section trailer. */
   .dev-panel { display: flex; flex-direction: column; gap: 12px; min-width: 0; }

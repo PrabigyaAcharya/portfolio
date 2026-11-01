@@ -29,7 +29,7 @@ portrait:                    # optional; omit and pages show a TODO frame
   alt: "Pixel-art cartoon of …"
 ```
 
-`portrait.txt` is a square grid, one character per LCD pixel: `.` bare screen, `-` light, `+` mid, `#` full ink; its side must divide 192 (32 does). Edit it by hand. The build turns it into `site/public/images/portrait-mask.png`; `get_bio` returns that URL as `portrait_url`.
+`portrait.txt` is a square grid, one character per LCD pixel: `.` bare screen, `-` light, `+` mid, `#` full ink; pages show it at whole multiples of its side (64 → 128 and 192). Edit it by hand. The build turns it into `site/public/images/portrait-mask.png`; `get_bio` returns that URL as `portrait_url`.
 
 ## `content/publications.yaml`
 

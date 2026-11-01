@@ -11,12 +11,12 @@ links:
   # file and push to update it.
   cv_pdf: "https://raw.githubusercontent.com/PrabigyaAcharya/portfolio/main/content/Prabigya_Acharya_CV.pdf"
 mcp_endpoint: "https://prabigya.com.np/mcp"
-# A hand-drawn 32×32 sprite: one character per LCD pixel, "." bare screen,
+# A hand-drawn 64×64 sprite: one character per LCD pixel, "." bare screen,
 # "-" light, "+" mid, "#" full ink. The build turns it into
 # site/public/images/portrait-mask.png.
 portrait:
   src: "portrait.txt"
-  alt: "Pixel-art cartoon of Prabigya Acharya: swept hair, round glasses, a wide grin"
+  alt: "Pixel-art cartoon of Prabigya Acharya: swept hair, round glasses, a wide grin, an open jacket"
 research_threads:
   - id: thread-1
     name: "NLP"
