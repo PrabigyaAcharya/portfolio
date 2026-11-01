@@ -179,7 +179,7 @@ const glyphs: Record<string, Array<[number, number, number, number]>> = {
     color: var(--screen-ink);
     border-radius: 2px;
     box-shadow: inset 0 0 0 2px var(--screen-edge);
-    transition: background-color var(--step-invert), color var(--step-invert);
+    transition: background-color var(--invert), color var(--invert);
   }
   .cart-stripe { display: flex; flex-direction: column; gap: 1px; }
   .cart-stripe::before, .cart-stripe::after { content: ''; display: block; height: 2px; }
@@ -197,8 +197,8 @@ const glyphs: Record<string, Array<[number, number, number, number]>> = {
   .cart:focus-visible { outline: 3px solid var(--print-blue); outline-offset: 3px; }
 
   /* ── Drawer ─────────────────────────────────────────────────────────────── */
-  /* Pinned to the right edge with only the handle showing; it slides open in
-     three stepped frames on hover, keyboard focus or a tap on the handle. */
+  /* Pinned to the right edge with only the handle showing; it slides open on
+     hover, keyboard focus or a tap on the handle. */
   .drawer {
     --handle: 34px;
     position: fixed;
@@ -208,7 +208,7 @@ const glyphs: Record<string, Array<[number, number, number, number]>> = {
     display: flex;
     align-items: center;
     transform: translate(calc(100% - var(--handle)), -50%);
-    transition: transform .24s steps(3, end);
+    transition: transform .32s cubic-bezier(.2, .8, .2, 1);
   }
   .drawer[hidden] { display: none; }
   .drawer:hover,
@@ -216,7 +216,7 @@ const glyphs: Record<string, Array<[number, number, number, number]>> = {
   .drawer.open { transform: translate(0, -50%); }
   /* Closed, the tray is hidden once it has slid away: no edge peeking past
      the window, and its cartridges leave the tab order (the handle stays). */
-  .drawer-body { transition: visibility 0s .24s; }
+  .drawer-body { transition: visibility 0s .32s; }
   .drawer:not(:hover, :focus-within, .open) .drawer-body { visibility: hidden; }
   .drawer:is(:hover, :focus-within, .open) .drawer-body { visibility: visible; transition: none; }
 

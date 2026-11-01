@@ -70,5 +70,5 @@
   --font-code:  ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
 
   /* Motion */
-  --step-invert: .12s steps(2, end);
+  --invert: .14s ease-out;         /* hover / active inverts on the LCD and labels */
 }

@@ -182,9 +182,9 @@ html[data-astro-transition]::view-transition-new(*) { animation: none; }
   inset: 4px 4px auto;
   height: 22%;
   background: linear-gradient(to bottom, transparent, rgba(238,240,184,.07) 60%, transparent);
-  /* Stepped like everything else on the LCD: ten moves a second instead of
-     re-compositing the whole screen on every display frame. */
-  animation: crt-roll 9s steps(90, end) infinite;
+  /* 30 moves a second: as smooth as the eye needs for a band this faint and
+     slow, at a sixth of the compositing work of moving it every frame. */
+  animation: crt-roll 9s steps(270, end) infinite;
 }
 @keyframes crt-roll {
   from { transform: translateY(-100%); }
@@ -261,7 +261,7 @@ html[data-astro-transition]::view-transition-new(*) { animation: none; }
   text-decoration: none;
   color: var(--screen-ink);
   background: transparent;
-  transition: background-color var(--step-invert), color var(--step-invert);
+  transition: background-color var(--invert), color var(--invert);
 }
 .lcd .tab { color: var(--screen-ink); text-decoration: none; }
 .lcd .tab:hover, .lcd .tab:focus-visible { background: var(--screen-edge); color: var(--screen-hi); outline: none; }
@@ -312,7 +312,7 @@ html[data-astro-transition]::view-transition-new(*) { animation: none; }
     color-mix(in srgb, var(--led) 24%, var(--lozenge)) 55%,
     color-mix(in srgb, var(--led) 30%, var(--lozenge-lo)) 100%);
   box-shadow: 0 2px 0 color-mix(in srgb, var(--led) 30%, var(--lozenge-shadow)), inset 0 1px 0 rgba(255,255,255,.4);
-  transition: color .12s steps(2, end);
+  transition: color var(--invert);
 }
 .power svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; }
 .power:hover, .power:focus-visible { color: color-mix(in srgb, var(--led) 70%, black); }
@@ -386,7 +386,7 @@ html:has(.screen-wrap) { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://ww
   border: var(--rule-ink);
   cursor: pointer;
   text-decoration: none;
-  transition: background-color var(--step-invert), color var(--step-invert);
+  transition: background-color var(--invert), color var(--invert);
 }
 .lcd .lcd-btn { color: var(--screen-ink); text-decoration: none; }
 .lcd .lcd-btn:hover, .lcd .lcd-btn:focus-visible { background: var(--screen-ink); color: var(--screen); outline: none; }
@@ -404,7 +404,7 @@ html:has(.screen-wrap) { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://ww
   gap: 4px 24px;
   padding: 14px 12px;
   border-top: var(--rule-ink);
-  transition: background-color var(--step-invert), color var(--step-invert);
+  transition: background-color var(--invert), color var(--invert);
 }
 .lcd a.lcd-row { color: var(--screen-ink); text-decoration: none; }
 .lcd a.lcd-row:hover, .lcd a.lcd-row:focus-visible { background: var(--screen-ink); color: var(--screen); outline: none; }
@@ -461,7 +461,7 @@ html:has(.screen-wrap) { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://ww
   border: 2px solid var(--screen-ink);
   color: var(--screen-ink);
   text-decoration: none;
-  transition: background-color var(--step-invert), color var(--step-invert);
+  transition: background-color var(--invert), color var(--invert);
 }
 .lcd .tag:hover, .lcd .tag:focus-visible, .lcd .tag[aria-current="true"] { background: var(--screen-ink); color: var(--screen); outline: none; }
 
