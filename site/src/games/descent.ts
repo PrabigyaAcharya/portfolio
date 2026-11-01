@@ -1,7 +1,8 @@
 // descent.ts — keep going down. Ledges with one gap each rise up the screen;
 // steer the ball with ← → and drop through the gaps. Ride a ledge up into the
-// spikes under the HUD and the run is over. Every ledge you get below brings
-// the loss down; the score is how many you passed.
+// spikes under the HUD and the run is over. Every eight ledges the game steps
+// up a speed tier: ledges rise faster, gaps narrow, steering quickens. Every
+// ledge you get below brings the loss down; the score is how many you passed.
 
 import { noButtons, rng, type Game } from './types';
 
@@ -19,6 +20,8 @@ interface State {
   vy: number;
   ledges: Ledge[];
   depth: number;      // ledges passed
+  speed: number;      // current rise, eased toward the tier's
+  flash: number;      // ticks left on the "faster" banner
   done: boolean;
 }
 
@@ -30,22 +33,24 @@ const THICK = 3;      // ledge thickness
 const SPACING = 22;
 const GRAVITY = 0.16;
 const FALL_MAX = 2.6;
-const MOVE = 1.6;
+const TIER = 8;      // ledges per speed tier
 
-const rise = (s: State) => Math.min(0.85, 0.3 + s.depth * 0.006);
+const tier = (s: State) => Math.floor(s.depth / TIER);
+// No plateau: the rise keeps climbing toward the ball's top falling speed and
+// the gaps toward the ball's width, so even a perfect run ends eventually.
+const riseFor = (t: number) => Math.min(FALL_MAX - 0.1, 0.45 + t * 0.14);   // px per tick
+const moveFor = (t: number) => Math.min(3.2, 1.6 + t * 0.12);
+const gapFor = (t: number) => Math.max(BALL + 2, 18 - t);
 const lossAt = (depth: number) => 1 / (1 + depth * 0.08);
 
 function addLedge(s: State, y: number) {
-  const width = Math.max(12, 19 - Math.floor(s.depth / 8));
+  const width = gapFor(tier(s));
   s.ledges.push({ y, gap: 2 + Math.floor(s.r() * (W - width - 4)), width, passed: false });
 }
 
-/** Whether the ball comes to rest on this ledge this tick. */
-function landing(s: State, ledge: Ledge): boolean {
-  const bottom = s.y + BALL;
-  const inGap = s.x >= ledge.gap && s.x + BALL <= ledge.gap + ledge.width;
-  return !inGap && bottom >= ledge.y && bottom <= ledge.y + THICK + FALL_MAX;
-}
+const inGap = (x: number, l: Ledge) => x >= l.gap && x + BALL <= l.gap + l.width;
+/** The ball and the ledge's band share at least one row. */
+const overlaps = (s: State, l: Ledge) => s.y + BALL > l.y && s.y < l.y + THICK;
 
 const descent: Game<State> = {
   id: 'descent',
@@ -53,37 +58,43 @@ const descent: Game<State> = {
   hint: 'arrows steer',
 
   create(seed) {
-    const s: State = { r: rng(seed), x: W / 2 - 2, y: TOP + 4, vy: 0, ledges: [], depth: 0, done: false };
+    const s: State = { r: rng(seed), x: W / 2 - 2, y: TOP + 4, vy: 0, ledges: [], depth: 0, speed: riseFor(0), flash: 0, done: false };
     for (let y = 60; y < H + SPACING; y += SPACING) addLedge(s, y);
     return s;
   },
 
   tick(s, { held }) {
     if (s.done) return;
-    const v = rise(s);
-    for (const l of s.ledges) l.y -= v;
+    // Ease into each new tier's speed over about a second instead of jolting.
+    s.speed += (riseFor(tier(s)) - s.speed) * 0.05;
+    if (s.flash > 0) s.flash--;
+    for (const l of s.ledges) l.y -= s.speed;
     s.ledges = s.ledges.filter(l => l.y > TOP - THICK);
     const last = s.ledges[s.ledges.length - 1];
     if (!last || last.y < H) addLedge(s, (last?.y ?? H) + SPACING);
 
-    // Steer, but never sideways into a ledge the ball is dropping through. A
-    // ball resting on a ledge sits up to one tick of rise into it; that one
-    // isn't "through", hence the pixel of slack.
+    // Steer. A ball already inside a gap stays between its walls; one that
+    // overlaps a ledge any other way is resting on it (the ledge rose into
+    // it this tick) and the landing below settles that.
     const steer = (held.right ? 1 : 0) - (held.left ? 1 : 0);
-    s.x = Math.max(0, Math.min(W - BALL, s.x + steer * MOVE));
-    for (const l of s.ledges) {
-      if (s.y + BALL > l.y + 1 && s.y < l.y + THICK) s.x = Math.max(l.gap, Math.min(l.gap + l.width - BALL, s.x));
-    }
+    const nx = Math.max(0, Math.min(W - BALL, s.x + steer * moveFor(tier(s))));
+    const through = s.ledges.find(l => overlaps(s, l) && inGap(s.x, l));
+    s.x = through ? Math.max(through.gap, Math.min(through.gap + through.width - BALL, nx)) : nx;
 
-    // Fall, or ride the ledge underneath up the screen.
+    // Fall, then stand on any ledge the ball overlaps outside its gap: one it
+    // fell onto, or one that rose into it. The overlap window (ball plus
+    // ledge, 7px) is wider than a tick of fall plus rise, so nothing tunnels.
     s.vy = Math.min(FALL_MAX, s.vy + GRAVITY);
-    s.y += s.vy;
-    const under = s.ledges.find(l => landing(s, l));
+    s.y = Math.min(H - BALL, s.y + s.vy);
+    const under = s.ledges.find(l => overlaps(s, l) && !inGap(s.x, l));
     if (under) { s.y = under.y - BALL; s.vy = 0; }
-    s.y = Math.min(H - BALL, s.y);
 
     for (const l of s.ledges) {
-      if (!l.passed && s.y > l.y + THICK) { l.passed = true; s.depth++; }
+      if (!l.passed && s.y > l.y + THICK) {
+        l.passed = true;
+        s.depth++;
+        if (s.depth % TIER === 0) s.flash = 45;
+      }
     }
     if (s.y <= TOP) s.done = true;
   },
@@ -111,6 +122,11 @@ const descent: Game<State> = {
     g.rect(0, 11, W, 1, 3);
     g.text(`loss ${lossAt(s.depth).toFixed(3)}`, 3, 2, 3);
     g.text(`depth ${s.depth}`, W - 3, 2, 2, 'right');
+    // A blinking banner as each speed tier starts.
+    if (s.flash > 0 && Math.floor(s.flash / 8) % 2 === 0) {
+      g.rect(34, 44, W - 68, 13, 3);
+      g.text('faster', W / 2, 47, 0, 'center');
+    }
   },
 
   over: s => s.done,
