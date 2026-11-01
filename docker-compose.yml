@@ -15,7 +15,7 @@ services:
     image: portfolio-site:local
     environment:
       # Cloudflare Worker backing /mcp, /api/ask, guestbook, eval, telemetry.
-      WORKER_ORIGIN: ${WORKER_ORIGIN:-https://portfolio-worker.workers.dev}
+      WORKER_ORIGIN: ${WORKER_ORIGIN:-https://portfolio-worker-production.acharyaprabigya.workers.dev}
     ports:
       - "8080:80"
     restart: unless-stopped

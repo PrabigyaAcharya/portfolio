@@ -40,7 +40,7 @@ FROM nginx:1.27-alpine AS production
 # Origin of the Cloudflare Worker that backs the dynamic routes
 # (/mcp, /api/ask, guestbook, leaderboard, eval, live telemetry).
 # Override per-environment in Dokploy. No trailing slash.
-ENV WORKER_ORIGIN=https://portfolio-worker.workers.dev
+ENV WORKER_ORIGIN=https://portfolio-worker-production.acharyaprabigya.workers.dev
 # Restrict envsubst to our own variable so nginx's $uri/$host survive untouched.
 ENV NGINX_ENVSUBST_FILTER=WORKER_ORIGIN
 
