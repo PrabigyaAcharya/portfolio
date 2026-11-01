@@ -67,7 +67,8 @@ const site = getSiteData();
         The visible site is built with <a href="https://astro.build">Astro 5</a> (fully static output)
         and styled with plain CSS — no utility classes, no component library.
         Every page renders meaningful HTML with JavaScript disabled; JS is used
-        only for progressive enhancement (telemetry polling, ask-box, keyboard navigation).
+        only for progressive enhancement (telemetry polling, ask-box, keyboard navigation,
+        swapping screens in place, and the cartridge games).
       </p>
       <p>
         The look borrows the palette and layout of an original-model handheld console:
@@ -145,10 +146,37 @@ const site = getSiteData();
         </table>
       </div>
 
+      <h2 id="cartridges-heading">Cartridges</h2>
+      <p>
+        The shelf beside the handheld on the landing page holds three small original games:
+        Descent, Context Window and Camera Ready. Insert one and it plays on the handheld's
+        screen; click the cartridge sticking out of the top to eject it. Whatever is inserted
+        also runs in the small screen at the right of every inside page on wide displays.
+        Click that screen to play; the arrow keys then steer the game instead of the tabs
+        until you press <kbd>Esc</kbd>.
+      </p>
+      <div class="table-scroll">
+        <table aria-label="Game controls">
+          <thead>
+            <tr><th>Key</th><th>Handheld</th><th>Action</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><kbd>←</kbd> <kbd>↑</kbd> <kbd>→</kbd> <kbd>↓</kbd></td><td>D-pad</td><td>Move</td></tr>
+            <tr><td><kbd>Z</kbd> or <kbd>Space</kbd></td><td>A</td><td>Action (hop, drop)</td></tr>
+            <tr><td><kbd>Enter</kbd></td><td>B (Start)</td><td>Start, restart</td></tr>
+            <tr><td><kbd>Esc</kbd></td><td></td><td>Stop playing in the inside-page screen</td></tr>
+          </tbody>
+        </table>
+      </div>
+
       <h2 id="privacy-heading">Privacy</h2>
       <p>
         No analytics. No tracking cookies. No third-party scripts except Google Fonts
         (loaded non-blocking; fallback stack is the system sans-serif).
+      </p>
+      <p>
+        Your shell colour, the inserted cartridge and your best scores are kept in this
+        browser's local storage and never leave it.
       </p>
       <p>
         The worker receives IP addresses for rate limiting. IPs are immediately hashed
