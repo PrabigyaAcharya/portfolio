@@ -66,20 +66,20 @@ const routes = [
   .landing-mark small { font-weight: 500; font-size: 15px; letter-spacing: 0.02em; margin-right: 8px; }
   .landing-byline { font-weight: 600; font-size: 13px; letter-spacing: 0.06em; }
 
-  /* The handheld with the cartridge shelf beside it; stacked on phones. */
+  /* The handheld; the cartridge drawer is pinned to the window's right
+     edge, and sits below the device on phones. */
   .landing-stage {
     flex: 1 1 auto;
     min-height: 0;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 72px;
-    padding-top: 40px;  /* room for a seated cartridge above the device */
+    gap: 26px;
   }
 
   @media (max-width: 700px) {
     .landing { padding: 16px; gap: 16px; }
-    .landing-stage { flex-direction: column; gap: 32px; padding-top: 48px; }
     .landing-byline { display: none; }
   }
 </style>

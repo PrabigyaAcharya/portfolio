@@ -5,8 +5,8 @@
 // the device's own screen (a "trailer"; Start or the body then opens it), the
 // lozenges go to GitHub and Scholar, and A switches between the grey and
 // black shells. Without JS the arms are plain links into their sections.
-// A cartridge from the shelf (Cartridges.astro) seats in .dev-slot and plays
-// on .dev-game; while one is in, the controls drive the game instead.
+// A cartridge picked from the drawer (Cartridges.astro) plays on .dev-game;
+// while one is selected, the controls drive the game instead.
 import { getCollection } from 'astro:content';
 import { getSiteData, getPublications, getNow, getCV } from '../lib/content';
 import Portrait from './Portrait.astro';
@@ -88,14 +88,6 @@ const sections = [
         </span>
 
         <span class="visually-hidden" aria-live="polite" data-preview-status></span>
-
-        <!-- The cartridge slot, behind the shell: a seated cartridge pokes out
-             above the top edge. Filled and shown by Cartridges.astro. -->
-        <span class="dev-slot">
-          <button class="dev-cart" type="button" hidden>
-            <span class="cart-label"></span>
-          </button>
-        </span>
 
         <span class="dev-mark" aria-hidden="true"><small>{firstName.toLowerCase()}</small> {rest.join(' ')}</span>
 
@@ -369,7 +361,7 @@ const sections = [
     box-shadow: inset 0 0 0 4px var(--screen-lit-edge), inset 0 8px 18px rgba(20, 40, 0, .25), 0 0 40px rgba(155, 188, 15, .35);
   }
 
-  /* ── Cartridge in: the screen runs the game ───────────────────────────── */
+  /* ── Cartridge selected: the screen runs the game ────────────────────── */
   /* The device faces you while a game is in, and the screen keeps the
      unlit olive the game's shades are drawn in. */
   .scale.has-cart .settle { transform: none; }
@@ -392,19 +384,6 @@ const sections = [
   .dev-game[hidden] { display: none; }
   .dev-lcd.boot .dev-game { animation: boot .36s steps(3, end); }
   @keyframes boot { from { opacity: 0; } to { opacity: 1; } }
-
-  /* The slot sits behind the front faces, so only the top of a seated
-     cartridge shows above the shell. */
-  .dev-slot {
-    position: absolute;
-    top: -54px;
-    left: 50%;
-    width: 92px;
-    margin-left: -46px;
-    transform: translateZ(-26px);
-    transform-style: preserve-3d;
-  }
-  .device > .dev-slot .dev-cart { pointer-events: auto; }
 
   .dev-mark {
     padding: 0 4px;

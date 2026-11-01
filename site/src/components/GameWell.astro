@@ -1,6 +1,6 @@
 ---
 // GameWell.astro — the small screen-within-the-screen on the right of every
-// inside page. It runs whichever cartridge is seated in the landing handheld:
+// inside page. It runs whichever cartridge is selected on the landing page:
 // an attract loop by default, playable once clicked (the arrow keys then
 // drive the game instead of the tabs; Esc hands them back). It persists across
 // tab swaps, so a game keeps going while you browse. Wide screens only, and
@@ -14,7 +14,7 @@
     <span class="well-title" data-well-title>No cartridge</span>
     <span class="well-sub" data-well-sub></span>
   </p>
-  <a class="well-insert" href="/" data-well-insert>Insert one on the handheld</a>
+  <a class="well-insert" href="/" data-well-insert>Pick one on the handheld</a>
 </aside>
 
 <script>
@@ -98,7 +98,7 @@
       if (!well.contains(e.relatedTarget as Node | null)) stopPlaying();
     });
 
-    // Follow the handheld: another tab inserting or ejecting, or this one.
+    // Follow the handheld: another tab selecting or stopping a cartridge, or this one.
     window.addEventListener('storage', (e) => { if (e.key === 'cartridge') load(); });
     document.addEventListener(CARTRIDGE_EVENT, () => load());
     // Only run a game while the well is actually on screen.
