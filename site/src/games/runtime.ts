@@ -137,7 +137,7 @@ export async function mountGame(
   function drawOver() {
     game.draw(state, g);
     if (mode === 'demo') return;
-    const bw = 96, bh = 46, bx = (W - bw) / 2, by = (H - bh) / 2;
+    const bw = 108, bh = 46, bx = (W - bw) / 2, by = (H - bh) / 2;
     g.rect(bx - 3, by - 3, bw + 6, bh + 6, 3);
     g.rect(bx, by, bw, bh, 0);
     g.text('game over', W / 2, by + 5, 3, 'center');

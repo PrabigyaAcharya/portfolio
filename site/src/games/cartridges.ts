@@ -12,7 +12,7 @@ export interface Cartridge {
 }
 
 export const cartridges: Cartridge[] = [
-  { id: 'descent',        title: 'Descent',        labelLine: 'Tune the learning rate', load: () => import('./descent').then(m => m.default) },
+  { id: 'descent',        title: 'Descent',        labelLine: 'Keep going down', load: () => import('./descent').then(m => m.default) },
   { id: 'context-window', title: 'Context Window', labelLine: 'Mind the overflow',   load: () => import('./context-window').then(m => m.default) },
   { id: 'camera-ready',   title: 'Camera Ready',   labelLine: 'Stack before the deadline', load: () => import('./camera-ready').then(m => m.default) },
 ];
