@@ -48,7 +48,7 @@ Contrast rules: reading text on the LCD is always `--screen-ink` on `--screen` (
 - Device and bezel corners are large bottom-right only: `--radius-device` (`16px 16px 84px 16px`) on the landing device; the full-window bezel uses `0 0 64px 0`.
 - Shell grain: `--shell-grain`. LCD inset: `--lcd-inset`. Bezel bevel: `--bezel-bevel` (the full-window bezel has no drop shadow).
 - Pinstripe under the bezel top edge: 3px magenta over 3px blue (`.pinstripe`).
-- CRT glass over the whole LCD (`.lcd::after`): 1-on-2-off ink scanlines, a fainter vertical dot-matrix grid, a radial vignette plus inset tube shadow; `.lcd::before` is a faint scan band rolling down every 9s (off ≤700px and under reduced motion). `.lcd-scroll` text gets a ±0.6px magenta/blue phosphor fringe. All of it is `pointer-events: none` and hidden in print. Keep it subtle — body copy must stay AA readable.
+- CRT glass over the whole LCD (`.lcd::after`): 1-on-2-off ink scanlines, a fainter vertical dot-matrix grid, a radial vignette plus inset tube shadow; `.lcd::before` is a faint scan band rolling down every 9s in `steps(90)` (off ≤700px and under reduced motion). `.lcd-scroll` text gets a ±0.6px magenta/blue phosphor fringe. All of it is `pointer-events: none` and hidden in print. Keep it subtle — body copy must stay AA readable.
 - On the LCD, rules are 3px solid ink (`--rule-ink`); left-rule blocks are 4px (`.ink-rule`). No hairlines, no shadows, no rounded corners inside the screen.
 - D-pad arms are ribbed with `repeating-linear-gradient` and have a centre dimple; A/B are domed (radial highlight at 35% 28%, 4px hard shadow, engraved letters).
 
@@ -75,7 +75,7 @@ Use these before inventing anything:
 
 ## Motion and interaction
 
-- Landing turn: the device rests angled (`rotateY(-32deg) rotateX(8deg)`, perspective 1400px) and turns to face the viewer only while hovered or focused, swinging back when the pointer leaves — a `.9s cubic-bezier(.45,0,.15,1)` transition, never an autoplay loop. Hover is read off the untransformed `.scale` wrapper so the turning device can't slip out from under the cursor. Idle float `translateY(0 → -8px)` 7s. Hover/focus also lights the screen in `steps(3,end)`. **No scale or lift on hover.**
+- Landing turn: the device rests angled (`rotateY(-32deg) rotateX(8deg)`, perspective 1400px) and turns to face the viewer only while hovered or focused, swinging back when the pointer leaves — a `.9s cubic-bezier(.45,0,.15,1)` transition, never an autoplay loop. Hover is read off the untransformed `.scale` wrapper so the turning device can't slip out from under the cursor. Idle float `translateY(0 → -8px)` 7s, in whole-pixel `steps(9, jump-none)` so the 3D device isn't re-composited every frame. Hover/focus also lights the screen in `steps(3,end)`. **No scale or lift on hover.**
 - On the LCD, hovers **invert ink and screen in 2 stepped frames** (`--step-invert`), never smooth fades. The active tab is permanently inverted.
 - The block cursor blinks with `steps(1,end)`.
 - Landing → screen uses a cross-document View Transition on `view-transition-name: lcd` (CSS only).

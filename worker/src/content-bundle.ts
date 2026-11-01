@@ -1,5 +1,5 @@
 // AUTO-GENERATED — do not edit by hand; run `npm run bundle-content`
-// Generated at: 2026-11-01T07:12:47.571Z
+// Generated at: 2026-11-01T07:22:22.905Z
 
 export interface ResearchThread {
   id: string;
@@ -126,7 +126,7 @@ export const site: SiteConfig = {
   "research_threads": [
     {
       "id": "thread-1",
-      "name": "Privacy-preserving NLP",
+      "name": "NLP",
       "blurb": "Lightweight language models for PII masking in conversational text — accuracy and deployment at the edge."
     },
     {

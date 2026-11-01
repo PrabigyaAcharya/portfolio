@@ -138,16 +138,21 @@ export async function mountGame(
     else game.draw(state, g);
   }
 
+  // Draw only when the game has moved on: every tick while playing, every
+  // other tick (15 fps) for the attract loop. Nothing else changes between
+  // ticks, and each canvas update re-composites the screen around it.
   let raf = 0;
   let acc = 0;
   let last = performance.now();
+  let drawn = -1;
   function loop(now: number) {
     raf = requestAnimationFrame(loop);
     if (document.hidden) { last = now; return; }
     acc += Math.min(now - last, 250);
     last = now;
     while (acc >= STEP) { step(); acc -= STEP; }
-    render();
+    const due = mode === 'demo' ? frame >> 1 : frame;
+    if (due !== drawn) { drawn = due; render(); }
   }
 
   function setMode(next: Mode) {
@@ -161,6 +166,7 @@ export async function mountGame(
     if (mode === 'demo') newGame();
     last = performance.now();
     acc = 0;
+    drawn = -1;
     raf = requestAnimationFrame(loop);
   }
 

@@ -33,6 +33,12 @@ a:hover { color: var(--print-blue-press); }
    from the landing into the site reads as zooming into the screen. */
 @view-transition { navigation: auto; }
 ::view-transition-group(lcd) { animation-duration: .45s; animation-timing-function: cubic-bezier(.45,0,.15,1); }
+/* Tab swaps inside the screen (the ClientRouter marks them with
+   data-astro-transition) are instant. Without this the lcd morph above ran on
+   every tab change, and its overlay swallowed clicks for half a second. */
+html[data-astro-transition]::view-transition-group(*),
+html[data-astro-transition]::view-transition-old(*),
+html[data-astro-transition]::view-transition-new(*) { animation: none; }
 
 @media (prefers-reduced-motion: reduce) {
   @view-transition { navigation: none; }
@@ -176,7 +182,9 @@ a:hover { color: var(--print-blue-press); }
   inset: 4px 4px auto;
   height: 22%;
   background: linear-gradient(to bottom, transparent, rgba(238,240,184,.07) 60%, transparent);
-  animation: crt-roll 9s linear infinite;
+  /* Stepped like everything else on the LCD: ten moves a second instead of
+     re-compositing the whole screen on every display frame. */
+  animation: crt-roll 9s steps(90, end) infinite;
 }
 @keyframes crt-roll {
   from { transform: translateY(-100%); }

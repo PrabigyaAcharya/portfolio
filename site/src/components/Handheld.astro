@@ -223,11 +223,13 @@ const sections = [
   .scale:hover .settle,
   .scale:focus-within .settle { transform: rotateY(0) rotateX(0); }
 
+  /* The float moves a whole pixel at a time (9 positions each way), so the
+     3D device is re-composited a few times a second, not on every frame. */
   @keyframes idle {
-    0%, 100% { transform: translateY(0); }
-    50%      { transform: translateY(-8px); }
+    0%, 100% { transform: translateY(0);    animation-timing-function: steps(9, jump-none); }
+    50%      { transform: translateY(-8px); animation-timing-function: steps(9, jump-none); }
   }
-  .idle { animation: idle 7s ease-in-out infinite; transform-style: preserve-3d; will-change: transform; }
+  .idle { animation: idle 7s infinite; transform-style: preserve-3d; will-change: transform; }
 
   /* ── Body ─────────────────────────────────────────────────────────────── */
   .device {
