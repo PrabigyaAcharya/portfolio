@@ -26,6 +26,11 @@ jobs:
       - name: Worker tests
         run: npm test -w worker
 
+      - name: Content invariants (no TODO placeholders)
+        run: npm run check-content
+        env:
+          PROD_GUARD: '1'
+
   # ── Deploy Cloudflare Worker (runs in parallel with deploy-site) ───────────────
   deploy-worker:
     needs: ci

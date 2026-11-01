@@ -11,7 +11,7 @@
 // with `mask-image` over `var(--screen-ink)`, so its colour always comes from
 // the tokens.
 //
-// No sprite, no mask: the pages then show a TODO placeholder.
+// No sprite, no mask: the pages then show no portrait.
 
 import { existsSync, mkdirSync, readFileSync, rmSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
@@ -56,7 +56,7 @@ async function main(src: string) {
 }
 
 if (!src || !existsSync(src)) {
-  console.warn(`[build-portrait] ${src ? `${site.portrait!.src} not found in content/` : 'no portrait.src in site.yaml'}; pages will show the TODO placeholder.`);
+  console.warn(`[build-portrait] ${src ? `${site.portrait!.src} not found in content/` : 'no portrait.src in site.yaml'}; pages will show no portrait.`);
   rmSync(out, { force: true });
 } else {
   main(src).catch((err) => { console.error('[build-portrait]', err); process.exit(1); });

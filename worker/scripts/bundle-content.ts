@@ -142,8 +142,8 @@ export interface Publication {
   venue: string;
   year: number;
   thread: string;
-  summary: string;
-  abstract: string;
+  summary?: string;
+  abstract?: string;
   backstory?: string;
   links: PublicationLinks;
   bibtex: string;

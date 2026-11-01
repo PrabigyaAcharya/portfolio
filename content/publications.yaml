@@ -1,23 +1,18 @@
-# - id: placeholder-paper-2025
-#   title: "TODO(prabigya): Paper Title Goes Here"
-#   authors: ["P. Acharya", "TODO Coauthor A", "TODO Coauthor B"]
-#   venue: "TODO(prabigya): Conference / Workshop / arXiv"
-#   year: 2025
-#   thread: thread-1
-#   summary: "TODO(prabigya): One plain-language sentence describing what this paper does."
-#   abstract: |
-#     TODO(prabigya): Full abstract text goes here.
-#   backstory: "TODO(prabigya): Optional margin note — how it came about, what failed."
-#   links:
-#     pdf: ""
-#     arxiv: ""
-#   bibtex: |
-#     @inproceedings{placeholder-paper-2025,
-#       title     = {TODO(prabigya): Paper Title Goes Here},
-#       author    = {Acharya, Prabigya and TODO, Coauthor},
-#       booktitle = {TODO(prabigya): Proceedings},
-#       year      = {2025},
-#     }
+# One entry per paper, newest first:
+#
+# - id: surname2026keyword          # stable: used in URLs, the BibTeX key and MCP
+#   title: "…"
+#   authors: ["…", "…"]               # display order
+#   venue: "…"
+#   year: 2026
+#   thread: thread-1                 # a research_threads id from site.yaml
+#   summary: "…"                     # optional: one plain-language sentence
+#   abstract: |                      # optional
+#     …
+#   backstory: "…"                   # optional margin note
+#   links: { pdf: "…", arxiv: "…" }  # omit empty keys
+#   bibtex: |                        # verbatim; the key must equal id
+#     @inproceedings{surname2026keyword, …}
 #   selected: true
 
 - id: acharya2026generating
@@ -26,9 +21,6 @@
   venue: "Proceedings of the 5th Workshop on NLP for Positive Impact (NLP4PI) at EMNLP 2026 (accepted)"
   year: 2026
   thread: thread-3
-  summary: "TODO(prabigya): One plain-language sentence describing what this paper does."
-  abstract: |
-    TODO(prabigya): Full abstract text goes here (copy it from the OpenReview page).
   links:
     pdf: "https://openreview.net/pdf?id=fVl7RxEVSV"
   bibtex: |
@@ -70,9 +62,6 @@
   venue: "2nd MVIC National Conference, Kathmandu, September 2026; in press, MVIC Journal of Management and Information Technology, 2(1)"
   year: 2026
   thread: thread-4
-  summary: "TODO(prabigya): One plain-language sentence describing what this paper does."
-  abstract: |
-    TODO(prabigya): Full abstract text goes here.
   backstory: "Co-authored with supervised undergraduates."
   links: {}
   bibtex: |
@@ -91,9 +80,6 @@
   venue: "2nd MVIC National Conference, Kathmandu, September 2026; in press, MVIC Journal of Management and Information Technology, 2(1)"
   year: 2026
   thread: thread-4
-  summary: "TODO(prabigya): One plain-language sentence describing what this paper does."
-  abstract: |
-    TODO(prabigya): Full abstract text goes here.
   backstory: "Co-authored with supervised undergraduates."
   links: {}
   bibtex: |
@@ -112,9 +98,6 @@
   venue: "2nd MVIC National Conference, Kathmandu, September 2026; in press, MVIC Journal of Management and Information Technology, 2(1)"
   year: 2026
   thread: thread-4
-  summary: "TODO(prabigya): One plain-language sentence describing what this paper does."
-  abstract: |
-    TODO(prabigya): Full abstract text goes here.
   backstory: "Co-authored with supervised undergraduates."
   links: {}
   bibtex: |
@@ -133,9 +116,6 @@
   venue: "2nd MVIC National Conference, Kathmandu, September 2026; in press, MVIC Journal of Management and Information Technology, 2(1)"
   year: 2026
   thread: thread-4
-  summary: "TODO(prabigya): One plain-language sentence describing what this paper does."
-  abstract: |
-    TODO(prabigya): Full abstract text goes here.
   backstory: "Co-authored with supervised undergraduates."
   links: {}
   bibtex: |

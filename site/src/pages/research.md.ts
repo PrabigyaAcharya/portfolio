@@ -34,10 +34,8 @@ export const GET: APIRoute = (context) => {
       lines.push(`**Authors:** ${pub.authors.join(', ')}`);
       lines.push(`**Venue:** ${pub.venue} (${pub.year})`);
       lines.push('');
-      lines.push(pub.summary);
-      lines.push('');
-      lines.push(`**Abstract:** ${pub.abstract.trim()}`);
-      lines.push('');
+      if (pub.summary) lines.push(pub.summary, '');
+      if (pub.abstract) lines.push(`**Abstract:** ${pub.abstract.trim()}`, '');
       if (pub.backstory) {
         lines.push(`*Note: ${pub.backstory}*`);
         lines.push('');

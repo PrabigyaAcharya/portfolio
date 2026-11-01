@@ -68,7 +68,7 @@ function searchContent(query: string, siteUrl: string): SearchChunk[] {
       results.push({
         source: `publications.yaml#${pub.id}`,
         title: pub.title,
-        snippet: pub.summary,
+        snippet: pub.summary ?? pub.venue,
         url: `${siteUrl}/research#${pub.id}`,
         score,
       });

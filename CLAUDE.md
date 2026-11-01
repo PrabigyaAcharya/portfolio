@@ -14,7 +14,7 @@ Three signature features live on top: a **live lab telemetry strip** (what's tra
 - **Single source of truth.** All content lives in `content/` as YAML + markdown. The website, the MCP server, the JSON API, the CV PDF, and llms.txt are all *renderings* of the same files. Never duplicate content into a component or the worker.
 - **Static-first, server-rendered.** The current site is a client-rendered SPA that is invisible to crawlers and agents — this rebuild exists partly to fix that. Every page must render meaningful HTML with JavaScript disabled. JS is allowed only for progressive enhancement (telemetry polling, ask-box, keyboard nav). Each LCD tab is a real route, not a client-side view.
 - **The device is the design.** Everything is either shell, bezel or LCD; materials and motion come only from the handheld spec (smooth LCD inverts, the landing swivel). No SaaS cards, no gradient washes, no emoji, no real-hardware trademarks. Read `.claude/skills/handheld-design/SKILL.md` before writing any CSS or page layout.
-- **Placeholders are loud.** You do not know Prabigya's real publications, bio, or research focus. Wherever real personal content is needed, insert clearly marked `TODO(prabigya): ...` placeholders with realistic *structure* but obviously fake text (e.g. "Paper title goes here"). Never invent plausible-sounding papers, affiliations, or biography — fake-but-plausible is worse than obviously-fake.
+- **No placeholders in shipped content.** You do not know Prabigya's publications, bio, or research focus beyond what is in `content/`. Never invent personal facts — plausible or otherwise. When real content is missing, leave the field out (make it optional and render nothing) rather than shipping a `TODO` or dummy text; nothing on the live site may say TODO. Mention what's missing to Prabigya in chat instead.
 - **The machine layer is a first-class product.** Treat the MCP server and JSON API with the same care as the visible site: versioned schemas, helpful error messages, rate limits.
 
 ## Tech stack (decided — don't relitigate)
@@ -89,7 +89,7 @@ cd worker && npm test           # vitest for tool handlers + scoring
 3. Readable at 360px wide; the bezel thins, tabs wrap and sidenotes collapse per the design skill.
 4. Any new content type is exposed in **all four** machine surfaces: page HTML, `.md` twin, `/api/*.json`, MCP tool. The content-schema skill has the checklist.
 5. `npm run check` and worker tests pass.
-6. No real-sounding fabricated personal facts anywhere.
+6. No fabricated personal facts and no `TODO`/placeholder text anywhere in content or rendered output (`npx tsx scripts/check-invariants.ts` with `PROD_GUARD=1` fails on `TODO(prabigya)`).
 
 ## Things you must NOT do
 

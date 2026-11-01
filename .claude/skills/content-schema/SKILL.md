@@ -9,7 +9,7 @@ Everything user-visible derives from `content/`. If you find yourself hardcoding
 
 Validate all YAML with **zod** schemas defined once in a shared package (`shared/schema.ts`) imported by *both* the Astro site and the worker. The build fails loudly on invalid content. Never let the two sides define their own types for the same data.
 
-All personal facts are placeholders until Prabigya fills them in. Use `TODO(prabigya)` markers and structurally-realistic but obviously fake values ("Paper title goes here", year `0000` is invalid — use a real-shaped year with a TODO comment). Never invent plausible papers, venues, or biography.
+Only what Prabigya has provided goes in `content/`. Never invent papers, venues, abstracts or biography, and never ship `TODO` or dummy text: when something is unknown, omit the field (optional fields render nothing) and mention it in chat. The yaml examples below show shapes, not content.
 
 ## `content/site.yaml`
 
@@ -42,9 +42,9 @@ A list, newest first. Fields:
   venue: "TODO(prabigya): venue / workshop / preprint"
   year: 2026
   thread: thread-1                # must match a research_threads id
-  summary: "TODO(prabigya): one plain-language sentence — 'In one sentence: …'"
-  abstract: |
-    TODO(prabigya): full abstract
+  summary: "…"                    # optional: one plain-language sentence
+  abstract: |                    # optional
+    …
   backstory: "TODO(prabigya): optional margin note — how it came about, what failed"
   links: { pdf: "", arxiv: "", code: "", poster: "" }   # omit empty keys
   bibtex: |                       # verbatim; key must equal id

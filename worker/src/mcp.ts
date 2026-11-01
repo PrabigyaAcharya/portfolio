@@ -141,7 +141,7 @@ export function buildMcpServer(env: Env): McpServer {
             title: pub.title,
             url: `${siteUrl}/research#${pub.id}`,
             score,
-            snippet: pub.summary,
+            snippet: pub.summary ?? pub.venue,
           });
         }
       }
