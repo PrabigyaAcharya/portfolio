@@ -1,5 +1,5 @@
 // AUTO-GENERATED — do not edit by hand; run `npm run bundle-content`
-// Generated at: 2026-11-01T12:32:30.030Z
+// Generated at: 2026-11-01T12:34:58.690Z
 
 export interface ResearchThread {
   id: string;
@@ -258,7 +258,7 @@ export const now: NowData = {
     "Research coordinator at Sunway"
   ],
   "reading": [
-    "Illiad by Homer",
+    "If Anyone Builds It, Everyone Dies by Eliezer Yudkowsky and Nate Soares",
     "Manifold Steering Reveals the Shared Geometry of Neural Network Representation and Behavior"
   ],
   "open_to": [
