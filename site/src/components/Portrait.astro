@@ -1,8 +1,8 @@
 ---
-// Portrait.astro — the pixel portrait on the LCD: the 48×48 ink mask built by
-// scripts/build-portrait.ts, painted in --screen-ink. Sizes should divide the
-// stored 192px evenly (192, 96) so the pixels stay square and sharp. Until a
-// photo has been converted it renders a loud TODO frame instead.
+// Portrait.astro — the pixel portrait on the LCD: the ink mask that
+// scripts/build-portrait.ts builds from the hand-drawn sprite, painted in
+// --screen-ink. Sizes should divide the stored 192px evenly (192, 96) so the
+// pixels stay square and sharp. Without a sprite it renders a loud TODO frame.
 import { getPortrait } from '../lib/content';
 
 export interface Props {
@@ -18,7 +18,7 @@ const vars = `--size:${size}px; --size-sm:${small}px`;
 {portrait ? (
   <span class="portrait" role="img" aria-label={portrait.alt} style={`${vars}; --mask:url(${portrait.url})`}></span>
 ) : (
-  <span class="portrait portrait-todo" style={vars}>TODO(prabigya): add a portrait photo (see site.yaml)</span>
+  <span class="portrait portrait-todo" style={vars}>TODO(prabigya): add a portrait sprite (see site.yaml)</span>
 )}
 
 <style>

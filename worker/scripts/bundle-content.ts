@@ -125,7 +125,7 @@ export interface SiteConfig {
   links: SiteLinks;
   mcp_endpoint: string;
   research_threads: ResearchThread[];
-  portrait?: { src: string; alt: string; crop?: [number, number, number, number] };
+  portrait?: { src: string; alt: string };
 }
 
 export interface PublicationLinks {

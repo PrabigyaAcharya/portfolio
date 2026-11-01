@@ -25,12 +25,11 @@ research_threads:            # used to group /research and power search_my_work
     name: "TODO(prabigya): research theme"
     blurb: "TODO(prabigya): 1–2 sentences in your voice"
 portrait:                    # optional; omit and pages show a TODO frame
-  src: "portrait.png"        # photo under content/, gitignored (content/portrait.*)
-  crop: [225, 70, 225, 225]  # optional [left, top, width, height] in photo pixels, square
-  alt: "Pixel-art portrait of …"
+  src: "portrait.txt"        # hand-drawn sprite under content/
+  alt: "Pixel-art cartoon of …"
 ```
 
-The build turns the photo into `site/public/images/portrait-mask.png` (committed). Without the photo, the existing mask is kept. `get_bio` returns its URL as `portrait_url`.
+`portrait.txt` is a square grid, one character per LCD pixel: `.` bare screen, `-` light, `+` mid, `#` full ink; its side must divide 192 (32 does). Edit it by hand. The build turns it into `site/public/images/portrait-mask.png`; `get_bio` returns that URL as `portrait_url`.
 
 ## `content/publications.yaml`
 

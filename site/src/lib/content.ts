@@ -35,7 +35,7 @@ const SiteSchema = z.object({
   mcp_endpoint: z.string(),
   research_threads: z.array(ResearchThreadSchema),
   // Photo in content/ that scripts/build-portrait.ts turns into the LCD pixel portrait.
-  portrait: z.object({ src: z.string(), alt: z.string(), crop: z.tuple([z.number(), z.number(), z.number(), z.number()]).optional() }).optional(),
+  portrait: z.object({ src: z.string(), alt: z.string() }).optional(),
 });
 
 const PublicationLinksSchema = z.object({
@@ -169,7 +169,7 @@ export function getPublicationsByYear(): Map<number, Publication[]> {
 /** Where scripts/build-portrait.ts writes the pixel portrait mask. */
 export const PORTRAIT_PATH = '/images/portrait-mask.png';
 
-/** The pixel portrait, or null until a photo has been converted. */
+/** The pixel portrait, or null until the sprite has been built. */
 export function getPortrait(): { url: string; alt: string } | null {
   const site = getSiteData();
   const built = existsSync(resolve(process.cwd(), 'public', PORTRAIT_PATH.slice(1)));

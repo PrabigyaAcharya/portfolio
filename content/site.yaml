@@ -11,14 +11,12 @@ links:
   # file and push to update it.
   cv_pdf: "https://raw.githubusercontent.com/PrabigyaAcharya/portfolio/main/content/Prabigya_Acharya_CV.pdf"
 mcp_endpoint: "https://prabigya.com.np/mcp"
-# The build turns this photo into the pixel portrait
-# (site/public/images/portrait-mask.png), which is committed. The photo itself
-# is gitignored. crop is [left, top, width, height] in photo pixels; keep it
-# square and tight on the face.
+# A hand-drawn 32×32 sprite: one character per LCD pixel, "." bare screen,
+# "-" light, "+" mid, "#" full ink. The build turns it into
+# site/public/images/portrait-mask.png.
 portrait:
-  src: "portrait.png"
-  crop: [225, 70, 225, 225]
-  alt: "Pixel-art portrait of Prabigya Acharya"
+  src: "portrait.txt"
+  alt: "Pixel-art cartoon of Prabigya Acharya: swept hair, round glasses, a wide grin"
 research_threads:
   - id: thread-1
     name: "NLP"

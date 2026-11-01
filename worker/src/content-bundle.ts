@@ -1,5 +1,5 @@
 // AUTO-GENERATED — do not edit by hand; run `npm run bundle-content`
-// Generated at: 2026-11-01T07:47:15.526Z
+// Generated at: 2026-11-01T08:28:24.129Z
 
 export interface ResearchThread {
   id: string;
@@ -23,7 +23,7 @@ export interface SiteConfig {
   links: SiteLinks;
   mcp_endpoint: string;
   research_threads: ResearchThread[];
-  portrait?: { src: string; alt: string; crop?: [number, number, number, number] };
+  portrait?: { src: string; alt: string };
 }
 
 export interface PublicationLinks {
@@ -146,14 +146,8 @@ export const site: SiteConfig = {
     }
   ],
   "portrait": {
-    "src": "portrait.png",
-    "alt": "Pixel-art portrait of Prabigya Acharya",
-    "crop": [
-      225,
-      70,
-      225,
-      225
-    ]
+    "src": "portrait.txt",
+    "alt": "Pixel-art cartoon of Prabigya Acharya: swept hair, round glasses, a wide grin"
   }
 };
 
