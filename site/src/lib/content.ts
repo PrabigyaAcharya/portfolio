@@ -35,7 +35,7 @@ const SiteSchema = z.object({
   mcp_endpoint: z.string(),
   research_threads: z.array(ResearchThreadSchema),
   // Photo in content/ that scripts/build-portrait.ts turns into the LCD pixel portrait.
-  portrait: z.object({ src: z.string(), alt: z.string() }).optional(),
+  portrait: z.object({ src: z.string(), alt: z.string(), crop: z.tuple([z.number(), z.number(), z.number(), z.number()]).optional() }).optional(),
 });
 
 const PublicationLinksSchema = z.object({

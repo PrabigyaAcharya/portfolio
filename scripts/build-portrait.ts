@@ -1,12 +1,17 @@
 #!/usr/bin/env tsx
 // scripts/build-portrait.ts — turns the photo named in site.yaml (portrait.src,
-// relative to content/) into the LCD pixel portrait at
-// site/public/images/portrait-mask.png. Run before every build and dev server.
+// relative to content/, optionally cut to portrait.crop) into the LCD pixel
+// portrait at site/public/images/portrait-mask.png. Run before every build and
+// dev server.
 //
-// The output is an alpha mask, not a picture: 48×48 LCD pixels, Bayer-dithered
-// to four levels of ink coverage, stored at 4× with nearest-neighbour so it
-// stays crisp at 1× and ½×. Pages paint it with `mask-image` over
+// The output is an alpha mask, not a picture: 48×48 LCD pixels in four flat
+// levels of ink coverage, stored at 4× with nearest-neighbour so it stays
+// crisp at 1× and ½×. Pages paint it with `mask-image` over
 // `var(--screen-ink)`, so its colour always comes from the tokens.
+//
+// The levels are flat (no dithering, which turns skin into checkerboard at
+// this size) and their thresholds come from the photo's own tone spread, so
+// any reasonably lit photo lands on all four.
 //
 // No photo, no change: an existing mask is kept (so the photo itself never has
 // to be committed), and without either the pages show a TODO placeholder.
@@ -21,40 +26,37 @@ const out = resolve(root, 'site', 'public', 'images', 'portrait-mask.png');
 
 const SIZE = 48;   // LCD pixels per side
 const UP = 4;      // stored scale
-const LEVELS = 4;  // screen, light, mid, full ink
+// Share of pixels darker than each cut, darkest first: full ink, mid, light.
+// The lightest 30% stay bare screen.
+const CUTS = [0.2, 0.42, 0.7];
 
-// 4×4 ordered-dither thresholds, 0..1.
-const BAYER = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5].map(v => (v + 0.5) / 16);
+interface PortraitYaml { src: string; crop?: [number, number, number, number] }
+const site = yaml.load(readFileSync(resolve(root, 'content', 'site.yaml'), 'utf-8')) as { portrait?: PortraitYaml };
+const portrait = site.portrait;
+const src = portrait?.src ? resolve(root, 'content', portrait.src) : null;
 
-const site = yaml.load(readFileSync(resolve(root, 'content', 'site.yaml'), 'utf-8')) as { portrait?: { src: string } };
-const src = site.portrait?.src ? resolve(root, 'content', site.portrait.src) : null;
-
-async function main(src: string) {
-  const { data } = await sharp(src)
-    .rotate()                                         // respect EXIF orientation
-    .resize(SIZE, SIZE, { fit: 'cover', position: sharp.strategy.attention })
-    .grayscale()
-    .normalise()
+async function main(src: string, crop?: PortraitYaml['crop']) {
+  let img = sharp(src).rotate();                    // respect EXIF orientation
+  if (crop) {
+    const [left, top, width, height] = crop;
+    img = img.extract({ left, top, width, height });
+  }
+  const { data } = await img
+    .resize(SIZE, SIZE, { fit: 'cover', position: sharp.strategy.attention, kernel: 'lanczos3' })
+    .grayscale()                                    // no sharpening: it speckles skin at 48 px
     .raw()
     .toBuffer({ resolveWithObject: true });
 
-  // Darker photo pixels get more ink.
-  const levels = new Uint8Array(SIZE * SIZE);
-  for (let y = 0; y < SIZE; y++) {
-    for (let x = 0; x < SIZE; x++) {
-      // Near-white reads as bare screen, so backgrounds don't fill with stray dots.
-      const ink = Math.max(0, (1 - data[y * SIZE + x] / 255 - 0.08) / 0.92);
-      const t = BAYER[(y % 4) * 4 + (x % 4)];
-      levels[y * SIZE + x] = Math.min(LEVELS - 1, Math.floor(ink * (LEVELS - 1) + t));
-    }
-  }
+  const sorted = Array.from(data.subarray(0, SIZE * SIZE)).sort((a, b) => a - b);
+  const th = CUTS.map(c => sorted[Math.floor(c * sorted.length)]);
+  const level = (v: number) => (v < th[0] ? 3 : v < th[1] ? 2 : v < th[2] ? 1 : 0);
 
   const W = SIZE * UP;
   const rgba = Buffer.alloc(W * W * 4);
   for (let y = 0; y < W; y++) {
     for (let x = 0; x < W; x++) {
-      const level = levels[Math.floor(y / UP) * SIZE + Math.floor(x / UP)];
-      rgba[(y * W + x) * 4 + 3] = Math.round((level / (LEVELS - 1)) * 255);
+      const v = data[Math.floor(y / UP) * SIZE + Math.floor(x / UP)];
+      rgba[(y * W + x) * 4 + 3] = Math.round((level(v) / 3) * 255);
     }
   }
 
@@ -64,8 +66,8 @@ async function main(src: string) {
 }
 
 if (!src || !existsSync(src)) {
-  const why = src ? `${site.portrait!.src} not found in content/` : 'no portrait.src in site.yaml';
+  const why = src ? `${portrait!.src} not found in content/` : 'no portrait.src in site.yaml';
   console.warn(`[build-portrait] ${why}; ${existsSync(out) ? 'keeping the existing mask' : 'pages will show the TODO placeholder'}.`);
 } else {
-  main(src).catch((err) => { console.error('[build-portrait]', err); process.exit(1); });
+  main(src, portrait?.crop).catch((err) => { console.error('[build-portrait]', err); process.exit(1); });
 }

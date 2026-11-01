@@ -11,11 +11,13 @@ links:
   # file and push to update it.
   cv_pdf: "https://raw.githubusercontent.com/PrabigyaAcharya/portfolio/main/content/Prabigya_Acharya_CV.pdf"
 mcp_endpoint: "https://prabigya.com.np/mcp"
-# TODO(prabigya): drop a head-and-shoulders photo at content/portrait.jpg. The
-# build turns it into the pixel portrait (site/public/images/portrait-mask.png);
-# commit the mask, and the photo too only if you want it in the public repo.
+# The build turns this photo into the pixel portrait
+# (site/public/images/portrait-mask.png), which is committed. The photo itself
+# is gitignored. crop is [left, top, width, height] in photo pixels; keep it
+# square and tight on the face.
 portrait:
-  src: "portrait.jpg"
+  src: "portrait.png"
+  crop: [225, 70, 225, 225]
   alt: "Pixel-art portrait of Prabigya Acharya"
 research_threads:
   - id: thread-1

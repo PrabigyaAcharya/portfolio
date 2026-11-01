@@ -30,3 +30,6 @@ npm-debug.log*
 
 # TypeScript build cache
 *.tsbuildinfo
+
+# Source photo for the pixel portrait; only the generated mask is committed
+content/portrait.*
