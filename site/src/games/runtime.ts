@@ -107,6 +107,20 @@ export async function mountGame(
     return { lines: [game.title], size: 8 };
   }
 
+  /** The hint on one line, or split at its double spaces when too wide. */
+  function hintLines(): string[] {
+    ctx.font = '8px Silkscreen, ui-monospace, monospace';
+    const fits = (t: string) => ctx.measureText(t.toUpperCase()).width <= W - 8;
+    if (fits(game.hint)) return [game.hint];
+    const lines: string[] = [];
+    for (const part of game.hint.split(/\s{2,}/)) {
+      const last = lines[lines.length - 1];
+      if (last !== undefined && fits(`${last}  ${part}`)) lines[lines.length - 1] = `${last}  ${part}`;
+      else lines.push(part);
+    }
+    return lines;
+  }
+
   function drawTitle() {
     g.clear(0);
     g.rect(4, 4, W - 8, 3, 3);
@@ -114,9 +128,9 @@ export async function mountGame(
     const { lines, size } = titleLines();
     const top = 18;
     lines.forEach((l, i) => g.text(l, W / 2, top + i * (size + 3), 3, 'center', size));
-    const below = top + lines.length * (size + 3) + 6;
-    g.text(game.hint, W / 2, below, 2, 'center');
-    if (best !== null) g.text(`best ${game.formatScore(best)}`, W / 2, below + 12, 2, 'center');
+    let below = top + lines.length * (size + 3) + 6;
+    for (const line of hintLines()) { g.text(line, W / 2, below, 2, 'center'); below += 10; }
+    if (best !== null) g.text(`best ${game.formatScore(best)}`, W / 2, below + 2, 2, 'center');
     if (mode !== 'still' && Math.floor(frame / 15) % 2 === 0) g.text('press start', W / 2, H - 22, 3, 'center');
   }
 

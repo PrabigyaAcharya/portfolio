@@ -30,7 +30,9 @@ export interface Gfx {
 export interface Game<S = unknown> {
   id: string;
   title: string;
-  /** One line of controls for the title screen, e.g. "A hop". */
+  /** Controls for the title screen, e.g. "A hop". Parts split by two spaces
+   *  wrap onto a second line when they don't fit. The pixel font has no
+   *  arrow glyphs, so write "arrows". */
   hint: string;
   create(seed: number): S;
   tick(state: S, input: Input): void;
