@@ -21,7 +21,9 @@ import { handleAsk } from './askbox.js';
 export interface Env {
   DB: D1Database;
   KV: KVNamespace;
-  GROQ_API_KEY?: string;
+  GROQ_API_KEY?: string;      // eval judging
+  COHERE_API_KEY?: string;    // the Ask box
+  COHERE_MODEL?: string;      // optional override of the Ask box's Cohere model
   SITE_URL?: string;
   TELEMETRY_TOKEN?: string;
   EVAL_ANSWERS?: string;

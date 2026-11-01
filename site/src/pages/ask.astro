@@ -5,12 +5,12 @@ import { getSiteData } from '../lib/content';
 
 const site = getSiteData();
 ---
-<Screen title="Ask" description={`Ask questions about ${site.name}'s papers and notes`} active="ask">
+<Screen title="Ask" description={`Ask questions about ${site.name}: research, papers, work, CV, notes`} active="ask">
   <div class="view ask-view">
-    <h1>Ask this notebook</h1>
+    <h1>Ask anything about me</h1>
     <p class="lcd-small">
-      Questions about my papers, posts and tools get answered from the notes themselves,
-      and nothing else. Answers cite the files they came from.
+      My research, papers, work, CV, what I'm doing now, the notebook: answers come
+      from this site and nothing else, and link to the pages they came from.
     </p>
     <AskBox />
   </div>

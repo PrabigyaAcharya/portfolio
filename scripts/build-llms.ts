@@ -35,7 +35,7 @@ const lines: string[] = [
   `- /cv ${BASE_URL}/cv — curriculum vitae`,
   `- /cv.md ${BASE_URL}/cv.md — machine-readable markdown of CV`,
   `- /notebook ${BASE_URL}/notebook — research notes and writings`,
-  `- /ask ${BASE_URL}/ask — ask this notebook (answers grounded in site content; POST /api/ask)`,
+  `- /ask ${BASE_URL}/ask — ask anything about Prabigya (answers grounded in all site content; POST /api/ask)`,
   `- /colophon ${BASE_URL}/colophon — how this site is built`,
   `- /colophon.md ${BASE_URL}/colophon.md — machine-readable markdown of colophon`,
   '',

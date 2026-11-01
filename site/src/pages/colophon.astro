@@ -119,12 +119,14 @@ const site = getSiteData();
         <li>Markdown twins — every page and notebook post has a <code>.md</code> version at the same URL with <code>.md</code> appended.</li>
       </ul>
 
-      <h2 id="ask-heading">Ask this notebook</h2>
+      <h2 id="ask-heading">Ask</h2>
       <p>
-        The <a href="/ask">Ask</a> screen lets you ask questions about the research and writing here.
-        Answers are grounded strictly in the content of this site — the worker retrieves
-        the most relevant chunks, then sends them to <code>claude-haiku-4-5</code>
-        with a system prompt that forbids answering outside the provided context.
+        The <a href="/ask">Ask</a> screen answers questions about anything on this site:
+        research, papers, work, education, teaching, the now page and the notebook. The
+        worker sends Cohere's <code>command-a</code> model the whole profile, CV, now page
+        and publication list, plus the notebook sections that best match the question
+        (BM25), and a system prompt that forbids answering outside them. Cohere returns
+        which documents it used, and those become the cited pages under each answer.
       </p>
       <p>
         Hard limits: 10 questions per IP per hour, 200 per day globally.

@@ -12,7 +12,7 @@
 - /cv https://prabigya.com.np/cv — curriculum vitae
 - /cv.md https://prabigya.com.np/cv.md — machine-readable markdown of CV
 - /notebook https://prabigya.com.np/notebook — research notes and writings
-- /ask https://prabigya.com.np/ask — ask this notebook (answers grounded in site content; POST /api/ask)
+- /ask https://prabigya.com.np/ask — ask anything about Prabigya (answers grounded in all site content; POST /api/ask)
 - /colophon https://prabigya.com.np/colophon — how this site is built
 - /colophon.md https://prabigya.com.np/colophon.md — machine-readable markdown of colophon
 

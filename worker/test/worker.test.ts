@@ -359,7 +359,7 @@ describe('ask-box', () => {
   it('rejects question over 300 chars with HTTP 400', async () => {
     const { handleAsk } = await import('../src/askbox.js');
     const env = createMockEnv();
-    env.GROQ_API_KEY = 'test-key'; // set so we reach length check
+    env.COHERE_API_KEY = 'test-key'; // set so we reach length check
     const longQuestion = 'a'.repeat(301);
     const req = new Request('http://localhost/api/ask', {
       method: 'POST',
@@ -375,7 +375,7 @@ describe('ask-box', () => {
   it('prompt construction wraps user text in <user_question> delimiters', async () => {
     const { buildAskPrompt } = await import('../src/askbox.js');
     const question = 'What is your research about?';
-    const { user } = buildAskPrompt(question, 'some context');
+    const { user } = buildAskPrompt(question);
     expect(user).toContain('<user_question>');
     expect(user).toContain(question);
     expect(user).toContain('</user_question>');
@@ -388,7 +388,7 @@ describe('ask-box', () => {
     const { handleAsk } = await import('../src/askbox.js');
     const kv = createMockKV();
     const env = createMockEnv(kv);
-    env.GROQ_API_KEY = 'test-key';
+    env.COHERE_API_KEY = 'test-key';
 
     // Seed the global KV counter to already be at the limit
     const today = new Date().toISOString().slice(0, 10);
@@ -412,7 +412,7 @@ describe('ask-box', () => {
     const { handleAsk } = await import('../src/askbox.js');
     const kv = createMockKV();
     const env = createMockEnv(kv);
-    env.GROQ_API_KEY = 'test-key';
+    env.COHERE_API_KEY = 'test-key';
 
     // Seed the per-IP KV counter to already be at the limit
     // We need to know the ipHash for '1.2.3.4' with salt 'test-salt'
@@ -433,7 +433,81 @@ describe('ask-box', () => {
     const res = await handleAsk(req, env, '1.2.3.4');
     expect(res.status).toBe(429);
   });
+
+  it('sends the whole site, not just the notebook', async () => {
+    const { coreDocuments } = await import('../src/askbox.js');
+    const ids = coreDocuments('https://x.test').map(d => d.id);
+    for (const want of ['profile', 'now', 'research-themes', 'cv-skills', 'cv-certifications']) expect(ids).toContain(want);
+    expect(ids.some(id => id.startsWith('cv-position-'))).toBe(true);
+    expect(ids.some(id => id.startsWith('cv-education-'))).toBe(true);
+    expect(ids.some(id => id.startsWith('pub-'))).toBe(true);
+    expect(ids.some(id => id.startsWith('post-'))).toBe(true);
+  });
+
+  it('ranks notebook sections by the words that matter, ignoring filler', async () => {
+    const { rank } = await import('../src/askbox.js');
+    const docs = [
+      { id: 'a', title: 'Music', text: 'what is the genetic algorithm for music', url: '' },
+      { id: 'b', title: 'Splats', text: 'gaussian splatting with clip features', url: '' },
+    ];
+    expect(rank('what is gaussian splatting?', docs, 1).map(d => d.id)).toEqual(['b']);
+    expect(rank('what is it?', docs, 2)).toEqual([]);
+  });
+
+  it('turns Cohere citations into one source per page', async () => {
+    const { readAnswer } = await import('../src/askbox.js');
+    const docs = [
+      { id: 'now', title: 'Now', text: '', url: 'https://x.test/now' },
+      { id: 'cv-position-0', title: 'Experience: A', text: '', url: 'https://x.test/cv' },
+      { id: 'cv-position-1', title: 'Experience: B', text: '', url: 'https://x.test/cv' },
+    ];
+    const out = readAnswer({
+      message: {
+        content: [{ type: 'text', text: 'She is **reading** a book.' }],
+        citations: [
+          { sources: [{ type: 'document', id: 'now' }] },
+          { sources: [{ type: 'document', id: 'cv-position-0' }, { type: 'document', id: 'cv-position-1' }] },
+        ],
+      },
+    }, docs);
+    expect(out.answer).toBe('She is reading a book.');
+    expect(out.sources).toEqual([
+      { title: 'Now', url: 'https://x.test/now' },
+      { title: 'Experience: A', url: 'https://x.test/cv' },
+    ]);
+  });
+
+  it('answers through Cohere with documents attached', async () => {
+    const { handleAsk } = await import('../src/askbox.js');
+    const env = createMockEnv();
+    env.COHERE_API_KEY = 'test-key';
+    let sent: any = null;
+    vi.stubGlobal('fetch', async (_url: string, init: RequestInit) => {
+      sent = JSON.parse(String(init.body));
+      return new Response(JSON.stringify({
+        message: { content: [{ type: 'text', text: 'An answer.' }], citations: [{ sources: [{ type: 'document', id: 'now' }] }] },
+      }), { status: 200 });
+    });
+    try {
+      const req = new Request('http://localhost/api/ask', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question: 'What are you reading?' }),
+      });
+      const res = await handleAsk(req, env, '1.2.3.4');
+      expect(res.status).toBe(200);
+      const body = await res.json() as { answer: string; sources: { title: string; url: string }[] };
+      expect(body.answer).toBe('An answer.');
+      expect(body.sources[0].url).toMatch(/\/now$/);
+      expect(sent.documents.some((d: any) => d.id === 'now')).toBe(true);
+      expect(sent.messages[1].content).toContain('<user_question>');
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  });
 });
+
+
 
 // ── IP hashing ────────────────────────────────────────────────────────────────
 

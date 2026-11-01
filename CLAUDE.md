@@ -28,7 +28,7 @@ Three signature features live on top: a **live lab telemetry strip** (what's tra
 | Dynamic backend | **One Cloudflare Worker** using **Hono** | Serves `/mcp`, `/api/*`, telemetry ingest, ask-box |
 | MCP | `@modelcontextprotocol/sdk`, **Streamable HTTP** transport at `/mcp` | |
 | Storage | **Cloudflare D1** (guestbook, leaderboard, eval attempts) + **KV** (telemetry latest-state, rate limiting) | |
-| Ask-box LLM | Anthropic API from the worker; key as a Worker secret | Hard rate limits; see agent-layer skill |
+| Ask-box LLM | **Cohere** chat API (`command-a`, grounded on documents) from the worker; key as a Worker secret (`COHERE_API_KEY`) | Hard rate limits; see agent-layer skill |
 | CV PDF | **Typst** template compiled at build time from `content/cv.yaml` | Fallback: Playwright print-to-PDF if Typst is unavailable in CI |
 | OG images | astro-og-canvas (or satori) at build time | One per page/post |
 | Hosting | Cloudflare Pages (site) + Workers (backend), deployed via `wrangler` | Custom domain: prabigya.com.np |
@@ -94,6 +94,6 @@ cd worker && npm test           # vitest for tool handlers + scoring
 ## Things you must NOT do
 
 - Do not add a CMS, database for content, React/Vue islands for static content, or any analytics that requires a cookie banner.
-- Do not commit secrets. Worker secrets via `wrangler secret put` (`ANTHROPIC_API_KEY`, `TELEMETRY_TOKEN`, `EVAL_ANSWERS` or answer-hash salt).
+- Do not commit secrets. Worker secrets via `wrangler secret put` (`COHERE_API_KEY`, `GROQ_API_KEY`, `TELEMETRY_TOKEN`, `EVAL_ANSWERS` or answer-hash salt).
 - Do not let the ask-box or MCP server return anything not derived from `content/` (no open-ended chat).
 - Do not deploy DNS changes; stop and ask the user before anything that affects the live domain.

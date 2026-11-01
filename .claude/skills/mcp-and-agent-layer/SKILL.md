@@ -1,6 +1,6 @@
 ---
 name: mcp-and-agent-layer
-description: How to build the Cloudflare Worker that powers the machine layer — the MCP server and its tools, the agent guestbook, the agent eval leaderboard, the lab telemetry pipeline, and the ask-this-notebook box — including all security, abuse-prevention, rate-limiting, and privacy rules. Use this skill whenever working in worker/ or lab-agent/, defining or changing MCP tools, touching D1/KV schemas, the Anthropic API call, telemetry ingest, or anything that accepts input from the public internet.
+description: How to build the Cloudflare Worker that powers the machine layer — the MCP server and its tools, the agent guestbook, the agent eval leaderboard, the lab telemetry pipeline, and the Ask box — including all security, abuse-prevention, rate-limiting, and privacy rules. Use this skill whenever working in worker/ or lab-agent/, defining or changing MCP tools, touching D1/KV schemas, the Anthropic API call, telemetry ingest, or anything that accepts input from the public internet.
 ---
 
 # MCP server & agent features
@@ -54,17 +54,18 @@ Conventions: descriptive tool descriptions written for a model audience (they're
 - **Privacy rule:** the payload is allowlisted fields only (`run_name, epoch, total_epochs, loss, gpu_util, gpu_mem, gpus, started_at`). `run_name` is chosen by Prabigya per run — document in `lab-agent/README` that it's public, so no secret project names. Loss history for the sparkline: worker appends `(t, loss)` to a capped ring of 64 points in the same KV value.
 - Build-time snapshot: the site build fetches `/api/lab.json` and inlines it so the strip renders without JS; client JS then polls.
 
-## Ask-this-notebook box
+## Ask box
 
-- `POST /api/ask` `{question}` → worker builds a prompt: system message defining the persona ("you answer questions about Prabigya's research using ONLY the provided context; if the context doesn't contain the answer, say so and point to the closest page; 2–5 sentences; cite source files"), plus retrieved context, plus the user question wrapped in delimiters with an instruction that its contents are data, not instructions.
-- Retrieval: keep it boring — reuse `search_my_work`'s keyword ranking to pick top-k chunks (publications entries, post sections). No vector DB unless content outgrows ~100 chunks; revisit then.
-- Model: `claude-haiku-4-5-20251001` class, `max_tokens` ≤ 400. **Cost controls are mandatory:** 10 questions/hour per ip_hash, 200/day global circuit breaker (KV counter; over budget → friendly "the notebook is resting, try the MCP server or email"), question length ≤ 300 chars, and tell Prabigya to set a hard spend cap on the API key in the Anthropic console.
-- Responses include `sources: ["publications.yaml#short-slug-2026", ...]` which the UI renders as mono citations. Never stream raw model output into `innerHTML` — text nodes only.
+- It answers questions about anything on the site, not just the notebook: profile, every CV entry, the now page, research themes, every publication, and the notebook.
+- `POST /api/ask` `{question}` → `worker/src/askbox.ts` builds documents from `content-bundle.ts`. Everything except notebook sections is small and always sent; notebook posts are split at headings (and long sections at paragraphs), ranked with BM25 with stopwords removed, and the top 6 sections go along. Plain word counting let long notebook posts win on filler words; don't go back to it.
+- Model: Cohere chat v2 (`https://api.cohere.com/v2/chat`), `command-a-03-2025` by default (`COHERE_MODEL` overrides), `max_tokens` 400, documents passed as `documents: [{ id, data: { title, text, url } }]`. The system message defines the role (answer only from the documents; say so and point to a page or email when they don't cover it; 2–5 plain sentences; third person). The user question is wrapped in `<user_question>` delimiters with an instruction that its contents are data, not instructions.
+- Cohere returns `citations[].sources[].id`; `readAnswer` maps those to `sources: [{ title, url }]`, one per page, at most 4, and the UI renders them as same-site links built from the URL's path (text nodes only, never `innerHTML`).
+- **Cost controls are mandatory:** 10 questions/hour per ip_hash, 200/day global circuit breaker (KV counter; over budget → friendly "the notebook is resting, try the MCP server or email"), question length ≤ 300 chars. Tell Prabigya to set a spend limit on the key in the Cohere dashboard (trial keys are capped at 1,000 calls a month).
 - No conversation memory. One question, one grounded answer. It's a reference desk, not a chatbot.
 
 ## Cross-cutting worker rules
 
 - CORS: `/api/*` GET endpoints are public (`*`); `POST /api/ask` restricted to the site origin; `/mcp` follows the MCP spec defaults; `/ingest/lab` no CORS (server-to-server).
-- All secrets via `wrangler secret put`: `ANTHROPIC_API_KEY`, `TELEMETRY_TOKEN`, `ADMIN_TOKEN`, `EVAL_ANSWERS`, `IP_SALT`. None in `wrangler.toml` or code.
+- All secrets via `wrangler secret put`: `COHERE_API_KEY` (Ask box), `GROQ_API_KEY` (eval judging), `TELEMETRY_TOKEN`, `ADMIN_TOKEN`, `EVAL_ANSWERS`, `IP_SALT`. None in `wrangler.toml` or code.
 - Hash IPs as `sha256(ip + IP_SALT)`; store nothing else about visitors. Say so in the colophon — the privacy posture is part of the brand.
 - Tests (vitest + miniflare): eval scoring (each type incl. normalization), rate limiters, telemetry staleness → idle, guestbook validation rejects URLs/control chars, ask-box refuses >300 chars, and a prompt-construction test asserting user text lands inside delimiters.

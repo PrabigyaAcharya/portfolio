@@ -19,7 +19,8 @@ binding = "KV"
 id = "30a448de4ce0401ea6f3e980aeee6d99"
 
 # Secrets (set via: wrangler secret put <NAME>)
-# GROQ_API_KEY      — for ask-box and eval judging (get a free key at console.groq.com)
+# COHERE_API_KEY    — for the Ask box (dashboard.cohere.com)
+# GROQ_API_KEY      — for eval judging (get a free key at console.groq.com)
 # TELEMETRY_TOKEN   — bearer token for lab-agent POSTs
 # EVAL_ANSWERS      — JSON object with answer hashes (never in repo)
 

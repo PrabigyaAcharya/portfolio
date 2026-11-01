@@ -1,6 +1,7 @@
 ---
-// AskBox.astro — "ask this notebook". Without JS the form is a mailto;
-// with JS it POSTs to /api/ask (the worker) and renders the grounded answer.
+// AskBox.astro — the Ask box. Without JS the form is a mailto; with JS it
+// POSTs to /api/ask (the worker), which answers from everything on the site
+// and cites the pages it used.
 import { getSiteData } from '../lib/content';
 
 const site = getSiteData();
@@ -27,7 +28,7 @@ const mailto = `mailto:${site.links.email}`;
 <div class="ask-answer" id="ask-answer" aria-live="polite" aria-atomic="true"></div>
 
 <p class="lcd-small">
-  Powered by MCP · or <a href={mailto}>email directly</a>.
+  Answers come only from this site · or <a href={mailto}>email directly</a>.
 </p>
 
 <noscript>
@@ -69,7 +70,7 @@ const mailto = `mailto:${site.links.email}`;
 
       answerEl.replaceChildren();
       const status = el('p', 'lcd-label ask-status');
-      status.append(el('span', '', 'Searching papers and notes'));
+      status.append(el('span', '', 'Searching the site'));
       const cursor = el('span', 'cursor blink');
       cursor.setAttribute('aria-hidden', 'true');
       status.append(cursor);
@@ -84,7 +85,7 @@ const mailto = `mailto:${site.links.email}`;
 
         const data = await res.json() as {
           answer?: string;
-          sources?: string[];
+          sources?: { title: string; url: string }[];
           error?: string;
           mailto?: string;
         };
@@ -108,7 +109,14 @@ const mailto = `mailto:${site.links.email}`;
           answerEl.append(el('p', 'ask-text ink-rule', data.answer));
           if (data.sources && data.sources.length > 0) {
             const sources = el('p', 'lcd-label ask-sources');
-            data.sources.forEach(s => sources.append(el('span', '', `→ ${s}`)));
+            for (const s of data.sources) {
+              // Same-site pages only: links are rebuilt from the path, never taken as given.
+              let href: string | null = null;
+              try { const u = new URL(s.url, location.origin); href = u.pathname + u.hash; } catch { /* skip */ }
+              const a = document.createElement('a');
+              a.textContent = `→ ${s.title}`;
+              if (href) { a.href = href; sources.append(a); } else sources.append(el('span', '', a.textContent));
+            }
             answerEl.append(sources);
           }
         }
