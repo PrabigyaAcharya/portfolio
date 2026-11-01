@@ -2,11 +2,10 @@
 // Screen.astro — every inside page: lilac bezel framing the CRT-style LCD,
 // key hints and tab strip on the screen, power button on the bezel. Each tab is a real route, so this works without JS;
 // the script below only adds ← → / Enter / Esc and live lab status. With JS, the
-// ClientRouter swaps tabs inside one document, so the pixel cursor (and the
-// game well) carry across tab changes instead of reloading with the page.
+// ClientRouter swaps tabs inside one document, so the pixel cursor carries
+// across tab changes instead of reloading with the page.
 import { ClientRouter } from 'astro:transitions';
 import Base from './Base.astro';
-import GameWell from '../components/GameWell.astro';
 import { getSiteData } from '../lib/content';
 
 export type Tab = 'home' | 'research' | 'notebook' | 'now' | 'cv' | 'ask';
@@ -71,7 +70,6 @@ const [firstName, ...rest] = site.name.split(' ');
           </div>
           <slot />
         </div>
-        <GameWell />
       </main>
 
     </section>
@@ -91,8 +89,6 @@ const [firstName, ...rest] = site.name.split(' ');
     const typing = t instanceof HTMLInputElement || t instanceof HTMLTextAreaElement || t instanceof HTMLSelectElement
       || (t instanceof HTMLElement && t.isContentEditable);
     if (typing) return;
-    // A game in the well has the keys while it is being played.
-    if (t instanceof HTMLElement && t.closest('[data-game-focus]')) return;
 
     if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
       // Let wide code blocks and tables keep native horizontal scrolling.
