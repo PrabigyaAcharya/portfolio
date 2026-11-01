@@ -11,7 +11,7 @@ const fullTitle = title === siteName ? title : `${title} — ${siteName}`;
 const fontsHref = 'https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Jost:ital,wght@0,500;0,700;1,600;1,700&family=Public+Sans:wght@400;500;600&display=swap';
 ---
 <!doctype html>
-<html lang="en">
+<html lang="en" transition:animate="none">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -20,8 +20,14 @@ const fontsHref = 'https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#d3cfc7" />
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#121214" />
     <!-- Apply a remembered shell choice before first paint (set by the A button on the landing handheld). -->
+    <!-- Inside pages swap documents with the ClientRouter, which copies the new
+         page's <html> attributes, so the choice is re-applied after every swap. -->
     <script is:inline>
-      try { const t = localStorage.getItem('theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch {}
+      (function () {
+        const apply = () => { try { const t = localStorage.getItem('theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch {} };
+        apply();
+        if (!window.__themeSwap) { window.__themeSwap = true; document.addEventListener('astro:after-swap', apply); }
+      })();
     </script>
     <title>{fullTitle}</title>
     {description && <meta name="description" content={description} />}
@@ -40,6 +46,7 @@ const fontsHref = 'https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;
       />
     )}
 
+    <slot name="head" />
     <link rel="alternate" type="application/rss+xml" title={`${siteName} notebook`} href="/notebook/rss.xml" />
   </head>
   <body>

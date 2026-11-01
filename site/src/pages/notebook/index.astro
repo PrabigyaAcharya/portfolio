@@ -56,6 +56,7 @@ const fmt = (d: Date) => d.toLocaleDateString('en-US', { year: 'numeric', month:
     });
   }
 
-  applyFilter();
+  // Once per session: page loads (including tab swaps) and hash changes.
+  document.addEventListener('astro:page-load', applyFilter);
   window.addEventListener('hashchange', applyFilter);
 </script>

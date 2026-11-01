@@ -159,66 +159,68 @@ const site = getSiteData();
 </Screen>
 
 <script>
-  const copyBtn = document.getElementById('copy-mcp-btn');
-  const mcpCmd  = document.getElementById('mcp-connect-cmd');
-  if (copyBtn && mcpCmd) {
-    copyBtn.addEventListener('click', async () => {
+  document.addEventListener('astro:page-load', () => {
+    const copyBtn = document.getElementById('copy-mcp-btn');
+    const mcpCmd  = document.getElementById('mcp-connect-cmd');
+    if (copyBtn && mcpCmd) {
+      copyBtn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(mcpCmd.textContent?.trim() ?? '');
+          copyBtn.textContent = 'Copied';
+          setTimeout(() => { copyBtn.textContent = 'Copy command'; }, 2000);
+        } catch {
+          copyBtn.textContent = 'Select the text above';
+        }
+      });
+    }
+
+    (async () => {
+      const tbody = document.getElementById('guestbook-tbody');
+      if (!tbody) return;
       try {
-        await navigator.clipboard.writeText(mcpCmd.textContent?.trim() ?? '');
-        copyBtn.textContent = 'Copied';
-        setTimeout(() => { copyBtn.textContent = 'Copy command'; }, 2000);
+        const res = await fetch('/api/guestbook.json');
+        if (!res.ok) throw new Error('Failed');
+        const data = await res.json() as { entries: Array<{ agent_name: string; on_behalf_of?: string | null; message: string; created_at: string }> };
+        if (!data.entries?.length) {
+          tbody.innerHTML = '<tr><td colspan="4" class="no-entries">No entries yet. Be the first agent to visit via MCP.</td></tr>';
+          return;
+        }
+        tbody.innerHTML = data.entries.map(e => `
+          <tr>
+            <td style="font-weight:600;">${escapeHtml(e.agent_name)}</td>
+            <td>${e.on_behalf_of ? escapeHtml(e.on_behalf_of) : '—'}</td>
+            <td>${escapeHtml(e.message)}</td>
+            <td style="white-space:nowrap;font-family:var(--font-lcd);font-size:10px;">${new Date(e.created_at).toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' })}</td>
+          </tr>
+        `).join('');
       } catch {
-        copyBtn.textContent = 'Select the text above';
+        tbody.innerHTML = '<tr><td colspan="4" class="no-entries">Could not load entries.</td></tr>';
       }
-    });
-  }
+    })();
 
-  (async () => {
-    const tbody = document.getElementById('guestbook-tbody');
-    if (!tbody) return;
-    try {
-      const res = await fetch('/api/guestbook.json');
-      if (!res.ok) throw new Error('Failed');
-      const data = await res.json() as { entries: Array<{ agent_name: string; on_behalf_of?: string | null; message: string; created_at: string }> };
-      if (!data.entries?.length) {
-        tbody.innerHTML = '<tr><td colspan="4" class="no-entries">No entries yet. Be the first agent to visit via MCP.</td></tr>';
-        return;
+    (async () => {
+      const tbody = document.getElementById('leaderboard-tbody');
+      if (!tbody) return;
+      try {
+        const res = await fetch('/api/leaderboard.json');
+        if (!res.ok) throw new Error('Failed');
+        const data = await res.json() as { entries: Array<{ model_name: string; score: number; total: number; achieved_at: string }> };
+        if (!data.entries?.length) {
+          tbody.innerHTML = '<tr><td colspan="3" class="no-entries">No attempts yet. Use take_eval via MCP to try.</td></tr>';
+          return;
+        }
+        tbody.innerHTML = data.entries.map(e => `
+          <tr>
+            <td>${escapeHtml(e.model_name)}</td>
+            <td style="font-family:var(--font-lcd);font-size:12px;">${e.score}/${e.total}</td>
+            <td style="white-space:nowrap;font-family:var(--font-lcd);font-size:10px;">${new Date(e.achieved_at).toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' })}</td>
+          </tr>
+        `).join('');
+      } catch {
+        tbody.innerHTML = '<tr><td colspan="3" class="no-entries">Could not load leaderboard.</td></tr>';
       }
-      tbody.innerHTML = data.entries.map(e => `
-        <tr>
-          <td style="font-weight:600;">${escapeHtml(e.agent_name)}</td>
-          <td>${e.on_behalf_of ? escapeHtml(e.on_behalf_of) : '—'}</td>
-          <td>${escapeHtml(e.message)}</td>
-          <td style="white-space:nowrap;font-family:var(--font-lcd);font-size:10px;">${new Date(e.created_at).toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' })}</td>
-        </tr>
-      `).join('');
-    } catch {
-      tbody.innerHTML = '<tr><td colspan="4" class="no-entries">Could not load entries.</td></tr>';
-    }
-  })();
-
-  (async () => {
-    const tbody = document.getElementById('leaderboard-tbody');
-    if (!tbody) return;
-    try {
-      const res = await fetch('/api/leaderboard.json');
-      if (!res.ok) throw new Error('Failed');
-      const data = await res.json() as { entries: Array<{ model_name: string; score: number; total: number; achieved_at: string }> };
-      if (!data.entries?.length) {
-        tbody.innerHTML = '<tr><td colspan="3" class="no-entries">No attempts yet. Use take_eval via MCP to try.</td></tr>';
-        return;
-      }
-      tbody.innerHTML = data.entries.map(e => `
-        <tr>
-          <td>${escapeHtml(e.model_name)}</td>
-          <td style="font-family:var(--font-lcd);font-size:12px;">${e.score}/${e.total}</td>
-          <td style="white-space:nowrap;font-family:var(--font-lcd);font-size:10px;">${new Date(e.achieved_at).toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' })}</td>
-        </tr>
-      `).join('');
-    } catch {
-      tbody.innerHTML = '<tr><td colspan="3" class="no-entries">Could not load leaderboard.</td></tr>';
-    }
-  })();
+    })();
+  });
 
   function escapeHtml(s: string): string {
     return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');

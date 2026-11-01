@@ -74,7 +74,7 @@ const links = [
 </style>
 
 <script>
-  document.querySelectorAll<HTMLButtonElement>('.copy-bibtex-btn').forEach(btn => {
+  document.addEventListener('astro:page-load', () => document.querySelectorAll<HTMLButtonElement>('.copy-bibtex-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const bibtex = btn.dataset.bibtex ? JSON.parse(btn.dataset.bibtex) as string : '';
       navigator.clipboard?.writeText(bibtex).then(() => {
@@ -82,5 +82,5 @@ const links = [
         setTimeout(() => { btn.textContent = 'Copy'; }, 1500);
       });
     });
-  });
+  }));
 </script>

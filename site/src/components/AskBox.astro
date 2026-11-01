@@ -47,11 +47,8 @@ const mailto = `mailto:${site.links.email}`;
 </style>
 
 <script>
-  const form     = document.getElementById('ask-form') as HTMLFormElement | null;
-  const input    = document.getElementById('ask-input') as HTMLInputElement | null;
-  const answerEl = document.getElementById('ask-answer') as HTMLDivElement | null;
-  if (!form || !input || !answerEl) throw new Error('ask-box elements missing');
-
+  // Runs on every page load: the ClientRouter swaps pages without reloading
+  // this module, so the form is looked up fresh each time.
   function el(tag: string, className: string, text?: string) {
     const node = document.createElement(tag);
     node.className = className;
@@ -59,58 +56,65 @@ const mailto = `mailto:${site.links.email}`;
     return node;
   }
 
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const question = input.value.trim();
-    if (!question) return;
+  document.addEventListener('astro:page-load', () => {
+    const form     = document.getElementById('ask-form') as HTMLFormElement | null;
+    const input    = document.getElementById('ask-input') as HTMLInputElement | null;
+    const answerEl = document.getElementById('ask-answer') as HTMLDivElement | null;
+    if (!form || !input || !answerEl) return;
 
-    answerEl.replaceChildren();
-    const status = el('p', 'lcd-label ask-status');
-    status.append(el('span', '', 'Searching papers and notes'));
-    const cursor = el('span', 'cursor blink');
-    cursor.setAttribute('aria-hidden', 'true');
-    status.append(cursor);
-    answerEl.append(status);
-
-    try {
-      const res = await fetch('/api/ask', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question }),
-      });
-
-      const data = await res.json() as {
-        answer?: string;
-        sources?: string[];
-        error?: string;
-        mailto?: string;
-      };
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const question = input.value.trim();
+      if (!question) return;
 
       answerEl.replaceChildren();
+      const status = el('p', 'lcd-label ask-status');
+      status.append(el('span', '', 'Searching papers and notes'));
+      const cursor = el('span', 'cursor blink');
+      cursor.setAttribute('aria-hidden', 'true');
+      status.append(cursor);
+      answerEl.append(status);
 
-      if (data.error) {
-        const errEl = el('p', 'ask-text', data.error);
-        if (data.mailto) {
-          errEl.append(' ');
-          const link = document.createElement('a');
-          link.href = `mailto:${data.mailto}`;
-          link.textContent = 'Email directly';
-          errEl.append(link);
-        }
-        answerEl.append(errEl);
-        return;
-      }
+      try {
+        const res = await fetch('/api/ask', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ question }),
+        });
 
-      if (data.answer) {
-        answerEl.append(el('p', 'ask-text ink-rule', data.answer));
-        if (data.sources && data.sources.length > 0) {
-          const sources = el('p', 'lcd-label ask-sources');
-          data.sources.forEach(s => sources.append(el('span', '', `→ ${s}`)));
-          answerEl.append(sources);
+        const data = await res.json() as {
+          answer?: string;
+          sources?: string[];
+          error?: string;
+          mailto?: string;
+        };
+
+        answerEl.replaceChildren();
+
+        if (data.error) {
+          const errEl = el('p', 'ask-text', data.error);
+          if (data.mailto) {
+            errEl.append(' ');
+            const link = document.createElement('a');
+            link.href = `mailto:${data.mailto}`;
+            link.textContent = 'Email directly';
+            errEl.append(link);
+          }
+          answerEl.append(errEl);
+          return;
         }
+
+        if (data.answer) {
+          answerEl.append(el('p', 'ask-text ink-rule', data.answer));
+          if (data.sources && data.sources.length > 0) {
+            const sources = el('p', 'lcd-label ask-sources');
+            data.sources.forEach(s => sources.append(el('span', '', `→ ${s}`)));
+            answerEl.append(sources);
+          }
+        }
+      } catch {
+        answerEl.replaceChildren(el('p', 'ask-text', 'Could not reach the notebook right now.'));
       }
-    } catch {
-      answerEl.replaceChildren(el('p', 'ask-text', 'Could not reach the notebook right now.'));
-    }
+    });
   });
 </script>

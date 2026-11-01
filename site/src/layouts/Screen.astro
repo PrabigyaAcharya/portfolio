@@ -1,7 +1,10 @@
 ---
 // Screen.astro — every inside page: lilac bezel framing the CRT-style LCD,
 // key hints and tab strip on the screen, power button on the bezel. Each tab is a real route, so this works without JS;
-// the script below only adds ← → / Enter / Esc and live lab status.
+// the script below only adds ← → / Enter / Esc and live lab status. With JS, the
+// ClientRouter swaps tabs inside one document, so the pixel cursor (and the
+// game well) carry across tab changes instead of reloading with the page.
+import { ClientRouter } from 'astro:transitions';
 import Base from './Base.astro';
 import BlockDrop from '../components/BlockDrop.astro';
 import { getSiteData } from '../lib/content';
@@ -31,6 +34,7 @@ const tabs: Array<{ id: Tab; href: string; label: string }> = [
 const [firstName, ...rest] = site.name.split(' ');
 ---
 <Base title={title} description={description} math={math}>
+  <Fragment slot="head"><ClientRouter /></Fragment>
   <div class="screen-wrap">
     <section class="bezel" aria-label="Display">
 
@@ -75,29 +79,35 @@ const [firstName, ...rest] = site.name.split(' ');
 </Base>
 
 <script>
-  // ── Keyboard: ← → step through tabs, Enter opens Ask, Esc goes Home ───────
-  const tabLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('.tabs .tab'));
-  const activeIdx = tabLinks.findIndex(a => a.getAttribute('aria-current') === 'page');
+  import { navigate } from 'astro:transitions/client';
 
+  // These listeners are registered once and survive tab swaps, so they look up
+  // the current page's tabs each time rather than holding on to old elements.
+
+  // ── Keyboard: ← → step through tabs, Enter opens Ask, Esc goes Home ───────
   document.addEventListener('keydown', (e) => {
     if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
     const t = e.target;
     const typing = t instanceof HTMLInputElement || t instanceof HTMLTextAreaElement || t instanceof HTMLSelectElement
       || (t instanceof HTMLElement && t.isContentEditable);
     if (typing) return;
+    // A game in the well has the keys while it is being played.
+    if (t instanceof HTMLElement && t.closest('[data-game-focus]')) return;
 
     if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
       // Let wide code blocks and tables keep native horizontal scrolling.
       if (t instanceof HTMLElement && t.closest('pre, .table-scroll, .katex-display')) return;
+      const tabLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('.tabs .tab'));
+      const activeIdx = tabLinks.findIndex(a => a.getAttribute('aria-current') === 'page');
       const from = activeIdx === -1 ? 0 : activeIdx;
       const step = e.key === 'ArrowRight' ? 1 : -1;
       const next = tabLinks[(from + step + tabLinks.length) % tabLinks.length];
-      if (next) { e.preventDefault(); window.location.href = next.href; }
+      if (next) { e.preventDefault(); navigate(next.href); }
       return;
     }
 
     if (e.key === 'Escape') {
-      if (window.location.pathname !== '/home') window.location.href = '/home';
+      if (window.location.pathname !== '/home') navigate('/home');
       return;
     }
 
@@ -106,30 +116,36 @@ const [firstName, ...rest] = site.name.split(' ');
       if (t instanceof HTMLElement && t.closest('a, button, summary')) return;
       const ask = document.getElementById('ask-input') as HTMLInputElement | null;
       if (ask) { ask.focus(); return; }
-      window.location.href = '/ask';
+      navigate('/ask');
     }
   });
 
   // ── Lab telemetry: LED in the bezel follows /api/lab.json ─────────────────
-  (function () {
+  let lastStatus = 'idle';
+
+  function paint() {
     const strip = document.querySelector<HTMLElement>('[data-poll]');
-    const endpoint = strip?.dataset.poll;
-    if (!strip || !endpoint) return;
+    if (!strip) return;
+    strip.dataset.status = lastStatus;
+    strip.title = `Lab ${lastStatus}`;
+    const word = strip.querySelector<HTMLElement>('[data-field="status"]');
+    if (word) word.textContent = lastStatus;
+  }
 
-    async function poll() {
-      try {
-        const res = await fetch(endpoint!);
-        if (!res.ok) return;
-        const data = await res.json() as { status?: string };
-        const status = data.status === 'training' ? 'training' : 'idle';
-        strip!.dataset.status = status;
-        strip!.title = `Lab ${status}`;
-        const word = strip!.querySelector<HTMLElement>('[data-field="status"]');
-        if (word) word.textContent = status;
-      } catch { /* non-critical */ }
-    }
+  async function poll() {
+    const endpoint = document.querySelector<HTMLElement>('[data-poll]')?.dataset.poll;
+    if (!endpoint) return;
+    try {
+      const res = await fetch(endpoint);
+      if (!res.ok) return;
+      const data = await res.json() as { status?: string };
+      lastStatus = data.status === 'training' ? 'training' : 'idle';
+      paint();
+    } catch { /* non-critical */ }
+  }
 
-    poll();
-    setInterval(poll, 60_000);
-  })();
+  // The bezel is re-rendered on every swap; repaint it from the last reading.
+  document.addEventListener('astro:page-load', paint);
+  poll();
+  setInterval(poll, 60_000);
 </script>
