@@ -11,6 +11,12 @@ links:
   # file and push to update it.
   cv_pdf: "https://raw.githubusercontent.com/PrabigyaAcharya/portfolio/main/content/Prabigya_Acharya_CV.pdf"
 mcp_endpoint: "https://prabigya.com.np/mcp"
+# TODO(prabigya): drop a head-and-shoulders photo at content/portrait.jpg. The
+# build turns it into the pixel portrait (site/public/images/portrait-mask.png);
+# commit the mask, and the photo too only if you want it in the public repo.
+portrait:
+  src: "portrait.jpg"
+  alt: "Pixel-art portrait of Prabigya Acharya"
 research_threads:
   - id: thread-1
     name: "Privacy-preserving NLP"

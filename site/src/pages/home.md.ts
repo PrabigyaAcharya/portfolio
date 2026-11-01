@@ -2,12 +2,13 @@
 export const prerender = true;
 
 import type { APIRoute } from 'astro';
-import { getNow, getSiteData } from '../lib/content';
+import { getNow, getPortrait, getSiteData } from '../lib/content';
 
 export const GET: APIRoute = (context) => {
   const base = context.site?.href.replace(/\/$/, '') ?? 'https://prabigya.com.np';
   const site = getSiteData();
   const now = getNow();
+  const portrait = getPortrait();
 
   const lines: string[] = [
     `# ${site.name}`,
@@ -15,6 +16,7 @@ export const GET: APIRoute = (context) => {
     '',
     `*${site.role}*`,
     '',
+    ...(portrait ? [`![${portrait.alt}](${base}${portrait.url})`, ''] : []),
     site.tagline,
     '',
     `Location: ${site.location}`,

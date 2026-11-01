@@ -282,7 +282,7 @@ export function buildMcpServer(env: Env): McpServer {
   // ── get_bio ────────────────────────────────────────────────────────────────
   server.tool(
     'get_bio',
-    'Get basic bio: name, role, tagline, location, and links.',
+    'Get basic bio: name, role, tagline, location, links, research threads and the pixel-portrait URL.',
     {},
     () => {
       return {
@@ -298,6 +298,8 @@ export function buildMcpServer(env: Env): McpServer {
               links: site.links,
               mcp_endpoint: site.mcp_endpoint,
               research_threads: site.research_threads,
+              // The LCD pixel portrait (an ink alpha mask), once one has been built.
+              portrait_url: site.portrait ? new URL('/images/portrait-mask.png', site.mcp_endpoint).href : null,
             },
           }, null, 2),
         }],

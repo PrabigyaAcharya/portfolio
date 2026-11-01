@@ -5,10 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "prebuild": "npx tsx ../scripts/build-llms.ts",
+    "prebuild": "npx tsx ../scripts/build-llms.ts && npx tsx ../scripts/build-portrait.ts",
     "build": "astro build",
     "preview": "astro preview",
-    "check": "astro check"
+    "check": "astro check",
+    "predev": "npx tsx ../scripts/build-portrait.ts"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.9",
@@ -24,6 +25,7 @@
   },
   "devDependencies": {
     "@types/js-yaml": "^4.0.9",
+    "sharp": "^0.34.5",
     "typescript": "^5.4.5"
   }
 }

@@ -3,7 +3,7 @@
 // All types are derived from shared/schema.ts (same zod definitions used by
 // the worker, so both sides stay in sync).
 
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import yaml from 'js-yaml';
 import { z } from 'zod';
@@ -34,6 +34,8 @@ const SiteSchema = z.object({
   links: SiteLinksSchema,
   mcp_endpoint: z.string(),
   research_threads: z.array(ResearchThreadSchema),
+  // Photo in content/ that scripts/build-portrait.ts turns into the LCD pixel portrait.
+  portrait: z.object({ src: z.string(), alt: z.string() }).optional(),
 });
 
 const PublicationLinksSchema = z.object({
@@ -160,4 +162,16 @@ export function getPublicationsByYear(): Map<number, Publication[]> {
   }
   // sort years descending
   return new Map([...byYear.entries()].sort((a, b) => b[0] - a[0]));
+}
+
+// ── Portrait ──────────────────────────────────────────────────────────────────
+
+/** Where scripts/build-portrait.ts writes the pixel portrait mask. */
+export const PORTRAIT_PATH = '/images/portrait-mask.png';
+
+/** The pixel portrait, or null until a photo has been converted. */
+export function getPortrait(): { url: string; alt: string } | null {
+  const site = getSiteData();
+  const built = existsSync(resolve(process.cwd(), 'public', PORTRAIT_PATH.slice(1)));
+  return site.portrait && built ? { url: PORTRAIT_PATH, alt: site.portrait.alt } : null;
 }

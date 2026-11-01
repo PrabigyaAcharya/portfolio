@@ -125,6 +125,7 @@ export interface SiteConfig {
   links: SiteLinks;
   mcp_endpoint: string;
   research_threads: ResearchThread[];
+  portrait?: { src: string; alt: string };
 }
 
 export interface PublicationLinks {
@@ -161,7 +162,14 @@ export interface CVEntry {
   role: string;
   start: string;
   end: string;
+  note?: string;
   details?: string[];
+}
+
+export interface CvCertification {
+  title: string;
+  detail?: string;
+  link?: string;
 }
 
 export interface CvProject {
@@ -172,10 +180,15 @@ export interface CvProject {
 }
 
 export interface CvData {
+  summary?: string;
   education: CVEntry[];
   positions: CVEntry[];
+  grants: CVEntry[];
+  supervision: CVEntry[];
+  teaching: CVEntry[];
   projects?: CvProject[];
   skills: string[];
+  certifications: CvCertification[];
   service: string[];
   awards: string[];
 }

@@ -9,6 +9,7 @@
 // on .dev-game; while one is in, the controls drive the game instead.
 import { getCollection } from 'astro:content';
 import { getSiteData, getPublications, getNow, getCV } from '../lib/content';
+import Portrait from './Portrait.astro';
 
 export interface Props {
   href: string;
@@ -63,9 +64,12 @@ const sections = [
             <span class="dev-pin"></span>
           </span>
           <span class="dev-lcd">
-            <span class="dev-panel" data-panel="home">
-              <span class="dev-name">{site.name}</span>
-              <span class="dev-tagline">{site.tagline}</span>
+            <span class="dev-panel dev-home" data-panel="home">
+              <Portrait size={96} />
+              <span class="dev-id">
+                <span class="dev-name">{site.name}</span>
+                <span class="dev-tagline">{site.tagline}</span>
+              </span>
             </span>
             {sections.map(sec => (
               <span class="dev-panel" data-panel={sec.id} hidden>
@@ -316,6 +320,10 @@ const sections = [
     text-shadow: 3px 3px 0 rgba(0, 0, 0, .12);
   }
   .dev-tagline { font-size: 13px; font-weight: 500; line-height: 1.4; max-width: 30ch; }
+  /* Title screen: the pixel portrait beside the name. */
+  .dev-panel.dev-home { flex-direction: row; align-items: center; gap: 12px; }
+  .dev-id { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+  .dev-home .dev-name { font-size: 22px; }
 
   /* One panel on screen at a time: the title screen, or a section trailer. */
   .dev-panel { display: flex; flex-direction: column; gap: 12px; min-width: 0; }

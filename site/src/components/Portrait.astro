@@ -1,0 +1,50 @@
+---
+// Portrait.astro — the pixel portrait on the LCD: the 48×48 ink mask built by
+// scripts/build-portrait.ts, painted in --screen-ink. Sizes should divide the
+// stored 192px evenly (192, 96) so the pixels stay square and sharp. Until a
+// photo has been converted it renders a loud TODO frame instead.
+import { getPortrait } from '../lib/content';
+
+export interface Props {
+  size: number;
+  /** Size at ≤700px wide; defaults to `size`. */
+  small?: number;
+}
+
+const { size, small = size } = Astro.props;
+const portrait = getPortrait();
+const vars = `--size:${size}px; --size-sm:${small}px`;
+---
+{portrait ? (
+  <span class="portrait" role="img" aria-label={portrait.alt} style={`${vars}; --mask:url(${portrait.url})`}></span>
+) : (
+  <span class="portrait portrait-todo" style={vars}>TODO(prabigya): add content/portrait.jpg</span>
+)}
+
+<style>
+  .portrait {
+    display: block;
+    flex: 0 0 auto;
+    width: var(--size);
+    height: var(--size);
+    background: var(--screen-ink);
+    -webkit-mask: var(--mask) 0 0 / 100% 100% no-repeat;
+    mask: var(--mask) 0 0 / 100% 100% no-repeat;
+  }
+  .portrait-todo {
+    display: flex;
+    align-items: center;
+    padding: 6px;
+    border: 3px dotted var(--screen-ink);
+    background: none;
+    -webkit-mask: none;
+    mask: none;
+    font-family: var(--font-lcd);
+    font-size: 8px;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+  }
+  @media (max-width: 700px) {
+    .portrait { width: var(--size-sm); height: var(--size-sm); }
+  }
+</style>

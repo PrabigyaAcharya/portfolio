@@ -1,5 +1,5 @@
 // AUTO-GENERATED — do not edit by hand; run `npm run bundle-content`
-// Generated at: 2026-11-01T06:57:06.923Z
+// Generated at: 2026-11-01T07:12:47.571Z
 
 export interface ResearchThread {
   id: string;
@@ -23,6 +23,7 @@ export interface SiteConfig {
   links: SiteLinks;
   mcp_endpoint: string;
   research_threads: ResearchThread[];
+  portrait?: { src: string; alt: string };
 }
 
 export interface PublicationLinks {
@@ -59,7 +60,14 @@ export interface CVEntry {
   role: string;
   start: string;
   end: string;
+  note?: string;
   details?: string[];
+}
+
+export interface CvCertification {
+  title: string;
+  detail?: string;
+  link?: string;
 }
 
 export interface CvProject {
@@ -70,10 +78,15 @@ export interface CvProject {
 }
 
 export interface CvData {
+  summary?: string;
   education: CVEntry[];
   positions: CVEntry[];
+  grants: CVEntry[];
+  supervision: CVEntry[];
+  teaching: CVEntry[];
   projects?: CvProject[];
   skills: string[];
+  certifications: CvCertification[];
   service: string[];
   awards: string[];
 }
@@ -131,7 +144,11 @@ export const site: SiteConfig = {
       "name": "Supervised student research",
       "blurb": "Papers co-authored with the undergraduates I supervise at Sunway College Kathmandu, presented at the 2nd MVIC National Conference."
     }
-  ]
+  ],
+  "portrait": {
+    "src": "portrait.jpg",
+    "alt": "Pixel-art portrait of Prabigya Acharya"
+  }
 };
 
 export const publications: Publication[] = [
