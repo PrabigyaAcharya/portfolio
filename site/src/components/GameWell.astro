@@ -1,0 +1,151 @@
+---
+// GameWell.astro — the small screen-within-the-screen on the right of every
+// inside page. It runs whichever cartridge is seated in the landing handheld:
+// an attract loop by default, playable once clicked (the arrow keys then
+// drive the game instead of the tabs; Esc hands them back). It persists across
+// tab swaps, so a game keeps going while you browse. Wide screens only, and
+// only with JS.
+---
+<aside class="well" data-well transition:persist="game-well" aria-label="Cartridge" hidden>
+  <button class="well-screen" type="button" data-well-play disabled>
+    <canvas class="well-canvas" width="240" height="200"></canvas>
+  </button>
+  <p class="well-caption">
+    <span class="well-title" data-well-title>No cartridge</span>
+    <span class="well-sub" data-well-sub></span>
+  </p>
+  <a class="well-insert" href="/" data-well-insert>Insert one on the handheld</a>
+</aside>
+
+<script>
+  import { findCartridge } from '../games/cartridges';
+  import { mountGame, type Mounted, type Mode } from '../games/runtime';
+  import { Pad, bindKeys } from '../games/input';
+  import { getInserted, getBest, CARTRIDGE_EVENT } from '../games/state';
+
+  const well = document.querySelector<HTMLElement>('[data-well]');
+  if (well) {
+    const button = well.querySelector<HTMLButtonElement>('[data-well-play]')!;
+    const canvas = well.querySelector<HTMLCanvasElement>('canvas')!;
+    const title = well.querySelector<HTMLElement>('[data-well-title]')!;
+    const sub = well.querySelector<HTMLElement>('[data-well-sub]')!;
+    const insertLink = well.querySelector<HTMLAnchorElement>('[data-well-insert]')!;
+    const wide = window.matchMedia('(min-width: 1340px) and (min-height: 620px)');
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const pad = new Pad();
+
+    let id: string | null = null;
+    let game: Mounted | null = null;
+    let unbindKeys: (() => void) | null = null;
+    let playing = false;
+
+    const idleMode = (): Mode => reduced.matches ? 'still' : 'demo';
+
+    function caption() {
+      const cart = findCartridge(id);
+      title.textContent = cart ? cart.title : 'No cartridge';
+      insertLink.hidden = !!cart;
+      button.disabled = !cart;
+      if (!cart) { sub.textContent = ''; return; }
+      const best = getBest(cart.id);
+      const bestText = best !== null && game ? ` · best ${game.game.formatScore(best)}` : '';
+      sub.textContent = playing ? 'Esc to stop' : `Click to play${bestText}`;
+      button.setAttribute('aria-label', playing ? `Playing ${cart.title}. Press Escape to stop.` : `Play ${cart.title}`);
+    }
+
+    function stopPlaying() {
+      if (!playing) return;
+      playing = false;
+      unbindKeys?.();
+      unbindKeys = null;
+      well!.removeAttribute('data-game-focus');
+      game?.setMode(idleMode());
+      caption();
+    }
+
+    function startPlaying() {
+      if (!game || playing) return;
+      playing = true;
+      well!.setAttribute('data-game-focus', '');
+      unbindKeys = bindKeys(pad, () => well!.contains(document.activeElement));
+      game.setMode('play');
+      caption();
+    }
+
+    async function load() {
+      const next = wide.matches ? getInserted() : null;
+      if (next === id && (game || !next)) { caption(); return; }
+      stopPlaying();
+      game?.stop();
+      game = null;
+      id = findCartridge(next) ? next : null;
+      caption();
+      if (!id) {
+        // Blank glass when empty.
+        canvas.getContext('2d')?.clearRect(0, 0, canvas.width, canvas.height);
+        return;
+      }
+      const want = id;
+      const mounted = await mountGame(canvas, want, { mode: idleMode(), pad });
+      if (id === want) { game = mounted; caption(); } else mounted.stop();
+    }
+
+    button.addEventListener('click', () => { if (!playing) startPlaying(); });
+    well.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && playing) { e.preventDefault(); stopPlaying(); }
+    });
+    well.addEventListener('focusout', (e) => {
+      if (!well.contains(e.relatedTarget as Node | null)) stopPlaying();
+    });
+
+    // Follow the handheld: another tab inserting or ejecting, or this one.
+    window.addEventListener('storage', (e) => { if (e.key === 'cartridge') load(); });
+    document.addEventListener(CARTRIDGE_EVENT, () => load());
+    // Only run a game while the well is actually on screen.
+    wide.addEventListener('change', () => load());
+    reduced.addEventListener('change', () => { if (!playing) game?.setMode(idleMode()); });
+
+    well.hidden = false;
+    load();
+  }
+</script>
+
+<style>
+  .well {
+    display: none;
+    position: absolute;
+    top: 150px;  /* below the key hints and tab rule */
+    right: 30px; /* clear of the scrollbar */
+    flex-direction: column;
+    gap: 8px;
+    width: 246px;
+  }
+  /* Only where the right side of the screen is actually empty. */
+  @media (min-width: 1340px) and (min-height: 620px) {
+    .well:not([hidden]) { display: flex; }
+  }
+
+  .well-screen {
+    display: block;
+    padding: 0;
+    border: var(--rule-ink);
+    background: var(--screen);
+    line-height: 0;
+  }
+  .well-screen:disabled { cursor: default; }
+  .well-screen:focus-visible { outline: 3px solid var(--screen-ink); outline-offset: 3px; }
+  .well-canvas { width: 240px; height: 200px; image-rendering: pixelated; }
+
+  .well-caption {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 0;
+    font-family: var(--font-lcd);
+    font-size: 11px;
+    line-height: 1.3;
+  }
+  .well-title { font-weight: 700; }
+  .well-insert { font-family: var(--font-lcd); font-size: 11px; color: var(--screen-ink); }
+  .well-insert[hidden] { display: none; }
+</style>

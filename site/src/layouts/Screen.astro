@@ -6,7 +6,7 @@
 // game well) carry across tab changes instead of reloading with the page.
 import { ClientRouter } from 'astro:transitions';
 import Base from './Base.astro';
-import BlockDrop from '../components/BlockDrop.astro';
+import GameWell from '../components/GameWell.astro';
 import { getSiteData } from '../lib/content';
 
 export type Tab = 'home' | 'research' | 'notebook' | 'now' | 'cv' | 'ask';
@@ -71,7 +71,7 @@ const [firstName, ...rest] = site.name.split(' ');
           </div>
           <slot />
         </div>
-        <BlockDrop />
+        <GameWell />
       </main>
 
     </section>
