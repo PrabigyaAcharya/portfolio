@@ -1,0 +1,259 @@
+---
+// Cartridges.astro — the shelf of game cartridges beside the landing handheld.
+// Pick one and it flies into the slot on the back of the device, the device
+// turns to face you, and the game boots on its screen. Click the seated
+// cartridge to eject it. Games need JS, so without it the shelf never shows.
+import { cartridges } from '../games/cartridges';
+
+// 8×8 pixel glyphs for the labels, as ink rects.
+const glyphs: Record<string, Array<[number, number, number, number]>> = {
+  // A dip in a curve with the ball resting in it.
+  'descent': [[0, 1, 1, 2], [1, 3, 1, 2], [2, 5, 1, 1], [3, 6, 2, 1], [5, 5, 1, 1], [6, 3, 1, 2], [7, 2, 1, 1], [3, 4, 2, 2]],
+  // A chain of tokens turning a corner.
+  'context-window': [[0, 1, 2, 2], [3, 1, 2, 2], [6, 1, 2, 2], [6, 4, 2, 2], [6, 7, 2, 1], [0, 5, 3, 1], [1, 6, 1, 1]],
+  // Pages stacked, the top one offset.
+  'camera-ready': [[2, 0, 5, 1], [1, 2, 6, 1], [1, 4, 6, 1], [1, 6, 6, 1], [1, 7, 6, 1]],
+};
+---
+<div class="shelf" data-shelf hidden>
+  <p class="shelf-head">Cartridges</p>
+  <ul class="shelf-list">
+    {cartridges.map(c => (
+      <li class="cart-spot">
+        <button class="cart" type="button" data-cart={c.id} data-title={c.title} aria-label={`Insert ${c.title}: ${c.labelLine}`}>
+          <span class="cart-label" aria-hidden="true">
+            <span class="cart-stripe"></span>
+            <svg class="cart-glyph" viewBox="0 0 8 8" shape-rendering="crispEdges" focusable="false">
+              {glyphs[c.id]?.map(([x, y, w, h]) => <rect x={x} y={y} width={w} height={h} />)}
+            </svg>
+            <span class="cart-title">{c.title}</span>
+            <span class="cart-line">{c.labelLine}</span>
+          </span>
+        </button>
+      </li>
+    ))}
+  </ul>
+  <p class="shelf-hint">Insert one to play</p>
+</div>
+
+<script>
+  import { findCartridge } from '../games/cartridges';
+  import { mountGame, type Mounted } from '../games/runtime';
+  import { Pad, bindKeys, bindButtons } from '../games/input';
+  import { getInserted, setInserted } from '../games/state';
+  import type { Key } from '../games/types';
+
+  const shelf = document.querySelector<HTMLElement>('[data-shelf]');
+  const scale = document.querySelector<HTMLElement>('.scale');
+  const device = scale?.querySelector<HTMLElement>('.device');
+
+  if (shelf && scale && device) {
+    const lcd = device.querySelector<HTMLElement>('.dev-lcd')!;
+    const canvas = device.querySelector<HTMLCanvasElement>('.dev-game')!;
+    const slotCart = device.querySelector<HTMLButtonElement>('.dev-cart')!;
+    const link = device.querySelector<HTMLAnchorElement>('.device-link')!;
+    const status = device.querySelector<HTMLElement>('[data-preview-status]')!;
+    const carts = Array.from(shelf.querySelectorAll<HTMLButtonElement>('.cart'));
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const pad = new Pad();
+
+    const controls: Array<[string, Key]> = [
+      ['.arm.up', 'up'], ['.arm.down', 'down'], ['.arm.left', 'left'], ['.arm.right', 'right'],
+      ['.ab-btn.a', 'a'], ['.ab-btn.b', 'start'],
+    ];
+
+    let current: { id: string; cart: HTMLButtonElement; game?: Mounted; unbind: () => void } | null = null;
+    let busy = false;
+
+    const animate = (el: Element, frames: Keyframe[], duration: number, steps: number) =>
+      reduced.matches ? Promise.resolve() : el.animate(frames, { duration, easing: `steps(${steps}, end)` }).finished.then(() => {});
+
+    /** Move `from` onto `to` and fade it out (or the reverse). */
+    function fly(from: Element, to: Element, back = false) {
+      const a = from.getBoundingClientRect();
+      const b = to.getBoundingClientRect();
+      const dx = b.left + b.width / 2 - (a.left + a.width / 2);
+      const dy = b.top + b.height / 2 - (a.top + a.height / 2);
+      const frames: Keyframe[] = [
+        { transform: 'none', opacity: 1 },
+        { transform: `translate(${dx}px, ${dy}px) rotate(-6deg)`, opacity: 0 },
+      ];
+      return animate(from, back ? frames.reverse() : frames, 360, 6);
+    }
+
+    async function insert(cart: HTMLButtonElement, withMotion: boolean) {
+      const id = cart.dataset.cart!;
+      const title = cart.dataset.title!;
+      if (busy || !findCartridge(id) || current?.id === id) return;
+      busy = true;
+      if (current) await eject(withMotion, false);
+
+      // Seat a copy of the label in the slot.
+      slotCart.querySelector('.cart-label')!.replaceWith(cart.querySelector('.cart-label')!.cloneNode(true));
+      slotCart.setAttribute('aria-label', `Eject ${title}`);
+      slotCart.title = 'Eject';
+      scale!.classList.add('has-cart');
+      cart.setAttribute('aria-pressed', 'true');
+
+      slotCart.hidden = false;
+      slotCart.style.visibility = 'hidden';
+      if (withMotion) await fly(cart, slotCart);
+      cart.classList.add('is-out');
+      slotCart.style.visibility = '';
+      if (withMotion) await animate(slotCart, [{ transform: 'translateY(-46px)' }, { transform: 'none' }], 240, 3);
+
+      // Hand the controls to the game.
+      link.inert = true;
+      const unbindButtons = bindButtons(pad, controls.map(([sel, k]) => [device!.querySelector<HTMLElement>(sel)!, k]));
+      // Enter and Space keep their usual meaning on focused links and buttons.
+      const unbindKeys = bindKeys(pad, (e) => !((e.key === 'Enter' || e.key === ' ')
+        && e.target instanceof HTMLElement && e.target.closest('a, button')));
+      current = { id, cart, unbind: () => { unbindButtons(); unbindKeys(); } };
+
+      lcd.classList.add('playing', 'boot');
+      canvas.hidden = false;
+      canvas.tabIndex = -1;
+      canvas.setAttribute('aria-label', `${title} game screen`);
+      setTimeout(() => lcd.classList.remove('boot'), 400);
+      try {
+        const game = await mountGame(canvas, id, { mode: 'play', pad });
+        if (current?.id === id) current.game = game; else game.stop();
+      } catch { /* the label stays seated; nothing to run */ }
+
+      setInserted(id);
+      status.textContent = `${title} inserted. Press Start to play: arrow keys or the d-pad to move, Z or A for action.`;
+      if (withMotion) {
+        // On phones the shelf sits below the device; bring the screen into view.
+        const r = lcd.getBoundingClientRect();
+        if (r.top < 0 || r.bottom > window.innerHeight) lcd.scrollIntoView({ block: 'center' });
+        canvas.focus({ preventScroll: true });
+      }
+      busy = false;
+    }
+
+    async function eject(withMotion: boolean, release = true) {
+      if (!current) return;
+      if (release) { if (busy) return; busy = true; }
+      const { cart, game, unbind } = current;
+      current = null;
+      game?.stop();
+      unbind();
+      lcd.classList.remove('playing', 'boot');
+      canvas.hidden = true;
+      link.inert = false;
+
+      if (withMotion) await animate(slotCart, [{ transform: 'none' }, { transform: 'translateY(-46px)', opacity: 0 }], 240, 3);
+      slotCart.hidden = true;
+      cart.classList.remove('is-out');
+      cart.removeAttribute('aria-pressed');
+      if (withMotion) await fly(cart, slotCart, true);
+      scale!.classList.remove('has-cart');
+      status.textContent = `${cart.dataset.title} ejected.`;
+      if (release) {
+        setInserted(null);
+        cart.focus({ preventScroll: true });
+        busy = false;
+      }
+    }
+
+    for (const cart of carts) cart.addEventListener('click', () => insert(cart, true));
+    slotCart.addEventListener('click', () => eject(true));
+
+    // A cartridge left in last visit is still seated.
+    const remembered = carts.find(c => c.dataset.cart === getInserted());
+    if (remembered) insert(remembered, false);
+
+    shelf.hidden = false;
+  }
+</script>
+
+<style is:global>
+  /* Shared by the shelf cartridges and the one seated in the handheld. */
+  .cart,
+  .dev-cart {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 92px;
+    height: 104px;
+    padding: 16px 8px 12px;
+    border: 0;
+    border-radius: 6px 6px 3px 3px;
+    background-color: var(--shell);
+    background-image:
+      repeating-linear-gradient(180deg, var(--shell-edge-far) 0 2px, transparent 2px 4px),
+      var(--shell-grain);
+    background-size: 100% 12px, auto;
+    background-repeat: no-repeat, repeat;
+    background-position: 0 2px, 0 0;
+    box-shadow: 0 4px 0 var(--shell-edge-far), inset 0 -2px 0 var(--shell-edge-near);
+    font: inherit;
+    color: var(--screen-ink);
+    text-align: left;
+  }
+  /* Contacts along the bottom edge. */
+  .cart::after,
+  .dev-cart::after {
+    content: '';
+    position: absolute;
+    left: 14px;
+    right: 14px;
+    bottom: 3px;
+    height: 4px;
+    background: repeating-linear-gradient(90deg, var(--shell-edge-far) 0 3px, transparent 3px 5px);
+  }
+  .cart-label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1 1 auto;
+    padding: 5px 6px 6px;
+    background: var(--screen);
+    color: var(--screen-ink);
+    border-radius: 2px;
+    box-shadow: inset 0 0 0 2px var(--screen-edge);
+    transition: background-color var(--step-invert), color var(--step-invert);
+  }
+  .cart-stripe { display: flex; flex-direction: column; gap: 1px; }
+  .cart-stripe::before, .cart-stripe::after { content: ''; display: block; height: 2px; }
+  .cart-stripe::before { background: var(--magenta); }
+  .cart-stripe::after  { background: var(--print-blue); }
+  .cart-glyph { width: 16px; height: 16px; fill: currentColor; }
+  .cart-title { font-family: var(--font-lcd); font-weight: 700; font-size: 8px; line-height: 1.15; }
+  .cart-line { font-size: 8px; font-weight: 600; line-height: 1.2; }
+
+  .cart:hover .cart-label,
+  .cart:focus-visible .cart-label,
+  .dev-cart:hover .cart-label,
+  .dev-cart:focus-visible .cart-label { background: var(--screen-ink); color: var(--screen); }
+  .cart:focus-visible,
+  .dev-cart:focus-visible { outline: 3px solid var(--print-blue); outline-offset: 3px; }
+  .dev-cart[hidden] { display: none; }
+
+  /* ── Shelf ──────────────────────────────────────────────────────────────── */
+  .shelf { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  .shelf[hidden] { display: none; }
+  .shelf-head, .shelf-hint {
+    margin: 0;
+    font-family: var(--font-print);
+    font-style: italic;
+    font-weight: 700;
+    color: var(--print-blue);
+  }
+  .shelf-head { font-size: 15px; }
+  .shelf-hint { font-size: 11px; letter-spacing: 0.06em; }
+  .shelf-list { display: flex; flex-direction: column; gap: 20px; margin: 0; padding: 0; list-style: none; }
+  .cart-spot { border-radius: 6px 6px 3px 3px; }
+  .cart-spot:nth-child(odd) .cart { rotate: -3deg; }
+  .cart-spot:nth-child(even) .cart { rotate: 2deg; }
+  /* The empty spot a seated cartridge leaves behind. */
+  .cart-spot:has(.cart.is-out) { outline: 2px dashed var(--shell-edge-far); outline-offset: -2px; }
+  .cart.is-out { visibility: hidden; }
+
+  @media (max-width: 700px) {
+    .shelf { gap: 10px; }
+    .shelf-list { flex-direction: row; gap: 14px; }
+    .cart-spot .cart { rotate: none !important; }
+  }
+  @media (max-width: 360px) { .shelf-list { zoom: .9; } }
+</style>
